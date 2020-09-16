@@ -1,13 +1,18 @@
-import { lstat, lstatSync } from 'fs';
+import { lstatSync } from 'fs';
 import * as _ from 'lodash';
 
-import { OpenDialogOptions, Uri, window, workspace } from 'vscode';
+import { Uri, window, workspace } from 'vscode';
+import {
+  getFolderNameFromInput,
+  getLastItemOfPath,
+  generateBarrelFile,
+} from '../utils';
 
 export const generateFromFolder = async (uri: Uri) => {
   // Command running via input
   let directory;
   if (_.isNil(_.get(uri, 'fsPath'))) {
-    directory = await _getFolderNameFromInput();
+    directory = await getFolderNameFromInput();
 
     if (_.isNil(directory)) {
       window.showErrorMessage('No folder was seleted. Please select a folder');
@@ -28,6 +33,19 @@ export const generateFromFolder = async (uri: Uri) => {
 
     if (directory.includes(workspacePath)) {
       // The selected folder is inside the current project
+      const folderName = getLastItemOfPath(directory.toString());
+
+      const files = await workspace.findFiles(`**\\**${folderName}\\*`);
+      const fileNames: string[] = [];
+      files.forEach((value: Uri) =>
+        fileNames.push(getLastItemOfPath(value.fsPath))
+      );
+
+      try {
+        await generateBarrelFile(directory.toString(), folderName, fileNames);
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       // The selected folder is outside the current project
       window.showErrorMessage(
@@ -42,21 +60,3 @@ export const generateFromFolder = async (uri: Uri) => {
     return;
   }
 };
-
-async function _getFolderNameFromInput(): Promise<String | undefined> {
-  const checkboxOptions: OpenDialogOptions = {
-    canSelectMany: false,
-    canSelectFiles: false,
-    canSelectFolders: true,
-    openLabel: 'Select the folder in which you want to create the barrel file',
-  };
-
-  return window.showOpenDialog(checkboxOptions).then((uri) => {
-    if (_.isNil(uri) || _.isEmpty(uri)) {
-      return undefined;
-    }
-
-    // The selected input is in the first array position
-    return uri[0].fsPath;
-  });
-}
