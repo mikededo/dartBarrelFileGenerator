@@ -6,10 +6,8 @@ export const generateBarrelFile = async (
   files: string[]
 ) => {
   const targetPath = `${directory}/${folderName}.dart`;
-  if (existsSync(targetPath)) {
-    throw Error(`${folderName}.dart already exists`);
-  }
 
+  // In case the file already exists we want to override its content
   return new Promise(async (resolve, reject) => {
     writeFile(targetPath, _generateExports(files), 'utf8', (error) => {
       if (error) {
