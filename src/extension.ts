@@ -1,8 +1,8 @@
 import { commands, ExtensionContext } from 'vscode';
-import { generateFromFolder } from './commands';
+import { generate } from './commands';
 
 export async function activate(context: ExtensionContext) {
   context.subscriptions.push(
-    commands.registerCommand('extension.generateFromFolder', generateFromFolder)
+    commands.registerCommand('extension.generateBarrelFile', generate)
   );
 }

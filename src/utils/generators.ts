@@ -1,5 +1,13 @@
-import { existsSync, writeFile } from 'fs';
+import { writeFile } from 'fs';
 
+/**
+ * Creates the barrel file and writes the exports in it. If the file
+ * already exists, it overrides its content
+ * 
+ * @param directory Destination directory
+ * @param folderName It will create the barrel file from the folder name
+ * @param files The files of the barrel file
+ */
 export const generateBarrelFile = async (
   directory: string,
   folderName: string,
@@ -19,14 +27,17 @@ export const generateBarrelFile = async (
   });
 };
 
+/**
+ * Generates the export string to write to the file
+ *
+ * @param files File names to export
+ */
 function _generateExports(files: string[]): string {
   files.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
 
   let exportText: string = '';
   files.forEach((fileName: string, i) => {
-    console.log(i);
     exportText = exportText.concat(`export '${fileName}';\n`);
-    console.log(exportText.replace('\\n', '.'));
   });
   return exportText;
 }

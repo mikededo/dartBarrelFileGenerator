@@ -6,9 +6,16 @@ import {
   getFolderNameFromInput,
   getLastItemOfPath,
   generateBarrelFile,
+  isDartFile,
 } from '../utils';
 
-export const generateFromFolder = async (uri: Uri) => {
+/**
+ * Generates the barrel file. If the given `Uri` is null, it will
+ * open an `OpenDialogOptions` to choose the folder of the barrel file.
+ * It will only accept the selected folder if it is from the curernt
+ * workspace
+ */
+export const generate = async (uri: Uri) => {
   // Command running via input
   let directory;
   if (_.isNil(_.get(uri, 'fsPath'))) {
@@ -33,18 +40,32 @@ export const generateFromFolder = async (uri: Uri) => {
 
     if (directory.includes(workspacePath)) {
       // The selected folder is inside the current project
+      // Following dart naming convention, we have to use camelcase
       const folderName = getLastItemOfPath(directory.toString());
-
+      const barrelFileName = folderName.toLowerCase().split(' ').join('_');
       const files = await workspace.findFiles(`**\\**${folderName}\\*`);
       const fileNames: string[] = [];
-      files.forEach((value: Uri) =>
-        fileNames.push(getLastItemOfPath(value.fsPath))
-      );
+
+      files.forEach((value: Uri) => {
+        const name = getLastItemOfPath(value.fsPath);
+
+        // We have to skip items which are not dart files and in case the
+        // user is updating the barrel file, we have to skip the barrel file
+        // to avoid a circular import
+        if (!(name === barrelFileName.concat('.dart')) && isDartFile(name)) {
+          fileNames.push(name);
+        }
+      });
 
       try {
-        await generateBarrelFile(directory.toString(), folderName, fileNames);
+        await generateBarrelFile(
+          directory.toString(),
+          barrelFileName,
+          fileNames
+        );
       } catch (error) {
-        console.log(error);
+        window.showErrorMessage(error);
+        return;
       }
     } else {
       // The selected folder is outside the current project

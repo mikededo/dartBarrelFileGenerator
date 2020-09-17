@@ -11,20 +11,20 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.generateFromFolder"
+    "onCommand:extension.generateBarrelFile"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extension.generateFromFolder",
+        "command": "extension.generateBarrelFile",
         "title": "Generate Dart Barrel File"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "extension.generateFromFolder",
+          "command": "extension.generateBarrelFile",
           "group": "7_modification",
           "when": "explorerResourceIsFolder"
         }
