@@ -7,6 +7,9 @@ import {
   getLastItemOfPath,
   generateBarrelFile,
   isDartFile,
+  isDirectory,
+  isSubFolderPath,
+  getSubfolderFromPath,
 } from '../utils';
 
 /**
@@ -15,7 +18,7 @@ import {
  * It will only accept the selected folder if it is from the curernt
  * workspace
  */
-export const generate = async (uri: Uri) => {
+export const generate = async (uri: Uri): Promise<string | undefined> => {
   // Command running via input
   let directory;
   if (_.isNil(_.get(uri, 'fsPath'))) {
@@ -27,7 +30,7 @@ export const generate = async (uri: Uri) => {
     }
   } else {
     // Clicked item is not a folder
-    if (!lstatSync(uri.fsPath).isDirectory()) {
+    if (!isDirectory(uri.fsPath)) {
       window.showErrorMessage('You must select a folder.');
       return;
     }
@@ -39,34 +42,7 @@ export const generate = async (uri: Uri) => {
     let workspacePath = workspace.workspaceFolders[0].uri.fsPath;
 
     if (directory.includes(workspacePath)) {
-      // The selected folder is inside the current project
-      // Following dart naming convention, we have to use camelcase
-      const folderName = getLastItemOfPath(directory.toString());
-      const barrelFileName = folderName.toLowerCase().split(' ').join('_');
-      const files = await workspace.findFiles(`**\\**${folderName}\\*`);
-      const fileNames: string[] = [];
-
-      files.forEach((value: Uri) => {
-        const name = getLastItemOfPath(value.fsPath);
-
-        // We have to skip items which are not dart files and in case the
-        // user is updating the barrel file, we have to skip the barrel file
-        // to avoid a circular import
-        if (!(name === barrelFileName.concat('.dart')) && isDartFile(name)) {
-          fileNames.push(name);
-        }
-      });
-
-      try {
-        await generateBarrelFile(
-          directory.toString(),
-          barrelFileName,
-          fileNames
-        );
-      } catch (error) {
-        window.showErrorMessage(error);
-        return;
-      }
+      return await _generate(directory.toString(), workspacePath);
     } else {
       // The selected folder is outside the current project
       window.showErrorMessage(
@@ -81,3 +57,61 @@ export const generate = async (uri: Uri) => {
     return;
   }
 };
+
+async function _generate(directory: string, workspacePath: string) {
+  // The selected folder is inside the current project
+  // Following dart naming convention, we have to use camelcase
+  const folderName = getLastItemOfPath(directory.toString());
+  const barrelFileName = folderName.toLowerCase().split(' ').join('_');
+  const files = await workspace.findFiles(`**\\**${folderName}\\*`);
+  const fileNames: string[] = [];
+  const checkedFolders = new Set();
+
+  for (let value of files) {
+    const currentFolderPath = workspacePath.concat('\\', folderName);
+    let name: string;
+
+    if (isSubFolderPath(currentFolderPath, value.fsPath)) {
+      const nestedFolderPath: string = getSubfolderFromPath(
+        currentFolderPath,
+        value.fsPath
+      );
+
+      // Check if we already have gone into that folder recursively
+      if (checkedFolders.has(nestedFolderPath)) {
+        continue;
+      } else {
+        checkedFolders.add(nestedFolderPath);
+      }
+
+      let result = await _generate(nestedFolderPath, currentFolderPath);
+
+      if (!_.isNil(result)) {
+        name = getLastItemOfPath(nestedFolderPath).concat('/', result, '.dart');
+      } else {
+        window.showErrorMessage(
+          'An error ocurred. Try again or send an issue in the repo!'
+        );
+        return;
+      }
+    } else {
+      name = getLastItemOfPath(value.fsPath);
+    }
+
+    // We have to skip items which are not dart files and in case the
+    // user is updating the barrel file, we have to skip the barrel file
+    // to avoid a circular import
+    if (!(name === barrelFileName.concat('.dart')) && isDartFile(name)) {
+      fileNames.push(name);
+    }
+  }
+
+  try {
+    await generateBarrelFile(directory.toString(), barrelFileName, fileNames);
+
+    return barrelFileName;
+  } catch (error) {
+    window.showErrorMessage(error);
+    return;
+  }
+}

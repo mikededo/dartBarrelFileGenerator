@@ -1,4 +1,6 @@
+import { statSync } from 'fs';
 import * as _ from 'lodash';
+import { split } from 'lodash';
 import { OpenDialogOptions, window } from 'vscode';
 
 /**
@@ -24,7 +26,7 @@ export const getFolderNameFromInput = async (): Promise<String | undefined> => {
 
 /**
  * Returns the last item of a path (the folder name or the file + the extension)
- * 
+ *
  * @param path Path to obtain the last item of
  */
 export const getLastItemOfPath = (path: string): string => {
@@ -33,8 +35,26 @@ export const getLastItemOfPath = (path: string): string => {
 
 /**
  * To know if a path is a dart file
- * 
+ *
  * @param path The file to check
  */
-export const isDartFile = (path: string): boolean =>
-  path.endsWith('.dart');
+export const isDartFile = (path: string): boolean => path.endsWith('.dart');
+
+export const isDirectory = (path: string): boolean =>
+  statSync(path).isDirectory();
+
+export const isSubFolderPath = (currentPath: string, path: string): boolean => {
+  if (!path.startsWith(currentPath)) {
+    throw new Error(`${path} is not inside ${currentPath}`);
+  }
+
+  return path.split(`${currentPath}\\`)[1].split('\\').length > 1;
+};
+
+export const getSubfolderFromPath = (
+  currentPath: string,
+  path: string
+): string => {
+  const folderName = path.split(currentPath)[1].split('\\')[1];
+  return currentPath.concat('\\', folderName);
+};

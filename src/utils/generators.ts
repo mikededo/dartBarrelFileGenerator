@@ -3,7 +3,7 @@ import { writeFile } from 'fs';
 /**
  * Creates the barrel file and writes the exports in it. If the file
  * already exists, it overrides its content
- * 
+ *
  * @param directory Destination directory
  * @param folderName It will create the barrel file from the folder name
  * @param files The files of the barrel file
@@ -12,7 +12,7 @@ export const generateBarrelFile = async (
   directory: string,
   folderName: string,
   files: string[]
-) => {
+): Promise<void> => {
   const targetPath = `${directory}/${folderName}.dart`;
 
   // In case the file already exists we want to override its content
