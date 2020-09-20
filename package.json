@@ -1,14 +1,25 @@
 {
   "name": "dart-barrel-file-generator",
   "displayName": "Dart Barrel File Generator",
-  "description": "Generates/updates barrel files for dart projects and Flutter apps.",
+  "description": "Generates barrel files for dart projects and Flutter apps.",
   "version": "0.0.1",
   "publisher": "MDDG",
   "engines": {
     "vscode": "^1.49.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikededo/dartBarrelFileGenerator"
+  },
   "categories": [
+    "Programming Languages",
     "Other"
+  ],
+  "icon": "assets/logo.png",
+  "keywords": [
+    "dart",
+    "barrel file",
+    "flutter"
   ],
   "activationEvents": [
     "onCommand:extension.generateCurrentAndNested",

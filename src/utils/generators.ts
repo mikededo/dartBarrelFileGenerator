@@ -36,7 +36,7 @@ function _generateExports(files: string[]): string {
   files.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
 
   let exportText: string = '';
-  files.forEach((fileName: string, i) => {
+  files.forEach((fileName: string) => {
     exportText = exportText.concat(`export '${fileName}';\n`);
   });
   return exportText;

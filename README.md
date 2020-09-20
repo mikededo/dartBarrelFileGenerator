@@ -1,65 +1,30 @@
-# dart-barrel-file-generator README
+# Dart Barrel File Generator
 
-This is the README for your extension "dart-barrel-file-generator". After writing up a brief description, we recommend including the following sections.
+VSCode extension that generate barrel files for folders containing dart files.
 
-## Features
+## Installation
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Dart Barrel Fiel generator either by [searching for the extension in VSCode](https://code.visualstudio.com/docs/editor/extension-gallery#_search-for-an-extension) or from the [marketplace](https://marketplace.visualstudio.com/).
 
-For example if there is an image subfolder under your extension project workspace:
+## Overview
 
-\!\[feature X\]\(images/feature-x.png\)
+It can create barrel files only two the selected folder
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+![current-and-only-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/src/assets/current-only.gif)
 
-## Requirements
+It creates aswell barrel files for the selected folder and all the nested folders from the selected. It also adds the nested folder barrel file to its parent barrel file.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+![current-and-nested-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/src/assets/current-only.gif)
 
-## Extension Settings
+## Commands
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+| Command                            | Description                                                   |
+| ---------------------------------- | ------------------------------------------------------------- |
+| `GDBF: Current Folder Only`        | Creates a barrel file for the selected folder                 |
+| `GDBF: Current and Nested Folders` | Creates a barrel file for the selected and its nested folders |
 
-For example:
+Both commans can be used by typing in the commmand palette. It will then ask you to choose a folder. If it is done from the folder tree, it will use the selected folder as the root folder.
 
-This extension contributes the following settings:
+## Attributions
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Extension icon made by [Freepik](https://www.flaticon.com/authors/freepik) from [flaticon](www.flaticon.com).
