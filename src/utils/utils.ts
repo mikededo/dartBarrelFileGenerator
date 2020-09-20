@@ -1,6 +1,5 @@
 import { statSync } from 'fs';
 import * as _ from 'lodash';
-import { split } from 'lodash';
 import { OpenDialogOptions, Uri, window } from 'vscode';
 
 /**

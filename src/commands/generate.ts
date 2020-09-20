@@ -12,9 +12,16 @@ import {
   GenerateHelper,
 } from '../utils';
 
+/**
+ * Generates barrel files for the current and all the nested
+ * folders
+ */
 export const generateCurrentAndNested = (uri: Uri) =>
   _generateValidation(uri, true);
 
+/**
+ * Generates a barrel file only for the selected folder
+ */
 export const generateCurrent = (uri: Uri) => _generateValidation(uri, false);
 
 /**
@@ -53,7 +60,7 @@ export const _generateValidation = async (
     let workspacePath = workspace.workspaceFolders[0].uri.fsPath;
 
     if (directory.includes(workspacePath)) {
-      return await _generate(directory.toString(), workspacePath, recursive);
+      return await _generate(directory.toString(), recursive);
     } else {
       // The selected folder is outside the current project
       window.showErrorMessage(
@@ -78,11 +85,7 @@ export const _generateValidation = async (
  * @param recursive `true` will create barrel files for the nested folders and
  * add them to the top level barrel file
  */
-async function _generate(
-  directory: string,
-  workspacePath: string,
-  recursive: boolean
-) {
+async function _generate(directory: string, recursive: boolean) {
   // The selected folder is inside the current project
   // Following dart naming convention, we have to use camelcase
   const folderName = getLastItemOfPath(directory.toString());
@@ -115,7 +118,7 @@ async function _generate(
       }
 
       // If we reach here => recursive == true
-      let result = await _generate(nestedFolderPath, directory, true);
+      let result = await _generate(nestedFolderPath, true);
 
       if (!_.isNil(result)) {
         name = getLastItemOfPath(nestedFolderPath).concat('/', result, '.dart');
