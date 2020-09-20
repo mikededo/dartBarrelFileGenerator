@@ -1,8 +1,12 @@
 import { commands, ExtensionContext } from 'vscode';
-import { generate } from './commands';
+import { generateCurrent, generateCurrentAndNested } from './commands';
 
 export async function activate(context: ExtensionContext) {
   context.subscriptions.push(
-    commands.registerCommand('extension.generateBarrelFile', generate)
+    commands.registerCommand(
+      'extension.generateCurrentAndNested',
+      generateCurrentAndNested
+    ),
+    commands.registerCommand('extension.generateCurrent', generateCurrent)
   );
 }

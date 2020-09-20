@@ -1,4 +1,3 @@
-import { lstatSync } from 'fs';
 import * as _ from 'lodash';
 
 import { Uri, window, workspace } from 'vscode';
@@ -10,15 +9,27 @@ import {
   isDirectory,
   isSubFolderPath,
   getSubfolderFromPath,
+  GenerateHelper,
 } from '../utils';
 
+export const generateCurrentAndNested = (uri: Uri) =>
+  _generateValidation(uri, true);
+
+export const generateCurrent = (uri: Uri) => _generateValidation(uri, false);
+
 /**
- * Generates the barrel file. If the given `Uri` is null, it will
- * open an `OpenDialogOptions` to choose the folder of the barrel file.
- * It will only accept the selected folder if it is from the curernt
- * workspace
+ * If the `Uri` passed is null or undefined, it will open a dialog box asking
+ * the user to choose a folder. If the user chooses a folder out of the current
+ * workspace it will show an error
+ *
+ * @param uri Uri recieved from vscode
+ * @param recursive `true` will create barrel files for the nested folders and
+ * add them to the top level barrel file
  */
-export const generate = async (uri: Uri): Promise<string | undefined> => {
+export const _generateValidation = async (
+  uri: Uri,
+  recursive: boolean
+): Promise<string | undefined> => {
   // Command running via input
   let directory;
   if (_.isNil(_.get(uri, 'fsPath'))) {
@@ -42,7 +53,7 @@ export const generate = async (uri: Uri): Promise<string | undefined> => {
     let workspacePath = workspace.workspaceFolders[0].uri.fsPath;
 
     if (directory.includes(workspacePath)) {
-      return await _generate(directory.toString(), workspacePath);
+      return await _generate(directory.toString(), workspacePath, recursive);
     } else {
       // The selected folder is outside the current project
       window.showErrorMessage(
@@ -58,33 +69,53 @@ export const generate = async (uri: Uri): Promise<string | undefined> => {
   }
 };
 
-async function _generate(directory: string, workspacePath: string) {
+/**
+ * Core function of the extension. Analizes the items in the directory and creates
+ * the barrel file for the current or the current and its nested folders
+ *
+ * @param directory The directory we are working on
+ * @param workspacePath Path of the workspace
+ * @param recursive `true` will create barrel files for the nested folders and
+ * add them to the top level barrel file
+ */
+async function _generate(
+  directory: string,
+  workspacePath: string,
+  recursive: boolean
+) {
   // The selected folder is inside the current project
   // Following dart naming convention, we have to use camelcase
   const folderName = getLastItemOfPath(directory.toString());
-  const barrelFileName = folderName.toLowerCase().split(' ').join('_');
-  const files = await workspace.findFiles(`**\\**${folderName}\\*`);
-  const fileNames: string[] = [];
-  const checkedFolders = new Set();
+  const helper: GenerateHelper = new GenerateHelper(
+    folderName,
+    folderName.toLowerCase().split(' ').join('_'),
+    await workspace.findFiles(`**\\${folderName}\\**`)
+  );
 
-  for (let value of files) {
-    const currentFolderPath = workspacePath.concat('\\', folderName);
+  for (let value of helper.files) {
     let name: string;
 
-    if (isSubFolderPath(currentFolderPath, value.fsPath)) {
+    if (isSubFolderPath(directory, value.fsPath)) {
+      // If the user only wants to create the barrel file only
+      // in the selected folder
+      if (!recursive) {
+        continue;
+      }
+
       const nestedFolderPath: string = getSubfolderFromPath(
-        currentFolderPath,
+        directory,
         value.fsPath
       );
 
       // Check if we already have gone into that folder recursively
-      if (checkedFolders.has(nestedFolderPath)) {
+      if (helper.isChecked(nestedFolderPath)) {
         continue;
       } else {
-        checkedFolders.add(nestedFolderPath);
+        helper.addChecked(nestedFolderPath);
       }
 
-      let result = await _generate(nestedFolderPath, currentFolderPath);
+      // If we reach here => recursive == true
+      let result = await _generate(nestedFolderPath, directory, true);
 
       if (!_.isNil(result)) {
         name = getLastItemOfPath(nestedFolderPath).concat('/', result, '.dart');
@@ -101,15 +132,19 @@ async function _generate(directory: string, workspacePath: string) {
     // We have to skip items which are not dart files and in case the
     // user is updating the barrel file, we have to skip the barrel file
     // to avoid a circular import
-    if (!(name === barrelFileName.concat('.dart')) && isDartFile(name)) {
-      fileNames.push(name);
+    if (!(name === helper.barrelFileName.concat('.dart')) && isDartFile(name)) {
+      helper.addFileName(name);
     }
   }
 
   try {
-    await generateBarrelFile(directory.toString(), barrelFileName, fileNames);
+    await generateBarrelFile(
+      directory.toString(),
+      helper.barrelFileName,
+      helper.fileNames
+    );
 
-    return barrelFileName;
+    return helper.barrelFileName;
   } catch (error) {
     window.showErrorMessage(error);
     return;

@@ -11,20 +11,30 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.generateBarrelFile"
+    "onCommand:extension.generateCurrentAndNested",
+    "onCommand:extension.generateCurrent"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extension.generateBarrelFile",
-        "title": "Generate Dart Barrel File"
+        "command": "extension.generateCurrentAndNested",
+        "title": "GDBF: Current and Nested Folders"
+      },
+      {
+        "command": "extension.generateCurrent",
+        "title": "GDBF: Current Folder Only"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "extension.generateBarrelFile",
+          "command": "extension.generateCurrentAndNested",
+          "group": "7_modification",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "extension.generateCurrent",
           "group": "7_modification",
           "when": "explorerResourceIsFolder"
         }
