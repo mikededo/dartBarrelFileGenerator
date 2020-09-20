@@ -2,7 +2,7 @@
   "name": "dart-barrel-file-generator",
   "displayName": "Dart Barrel File Generator",
   "description": "Generates barrel files for dart projects and Flutter apps.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "miquelddg",
   "author": {
     "name": "Miquel de Domingo i Giral",
@@ -34,7 +34,7 @@
     "onCommand:extension.generateCurrentAndNested",
     "onCommand:extension.generateCurrent"
   ],
-  "main": "./out/extension.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -66,6 +66,7 @@
     "webpack": "webpack --mode development",
     "webpack-dev": "webpack --mode development --watch",
     "test-compile": "tsc -p ./",
+    "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./"
   },
   "devDependencies": {
