@@ -10,11 +10,11 @@ Dart Barrel Fiel generator either by [searching for the extension in VSCode](htt
 
 It can create barrel files only two the selected folder
 
-![current-and-only-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/src/assets/current-only.gif)
+![current-and-only-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-only.gif)
 
 It creates aswell barrel files for the selected folder and all the nested folders from the selected. It also adds the nested folder barrel file to its parent barrel file.
 
-![current-and-nested-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/src/assets/current-only.gif)
+![current-and-nested-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-only.gif)
 
 ## Commands
 
