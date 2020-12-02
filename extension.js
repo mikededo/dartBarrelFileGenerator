@@ -1,5 +1,6 @@
 const { lstatSync, writeFile } = require('fs');
 const _ = require('lodash');
+const path = require('path');
 const vscode = require('vscode');
 
 /**
@@ -62,18 +63,20 @@ async function validateAndGenerate(uri, recursive = false) {
   if (_.isNil(_.get(uri, 'path'))) {
     targetDir = await getFolderNameFromInput();
 
+    targetDir = toPosixPath(targetDir);
+
     if (!lstatSync(targetDir).isDirectory()) {
       throw Error('Select a directory!');
     }
   } else {
-    if (!lstatSync(uri.path).isDirectory()) {
+    if (!lstatSync(toPosixPath(uri.fsPath)).isDirectory()) {
       throw Error('Select a directory!');
     }
 
-    targetDir = uri.path;
+    targetDir = toPosixPath(uri.fsPath);
   }
 
-  const currDir = vscode.workspace.workspaceFolders[0].uri.path;
+  const currDir = toPosixPath(vscode.workspace.workspaceFolders[0].uri.fsPath);
   if (!targetDir.includes(currDir)) {
     throw Error('Select a folder from the workspace');
   } else {
@@ -82,7 +85,7 @@ async function validateAndGenerate(uri, recursive = false) {
 }
 
 /**
- * @param {string} targetPath
+ * @param {string} targetPath Has to be in posix style
  * @param {boolean} recursive
  * @returns {Promise<string>}
  * @throws {Error}
@@ -93,28 +96,37 @@ async function generate(targetPath, recursive = false) {
   let splitDir = targetPath.split('/');
   const dirName = splitDir[splitDir.length - 1];
 
-  const wksFiles = await vscode.workspace.findFiles(`**/${dirName}/**`);
+  const wksFiles = await vscode.workspace.findFiles(
+    `**${path.sep}${dirName}${path.sep}**`
+  );
   const files = [];
-  const dirs = [];
+  const dirs = new Set();
 
   for (const t of wksFiles) {
-    if (lstatSync(t.path).isFile()) {
-      if (t.path.endsWith('.dart') && !t.path.endsWith(`${dirName}.dart`)) {
-        if (t.path.split(`/`).length - splitDir.length == 1) {
+    const posixPath = toPosixPath(t.fsPath);
+    if (lstatSync(posixPath).isFile()) {
+      if (
+        posixPath.endsWith('.dart') &&
+        !posixPath.endsWith(`${dirName}.dart`)
+      ) {
+        if (posixPath.split(`/`).length - splitDir.length == 1) {
           // Get only dart files that are nested to the current folder
-          files.push(t.path);
+          files.push(posixPath.substring(posixPath.lastIndexOf('/') + 1));
         } else if (recursive) {
           // Get all subfolders since we want to create it recursively
-          const folderName = t.path.split(targetPath)[1].split('/')[1];
-          dirs.push(targetPath.concat(`/${folderName}`));
+          const folderName = posixPath.split(targetPath)[1].split('/')[1];
+
+          dirs.add(targetPath.concat(`/${folderName}`));
         }
       }
     }
   }
 
-  if (recursive && dirs.length > 0) {
+  if (recursive && dirs.size > 0) {
     for (const d of dirs) {
-      generate(d, true);
+      files.push(
+        toPosixPath(await generate(d, true)).split(`${targetPath}/`)[1]
+      );
     }
   }
 
@@ -122,17 +134,17 @@ async function generate(targetPath, recursive = false) {
   files.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
   let exports = '';
   for (const t of files) {
-    exports = `${exports}export '${t.substring(t.lastIndexOf('/') + 1)}';\n`;
+    exports = `${exports}export '${t}';\n`;
   }
 
   const barrelFile = `${targetPath}/${dirName}.dart`;
   return new Promise(async (resolve) => {
-    writeFile(barrelFile, exports, 'utf8', (error) => {
+    writeFile(toPlatformSpecificPath(barrelFile), exports, 'utf8', (error) => {
       if (error) {
         throw Error(error.message);
       }
 
-      resolve(barrelFile);
+      resolve(toPlatformSpecificPath(barrelFile));
     });
   });
 }
@@ -158,6 +170,22 @@ async function getFolderNameFromInput() {
   });
 }
 
+/**
+ * @param {string} pathLike
+ * @returns {string}
+ */
+function toPosixPath(pathLike) {
+  return pathLike.split(path.sep).join(path.posix.sep);
+}
+
+/**
+ * @param {string} posixPath
+ * @returns {string}
+ */
+function toPlatformSpecificPath(posixPath) {
+  return posixPath.split(path.posix.sep).join(path.sep);
+}
+
 exports.activate = activate;
 
 function deactivate() {}
@@ -169,4 +197,6 @@ module.exports = {
   generateCurrentAndNested,
   validateAndGenerate,
   generate,
+  toPosixPath,
+  toPlatformSpecificPath,
 };
