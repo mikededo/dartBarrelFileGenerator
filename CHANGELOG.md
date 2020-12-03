@@ -1,9 +1,17 @@
 # Change Log
 
-All notable changes to the "dart-barrel-file-generator" extension will be documented in this file.
+## 1.0.2
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+- Added `Changelog.MD`
 
-## [Unreleased]
+## 1.0.1
 
-- Initial release
+- Fixed platform specific path bug not initializing the extension
+
+## 0.0.2
+
+- Bug Fixing
+
+## 0.0.1
+
+- Initial release of the extension
