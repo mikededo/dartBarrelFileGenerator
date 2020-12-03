@@ -1,8 +1,8 @@
 {
   "name": "dart-barrel-file-generator",
   "displayName": "Dart Barrel File Generator",
-  "description": "Generates barrel files for dart projects and Flutter apps.",
-  "version": "0.0.2",
+  "description": "",
+  "version": "1.0.1",
   "publisher": "miquelddg",
   "author": {
     "name": "Miquel de Domingo i Giral",
@@ -10,7 +10,7 @@
     "url": "https://www.github.com/mikededo"
   },
   "engines": {
-    "vscode": "^1.49.0"
+    "vscode": "^1.51.0"
   },
   "repository": {
     "type": "git",
@@ -31,30 +31,31 @@
     "flutter"
   ],
   "activationEvents": [
-    "onCommand:extension.generateCurrentAndNested",
-    "onCommand:extension.generateCurrent"
+    "onLanguage:dart",
+    "onCommand:dart-barrel-file-generator.generateCurrent",
+    "onCommand:dart-barrel-file-generator.generateCurrentAndNested"
   ],
-  "main": "./dist/extension.js",
+  "main": "./extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extension.generateCurrentAndNested",
-        "title": "GDBF: Current and Nested Folders"
+        "command": "dart-barrel-file-generator.generateCurrent",
+        "title": "GDBF: Current Folder Only"
       },
       {
-        "command": "extension.generateCurrent",
-        "title": "GDBF: Current Folder Only"
+        "command": "dart-barrel-file-generator.generateCurrentAndNested",
+        "title": "GDBF: Current Folder and Nested Folders"
       }
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "extension.generateCurrentAndNested",
+          "command": "dart-barrel-file-generator.generateCurrent",
           "group": "7_modification",
           "when": "explorerResourceIsFolder"
         },
         {
-          "command": "extension.generateCurrent",
+          "command": "dart-barrel-file-generator.generateCurrentAndNested",
           "group": "7_modification",
           "when": "explorerResourceIsFolder"
         }
@@ -62,31 +63,23 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "webpack --mode production",
-    "webpack": "webpack --mode development",
-    "webpack-dev": "webpack --mode development --watch",
-    "test-compile": "tsc -p ./",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js"
   },
   "devDependencies": {
     "@types/glob": "^7.1.3",
-    "@types/lodash": "^4.14.161",
     "@types/mocha": "^8.0.0",
-    "@types/node": "^14.0.27",
-    "@types/vscode": "^1.49.0",
-    "@typescript-eslint/eslint-plugin": "^4.1.1",
-    "@typescript-eslint/parser": "^4.1.1",
+    "@types/node": "^12.11.7",
+    "@types/vscode": "^1.51.0",
     "eslint": "^7.9.0",
     "glob": "^7.1.6",
     "mocha": "^8.1.3",
-    "ts-loader": "^8.0.4",
     "typescript": "^4.0.2",
-    "vscode-test": "^1.4.0",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12"
+    "vscode-test": "^1.4.0"
   },
   "dependencies": {
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.20",
+    "path": "^0.12.7"
   }
 }
