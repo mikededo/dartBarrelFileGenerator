@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.3
+
+- Fixed `lodash` dependency missing
+
 ## 1.0.2
 
 - Added `Changelog.MD`
