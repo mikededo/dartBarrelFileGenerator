@@ -31,7 +31,7 @@ async function generateCurrent(uri) {
   try {
     vscode.window.showInformationMessage(
       'GDBF: Generated file!',
-      await validateAndGenerate(uri, true)
+      await validateAndGenerate(uri, false)
     );
   } catch (error) {
     vscode.window.showErrorMessage('GDBF: Error on generating the file', error);
@@ -114,9 +114,14 @@ async function generate(targetPath, recursive = false) {
           files.push(posixPath.substring(posixPath.lastIndexOf('/') + 1));
         } else if (recursive) {
           // Get all subfolders since we want to create it recursively
-          const folderName = posixPath.split(targetPath)[1].split('/')[1];
-
-          dirs.add(targetPath.concat(`/${folderName}`));
+          var targetFilePathParts = posixPath.split(targetPath);
+          if (targetFilePathParts.length > 1) {
+            var targetFileFolderParts = targetFilePathParts[1].split('/');
+            if (targetFileFolderParts.length > 1) {
+              const folderName = targetFileFolderParts[1];
+              dirs.add(targetPath.concat(`/${folderName}`));
+            }
+          }
         }
       }
     }
@@ -188,7 +193,7 @@ function toPlatformSpecificPath(posixPath) {
 
 exports.activate = activate;
 
-function deactivate() {}
+function deactivate() { }
 
 module.exports = {
   activate,
