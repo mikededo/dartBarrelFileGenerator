@@ -114,9 +114,9 @@ async function generate(targetPath, recursive = false) {
           files.push(posixPath.substring(posixPath.lastIndexOf('/') + 1));
         } else if (recursive) {
           // Get all subfolders since we want to create it recursively
-          var targetFilePathParts = posixPath.split(targetPath);
+          const targetFilePathParts = posixPath.split(targetPath);
           if (targetFilePathParts.length > 1) {
-            var targetFileFolderParts = targetFilePathParts[1].split('/');
+            const targetFileFolderParts = targetFilePathParts[1].split('/');
             if (targetFileFolderParts.length > 1) {
               const folderName = targetFileFolderParts[1];
               dirs.add(targetPath.concat(`/${folderName}`));
@@ -191,9 +191,7 @@ function toPlatformSpecificPath(posixPath) {
   return posixPath.split(path.posix.sep).join(path.sep);
 }
 
-exports.activate = activate;
-
-function deactivate() { }
+function deactivate() {}
 
 module.exports = {
   activate,
