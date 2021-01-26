@@ -14,7 +14,7 @@ It can create barrel files only two the selected folder
 
 It creates aswell barrel files for the selected folder and all the nested folders from the selected. It also adds the nested folder barrel file to its parent barrel file.
 
-![current-and-nested-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-only.gif)
+![current-and-nested-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-and-nested.gif)
 
 ## Commands
 
