@@ -3,6 +3,14 @@ const _ = require('lodash');
 const path = require('path');
 const vscode = require('vscode');
 
+const CONFIGURATIONS = {
+  key: 'dartBarrelFileGenerator',
+  values: {
+    EXCLUDE_FREEZED: 'excludeFreezed',
+    EXCLUDE_GENERATED: 'excludeGenerated',
+  },
+};
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -105,10 +113,7 @@ async function generate(targetPath, recursive = false) {
   for (const t of wksFiles) {
     const posixPath = toPosixPath(t.fsPath);
     if (lstatSync(posixPath).isFile()) {
-      if (
-        posixPath.endsWith('.dart') &&
-        !posixPath.endsWith(`${dirName}.dart`)
-      ) {
+      if (shouldExport(posixPath, dirName)) {
         if (posixPath.split(`/`).length - splitDir.length == 1) {
           // Get only dart files that are nested to the current folder
           files.push(posixPath.substring(posixPath.lastIndexOf('/') + 1));
@@ -189,6 +194,42 @@ function toPosixPath(pathLike) {
  */
 function toPlatformSpecificPath(posixPath) {
   return posixPath.split(path.posix.sep).join(path.sep);
+}
+
+/**
+ * @param {string} posixPath
+ * @param {string} dirName
+ * @returns {boolean} Whether the file should be exported or not
+ */
+function shouldExport(posixPath, dirName) {
+  if (posixPath.endsWith('.dart') && !posixPath.endsWith(`${dirName}.dart`)) {
+    if (posixPath.endsWith('.freezed.dart')) {
+      // Export only if files are not excluded
+      return !getConfig(CONFIGURATIONS.values.EXCLUDE_FREEZED);
+    } else if (posixPath.endsWith('.g.dart')) {
+      // Export only if files are not excluded
+      return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+/**
+ * @param {string} value
+ * @returns {any} The value of the configuration (undefined if does not exist)
+ */
+function getConfig(value) {
+  console.log(
+    vscode.workspace
+      .getConfiguration()
+      .get([CONFIGURATIONS.key, value].join('.'))
+  );
+  return vscode.workspace
+    .getConfiguration()
+    .get([CONFIGURATIONS.key, value].join('.'));
 }
 
 function deactivate() {}
