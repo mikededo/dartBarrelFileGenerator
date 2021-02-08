@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.0
+
+- Added file exclusion for generated files.
+  - Files type excluded are `.g.dart` and `.freezed.dart`
+  - Enabled by default, it can be toggled in the configuration folder.
+- Added LICENSE file
+
 ## 1.1.0
 
 - Fixed recursive function arguments

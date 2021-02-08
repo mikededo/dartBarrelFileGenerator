@@ -2,7 +2,7 @@
   "name": "dart-barrel-file-generator",
   "displayName": "Dart Barrel File Generator",
   "description": "",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "publisher": "miquelddg",
   "author": {
     "name": "Miquel de Domingo i Giral",
@@ -47,6 +47,25 @@
         "title": "GDBF: Current Folder and Nested Folders"
       }
     ],
+    "configuration": [
+      {
+        "title": "Dart Barrel File Generator",
+        "properties": {
+          "dartBarrelFileGenerator.excludeFreezed": {
+            "title": "Exclude freezed (.freezed.dart) files",
+            "type": "boolean",
+            "default": true,
+            "description": "Exclude .freezed.dart files"
+          },
+          "dartBarrelFileGenerator.excludeGenerated": {
+            "title": "Exclude generated (.g.dart) files",
+            "type": "boolean",
+            "default": true,
+            "description": "Exclude .g.dart files"
+          }
+        }
+      }
+    ],
     "menus": {
       "explorer/context": [
         {
@@ -65,7 +84,8 @@
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
-    "test": "node ./test/runTest.js"
+    "test": "node ./test/runTest.js",
+    "build": "vsce package --out dist/"
   },
   "devDependencies": {
     "@types/glob": "^7.1.3",

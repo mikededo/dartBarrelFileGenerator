@@ -2,6 +2,7 @@
 .vscode-test/**
 out/test/**
 src/**
+dist/
 .gitignore
 vsc-extension-quickstart.md
 webpack.config.js
