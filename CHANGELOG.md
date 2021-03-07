@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.2.1
+
+- Fixed file export when two folders are named the same ([#7](https://github.com/mikededo/dartBarrelFileGenerator/issues/7))
+
 ## 1.2.0
 
 - Added file exclusion for generated files.
