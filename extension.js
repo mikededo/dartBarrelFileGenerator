@@ -94,19 +94,28 @@ async function validateAndGenerate(uri, recursive = false) {
 
 /**
  * @param {string} targetPath Has to be in posix style
- * @param {boolean} recursive
+ * @param {boolean} recursive Whether it should be recursive
+ * @param {string} appendToDir Appends the string to the directory name
  * @returns {Promise<string>}
  * @throws {Error}
  */
-async function generate(targetPath, recursive = false) {
+async function generate(targetPath, recursive = false, appendToDir = null) {
   // Selected target is in the current workspace
   // This could be optional
-  let splitDir = targetPath.split('/');
+  const splitDir = targetPath.split('/');
+  // The folder name
   const dirName = splitDir[splitDir.length - 1];
+  // The folder name appended to all the folders that have been called since the
+  // beggining of the recursion. It prevents adding files from folders which
+  // are named the same
+  const appendedDirName = appendToDir
+    ? `${appendToDir}${path.sep}${dirName}`
+    : dirName;
 
   const wksFiles = await vscode.workspace.findFiles(
-    `**${path.sep}${dirName}${path.sep}**`
+    `**${path.sep}${appendedDirName}${path.sep}**`
   );
+
   const files = [];
   const dirs = new Set();
 
@@ -135,7 +144,9 @@ async function generate(targetPath, recursive = false) {
   if (recursive && dirs.size > 0) {
     for (const d of dirs) {
       files.push(
-        toPosixPath(await generate(d, true)).split(`${targetPath}/`)[1]
+        toPosixPath(await generate(d, true, appendedDirName)).split(
+          `${targetPath}/`
+        )[1]
       );
     }
   }
@@ -143,6 +154,7 @@ async function generate(targetPath, recursive = false) {
   // Sort files
   files.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
   let exports = '';
+
   for (const t of files) {
     exports = `${exports}export '${t}';\n`;
   }
@@ -222,11 +234,6 @@ function shouldExport(posixPath, dirName) {
  * @returns {any} The value of the configuration (undefined if does not exist)
  */
 function getConfig(value) {
-  console.log(
-    vscode.workspace
-      .getConfiguration()
-      .get([CONFIGURATIONS.key, value].join('.'))
-  );
   return vscode.workspace
     .getConfiguration()
     .get([CONFIGURATIONS.key, value].join('.'));
