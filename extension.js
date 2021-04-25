@@ -1,4 +1,4 @@
-const { lstatSync, writeFile } = require('fs');
+const { readdirSync, lstatSync, writeFile } = require('fs');
 const _ = require('lodash');
 const path = require('path');
 const vscode = require('vscode');
@@ -42,6 +42,7 @@ async function generateCurrent(uri) {
       await validateAndGenerate(uri, false)
     );
   } catch (error) {
+    console.log(error);
     vscode.window.showErrorMessage('GDBF: Error on generating the file', error);
   }
 }
@@ -95,56 +96,33 @@ async function validateAndGenerate(uri, recursive = false) {
 /**
  * @param {string} targetPath Has to be in posix style
  * @param {boolean} recursive Whether it should be recursive
- * @param {string} appendToDir Appends the string to the directory name
  * @returns {Promise<string>}
  * @throws {Error}
  */
-async function generate(targetPath, recursive = false, appendToDir = null) {
+async function generate(targetPath, recursive = false) {
   // Selected target is in the current workspace
   // This could be optional
   const splitDir = targetPath.split('/');
   // The folder name
   const dirName = splitDir[splitDir.length - 1];
-  // The folder name appended to all the folders that have been called since the
-  // beggining of the recursion. It prevents adding files from folders which
-  // are named the same
-  const appendedDirName = appendToDir
-    ? `${appendToDir}${path.sep}${dirName}`
-    : dirName;
-
-  const wksFiles = await vscode.workspace.findFiles(
-    `**${path.sep}${appendedDirName}${path.sep}**`
-  );
 
   const files = [];
   const dirs = new Set();
 
-  for (const t of wksFiles) {
-    const posixPath = toPosixPath(t.fsPath);
-    if (lstatSync(posixPath).isFile()) {
-      if (shouldExport(posixPath, dirName)) {
-        if (posixPath.split(`/`).length - splitDir.length == 1) {
-          // Get only dart files that are nested to the current folder
-          files.push(posixPath.substring(posixPath.lastIndexOf('/') + 1));
-        } else if (recursive) {
-          // Get all subfolders since we want to create it recursively
-          const targetFilePathParts = posixPath.split(targetPath);
-          if (targetFilePathParts.length > 1) {
-            const targetFileFolderParts = targetFilePathParts[1].split('/');
-            if (targetFileFolderParts.length > 1) {
-              const folderName = targetFileFolderParts[1];
-              dirs.add(targetPath.concat(`/${folderName}`));
-            }
-          }
-        }
+  for (const curr of readdirSync(targetPath, { withFileTypes: true })) {
+    if (curr.isFile()) {
+      if (shouldExport(curr.name, dirName)) {
+        files.push(curr.name);
       }
+    } else if (curr.isDirectory()) {
+      dirs.add(curr.name);
     }
   }
 
   if (recursive && dirs.size > 0) {
     for (const d of dirs) {
       files.push(
-        toPosixPath(await generate(d, true, appendedDirName)).split(
+        toPosixPath(await generate(`${targetPath}/${d}`, true)).split(
           `${targetPath}/`
         )[1]
       );

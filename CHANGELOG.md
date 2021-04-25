@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.3.0
+
+- Fix `1.2.1` on Windows OS
+
 ## 1.2.1
 
 - Fixed file export when two folders are named the same ([#7](https://github.com/mikededo/dartBarrelFileGenerator/issues/7))
