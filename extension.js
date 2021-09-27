@@ -217,7 +217,7 @@ function shouldExport(posixPath, dirName) {
       // Export only if files are not excluded
       return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
     }
-    console.log(posixPath);
+
     return true;
   }
 
