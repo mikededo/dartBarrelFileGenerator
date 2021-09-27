@@ -2,7 +2,7 @@
   "name": "dart-barrel-file-generator",
   "displayName": "Dart Barrel File Generator",
   "description": "",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "publisher": "miquelddg",
   "author": {
     "name": "Miquel de Domingo i Giral",
@@ -10,7 +10,7 @@
     "url": "https://www.github.com/mikededo"
   },
   "engines": {
-    "vscode": "^1.51.0"
+    "vscode": "^1.60.0"
   },
   "repository": {
     "type": "git",

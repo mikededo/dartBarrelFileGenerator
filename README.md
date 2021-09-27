@@ -25,6 +25,13 @@ It creates aswell barrel files for the selected folder and all the nested folder
 
 Both commans can be used by typing in the commmand palette. It will then ask you to choose a folder. If it is done from the folder tree, it will use the selected folder as the root folder.
 
+## Options
+
+You can also exclude `.freezed.dart` and `.g.dart` (generated) files by modifying the following options in your settings:
+
+- `dartBarrelFileGenerator.excludeFreezed: false` (by default).
+- `dartBarrelFileGenerator.excludeGenerated: false` (by default).
+
 ## Attributions
 
 Extension icon made by [Freepik](https://www.flaticon.com/authors/freepik) from [flaticon](www.flaticon.com).

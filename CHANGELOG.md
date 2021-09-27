@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.3.1
+
+- Fix files not exporting when suffixed with folder name ([#10](https://github.com/mikededo/dartBarrelFileGenerator/issues/10))
+
 ## 1.3.0
 
 - Fix `1.2.1` on Windows OS
