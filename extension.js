@@ -11,6 +11,23 @@ const CONFIGURATIONS = {
   },
 };
 
+const REGEX = {
+  /**
+   * Used to check whether the current file name has a
+   * dart file extension
+   */
+  dart: new RegExp('.*(.dart)$'),
+
+  /**
+   * Returns a regex tnhat will match if the filename has
+   * the same name as the barrel file of the `folder` param
+   *
+   * @param {string} folder The folder name
+   * @returns {RegExp}
+   */
+  base: (folder) => new RegExp(`^${folder}.dart$`),
+};
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -192,7 +209,7 @@ function toPlatformSpecificPath(posixPath) {
  * @returns {boolean} Whether the file should be exported or not
  */
 function shouldExport(posixPath, dirName) {
-  if (posixPath.endsWith('.dart') && !posixPath.endsWith(`${dirName}.dart`)) {
+  if (REGEX.dart.test(posixPath) && !REGEX.base(dirName).test(posixPath)) {
     if (posixPath.endsWith('.freezed.dart')) {
       // Export only if files are not excluded
       return !getConfig(CONFIGURATIONS.values.EXCLUDE_FREEZED);
@@ -200,7 +217,7 @@ function shouldExport(posixPath, dirName) {
       // Export only if files are not excluded
       return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
     }
-
+    console.log(posixPath);
     return true;
   }
 
