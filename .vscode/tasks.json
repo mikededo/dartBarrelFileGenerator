@@ -4,17 +4,16 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "tasks: watch-tests",
 			"type": "npm",
-			"script": "watch",
+			"script": "watch:tests",
 			"problemMatcher": "$tsc-watch",
 			"isBackground": true,
 			"presentation": {
-				"reveal": "never"
+				"reveal": "never",
+				"group": "watchers"
 			},
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
+			"group": "build"
 		}
 	]
 }

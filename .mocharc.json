@@ -1,4 +1,0 @@
-{
-  "extension": ["mjs"],
-  "spec": "out/test/**/*.spec.js"
-}
