@@ -1,28 +1,27 @@
 import _ from 'lodash';
 import { commands, ExtensionContext, Uri, window } from 'vscode';
 
-import { GEN_TYPE, validateAndGenerate } from './helpers';
-import { Context } from './helpers';
+import { Context, GEN_TYPE, validateAndGenerate } from './helpers';
 
 /**
  * Activates the extension
  */
 const activate = (context: ExtensionContext) => {
-    // Generate Current
-    context.subscriptions.push(
-        commands.registerCommand(
-            'dart-barrel-file-generator.generateCurrent',
-            generateCurrent
-        )
-    );
+  // Generate Current
+  context.subscriptions.push(
+    commands.registerCommand(
+      'dart-barrel-file-generator.generateCurrent',
+      generateCurrent
+    )
+  );
 
-    // Generate Current and Nested
-    context.subscriptions.push(
-        commands.registerCommand(
-            'dart-barrel-file-generator.generateCurrentAndNested',
-            generateCurrentAndNested
-        )
-    );
+  // Generate Current and Nested
+  context.subscriptions.push(
+    commands.registerCommand(
+      'dart-barrel-file-generator.generateCurrentAndNested',
+      generateCurrentAndNested
+    )
+  );
 };
 
 /**
@@ -33,23 +32,23 @@ const activate = (context: ExtensionContext) => {
  * @param uri The uri path in which to create the barrel file
  */
 const generateCurrent = async (uri: Uri) => {
-    Context.initGeneration({ path: uri, type: GEN_TYPE.REGULAR });
+  Context.initGeneration({ path: uri, type: GEN_TYPE.REGULAR });
 
-    try {
-        window.showInformationMessage(
-            'GDBF: Generated file!',
-            await validateAndGenerate().then((s) => {
-                Context.endGeneration();
-
-                return s;
-            })
-        );
-    } catch (error: any) {
-        Context.onError(error);
+  try {
+    window.showInformationMessage(
+      'GDBF: Generated file!',
+      await validateAndGenerate().then((s) => {
         Context.endGeneration();
 
-        window.showErrorMessage('GDBF: Error on generating the file', error);
-    }
+        return s;
+      })
+    );
+  } catch (error: any) {
+    Context.onError(error);
+    Context.endGeneration();
+
+    window.showErrorMessage('GDBF: Error on generating the file', error);
+  }
 };
 
 /**
@@ -60,27 +59,27 @@ const generateCurrent = async (uri: Uri) => {
  * @param uri The uri path in which to create the barrel file
  */
 const generateCurrentAndNested = async (uri: Uri) => {
-    Context.initGeneration({ path: uri, type: GEN_TYPE.RECURSIVE });
+  Context.initGeneration({ path: uri, type: GEN_TYPE.RECURSIVE });
 
-    try {
-        window.showInformationMessage(
-            'GDBF: Generated files!',
-            await validateAndGenerate().then((s) => {
-                Context.endGeneration();
-
-                return s;
-            })
-        );
-    } catch (error: any) {
-        Context.onError(error);
+  try {
+    window.showInformationMessage(
+      'GDBF: Generated files!',
+      await validateAndGenerate().then((s) => {
         Context.endGeneration();
 
-        window.showErrorMessage('GDBF: Error on generating the file', error);
-    }
+        return s;
+      })
+    );
+  } catch (error: any) {
+    Context.onError(error);
+    Context.endGeneration();
+
+    window.showErrorMessage('GDBF: Error on generating the file', error);
+  }
 };
 
 const deactivate = () => {
-    Context.deactivate();
+  Context.deactivate();
 };
 
 export { activate, deactivate, generateCurrent, generateCurrentAndNested };

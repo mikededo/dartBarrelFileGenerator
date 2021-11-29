@@ -13,7 +13,7 @@ type PosixPath = string;
  * @returns An equal location with posix separators
  */
 export const toPosixPath = (pathLike: string): PosixPath =>
-    pathLike.split(path.sep).join(path.posix.sep);
+  pathLike.split(path.sep).join(path.posix.sep);
 
 /**
  * Converts a `PosixPath` to a OS specific path
@@ -22,7 +22,7 @@ export const toPosixPath = (pathLike: string): PosixPath =>
  * @returns A location path with os specific separators
  */
 export const toOsSpecificPath = (posixPath: PosixPath): string =>
-    posixPath.split(path.posix.sep).join(path.sep);
+  posixPath.split(path.posix.sep).join(path.sep);
 
 /**
  * Checks if a file is a dart file
@@ -41,13 +41,13 @@ export const isDartFile = (fileName: string) => FILE_REGEX.dart.test(fileName);
  * barrel file
  */
 export const isBarrelFile = (dirName: string, fileName: string) =>
-    FILE_REGEX.base(dirName).test(fileName);
+  FILE_REGEX.base(dirName).test(fileName);
 
 /**
  * Sorts the file names alphabetically
  */
 export const fileSort = (a: string, b: string): number =>
-    a < b ? -1 : a > b ? 1 : 0;
+  a < b ? -1 : a > b ? 1 : 0;
 
 /**
  * Shows a vscode dialog to select a folder to create a barrel file to
@@ -55,12 +55,12 @@ export const fileSort = (a: string, b: string): number =>
  * @returns The selected path if any
  */
 export const getFolderNameFromDialog = (): Thenable<string | undefined> =>
-    window.showOpenDialog(CONFIGURATIONS.input).then((uri) =>
-        _.isNil(uri) || _.isEmpty(uri)
-            ? undefined
-            : // The selected input is in the first array position
-              uri[0].path
-    );
+  window.showOpenDialog(CONFIGURATIONS.input).then((uri) =>
+    _.isNil(uri) || _.isEmpty(uri)
+      ? undefined
+      : // The selected input is in the first array position
+        uri[0].path
+  );
 
 /**
  * Checks if the given `posixPath` is a dart file, it has a different
@@ -72,24 +72,24 @@ export const getFolderNameFromDialog = (): Thenable<string | undefined> =>
  * exports
  */
 export const shouldExport = (
-    posixPath: PosixPath,
-    dirName: string
+  posixPath: PosixPath,
+  dirName: string
 ): boolean => {
-    if (isDartFile(posixPath) && !isBarrelFile(dirName, posixPath)) {
-        if (FILE_REGEX.suffixed('freezed').test(posixPath)) {
-            // Export only if files are not excluded
-            return !getConfig(CONFIGURATIONS.values.EXCLUDE_FREEZED);
-        }
-
-        if (FILE_REGEX.suffixed('g').test(posixPath)) {
-            // Export only if files are not excluded
-            return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
-        }
-
-        return true;
+  if (isDartFile(posixPath) && !isBarrelFile(dirName, posixPath)) {
+    if (FILE_REGEX.suffixed('freezed').test(posixPath)) {
+      // Export only if files are not excluded
+      return !getConfig(CONFIGURATIONS.values.EXCLUDE_FREEZED);
     }
 
-    return false;
+    if (FILE_REGEX.suffixed('g').test(posixPath)) {
+      // Export only if files are not excluded
+      return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
+    }
+
+    return true;
+  }
+
+  return false;
 };
 
 /**
@@ -99,7 +99,7 @@ export const shouldExport = (
  * @returns The configuration value if any
  */
 export const getConfig = (name: string): any | undefined =>
-    workspace.getConfiguration().get([CONFIGURATIONS.key, name].join('.'));
+  workspace.getConfiguration().get([CONFIGURATIONS.key, name].join('.'));
 
 export const formatDate = (date: Date = new Date()) =>
-    date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+  date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
