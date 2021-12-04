@@ -20,8 +20,8 @@ class GeneratorContext {
   private type?: GEN_TYPE;
   private startTimestamp?: number;
 
-  constructor(channelName: string = 'DartBarrelFile') {
-    this.channel = window.createOutputChannel(channelName);
+  constructor() {
+    this.channel = window.createOutputChannel('DartBarrelFile');
 
     this.channel.appendLine(
       `[${formatDate()}] DartBarrelFile extension enabled`
@@ -119,3 +119,4 @@ class GeneratorContext {
 const ctx = new GeneratorContext();
 
 export default ctx;
+export { GeneratorContext };

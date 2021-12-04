@@ -1,48 +1,48 @@
-import assert from 'assert';
-
 import { FILE_REGEX } from '../../helpers/constants';
 
 describe('constants', () => {
   describe('FILE_REGEX', () => {
     describe('#dart', () => {
       it('should return a RegExp', () => {
-        assert.ok(FILE_REGEX.dart instanceof RegExp);
+        expect(FILE_REGEX.dart).toBeInstanceOf(RegExp);
       });
 
       it('should return true if file is a dart file', () => {
-        assert.ok(FILE_REGEX.dart.test('main.dart'));
+        expect(FILE_REGEX.dart.test('main.dart')).toBeTruthy();
       });
 
       it('should return false if file not a dart file', () => {
-        assert.ok(!FILE_REGEX.dart.test('main.js'));
+        expect(FILE_REGEX.dart.test('main.js')).toBeFalsy();
       });
     });
 
     describe('#suffixed', () => {
       it('should return a RegExp', () => {
-        assert.ok(FILE_REGEX.suffixed('freezed') instanceof RegExp);
+        expect(FILE_REGEX.suffixed('freezed')).toBeInstanceOf(RegExp);
       });
 
       it('should return true if file suffixed with freezed', () => {
-        assert.ok(FILE_REGEX.suffixed('freezed').test('file.freezed.dart'));
+        expect(
+          FILE_REGEX.suffixed('freezed').test('file.freezed.dart')
+        ).toBeTruthy();
       });
 
       it('should return false if file not suffixed with freezed', () => {
-        assert.ok(!FILE_REGEX.suffixed('freezed').test('file.g.dart'));
+        expect(FILE_REGEX.suffixed('freezed').test('file.g.dart')).toBeFalsy();
       });
     });
 
     describe('#base', () => {
       it('should return a RegExp', () => {
-        assert.ok(FILE_REGEX.base('main') instanceof RegExp);
+        expect(FILE_REGEX.base('main')).toBeInstanceOf(RegExp);
       });
 
       it('should return true if file has the same name as the folder barrel file', () => {
-        assert.ok(FILE_REGEX.base('widgets').test('widgets.dart'));
+        expect(FILE_REGEX.base('widgets').test('widgets.dart')).toBeTruthy();
       });
 
       it('should return true if file does not have the same name as the folder barrel file', () => {
-        assert.ok(!FILE_REGEX.base('widgets').test('AppBar.dart'));
+        expect(FILE_REGEX.base('widgets').test('AppBar.dart')).toBeFalsy();
       });
     });
   });
