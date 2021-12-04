@@ -15,7 +15,9 @@ export const CONFIGURATIONS = {
 };
 
 export enum GEN_TYPE {
+  // eslint-disable-next-line no-unused-vars
   REGULAR = 0,
+  // eslint-disable-next-line no-unused-vars
   RECURSIVE = 1
 }
 

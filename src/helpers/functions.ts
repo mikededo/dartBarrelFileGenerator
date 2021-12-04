@@ -1,8 +1,10 @@
-import _ from 'lodash';
-import path from 'path';
+import { isEmpty, isNil } from 'lodash';
+import { sep, posix } from 'path';
 import { window, workspace } from 'vscode';
 
 import { CONFIGURATIONS, FILE_REGEX } from './constants';
+
+const path = { sep, posix };
 
 type PosixPath = string;
 
@@ -56,7 +58,7 @@ export const fileSort = (a: string, b: string): number =>
  */
 export const getFolderNameFromDialog = (): Thenable<string | undefined> =>
   window.showOpenDialog(CONFIGURATIONS.input).then((uri) =>
-    _.isNil(uri) || _.isEmpty(uri)
+    isNil(uri) || isEmpty(uri)
       ? undefined
       : // The selected input is in the first array position
         uri[0].path

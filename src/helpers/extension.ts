@@ -1,5 +1,5 @@
 import { lstatSync, readdirSync, writeFile } from 'fs';
-import _ from 'lodash';
+import { get, isNil } from 'lodash';
 import { workspace } from 'vscode';
 
 import Context from './context';
@@ -23,10 +23,10 @@ import {
 const validateAndGenerate = async (): Promise<string> => {
   let targetDir;
 
-  if (_.isNil(_.get(Context.activePath, 'path'))) {
+  if (isNil(get(Context.activePath, 'path'))) {
     targetDir = await getFolderNameFromDialog();
 
-    if (_.isNil(targetDir)) {
+    if (isNil(targetDir)) {
       throw Error('Select a directory!');
     }
 

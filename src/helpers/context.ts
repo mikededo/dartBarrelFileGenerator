@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isNil } from 'lodash';
 import { OutputChannel, Uri, window } from 'vscode';
 
 import { GEN_TYPE } from './constants';
@@ -37,7 +37,7 @@ class GeneratorContext {
   }
 
   get activePath(): Uri {
-    if (_.isNil(this.path)) {
+    if (isNil(this.path)) {
       throw new Error('Context.activePath called when no active path');
     }
 
@@ -45,7 +45,7 @@ class GeneratorContext {
   }
 
   get activeType(): GEN_TYPE {
-    if (_.isNil(this.type)) {
+    if (isNil(this.type)) {
       throw new Error('Context.activeType called when no active type');
     }
 
@@ -71,7 +71,7 @@ class GeneratorContext {
   }
 
   endGeneration(): void {
-    if (_.isNil(this.startTimestamp)) {
+    if (isNil(this.startTimestamp)) {
       throw new Error(
         'Context.endGeneration cannot be called before Context.initGeneration'
       );

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { commands, ExtensionContext, Uri, window } from 'vscode';
 
 import { Context, GEN_TYPE, validateAndGenerate } from './helpers';
