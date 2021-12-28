@@ -6,6 +6,7 @@ const vscode = require('vscode');
 const CONFIGURATIONS = {
   key: 'dartBarrelFileGenerator',
   values: {
+    PROPT_NAME: 'promptName',
     EXCLUDE_FREEZED: 'excludeFreezed',
     EXCLUDE_GENERATED: 'excludeGenerated',
   },
@@ -85,6 +86,17 @@ async function generateCurrentAndNested(uri) {
  * @throws {Error}
  */
 async function validateAndGenerate(uri, recursive = false) {
+  let promptName = undefined;
+
+  if (!recursive && getConfig(CONFIGURATIONS.values.PROPT_NAME)) {
+    promptName = await vscode.window.showInputBox({
+      title: 'Barrel file name',
+      prompt:
+        'Enter the name of the barrel file without the extension. If no name is entered, the folder name will be used',
+      placeHolder: 'Ex: index',
+    });
+  }
+
   let targetDir;
   if (_.isNil(_.get(uri, 'path'))) {
     targetDir = await getFolderNameFromInput();
@@ -106,7 +118,7 @@ async function validateAndGenerate(uri, recursive = false) {
   if (!targetDir.includes(currDir)) {
     throw Error('Select a folder from the workspace');
   } else {
-    return generate(targetDir, recursive);
+    return generate(targetDir, promptName, recursive);
   }
 }
 
@@ -116,7 +128,7 @@ async function validateAndGenerate(uri, recursive = false) {
  * @returns {Promise<string>}
  * @throws {Error}
  */
-async function generate(targetPath, recursive = false) {
+async function generate(targetPath, promptName, recursive = false) {
   // Selected target is in the current workspace
   // This could be optional
   const splitDir = targetPath.split('/');
@@ -128,7 +140,7 @@ async function generate(targetPath, recursive = false) {
 
   for (const curr of readdirSync(targetPath, { withFileTypes: true })) {
     if (curr.isFile()) {
-      if (shouldExport(curr.name, dirName)) {
+      if (shouldExport(curr.name, dirName, promptName)) {
         files.push(curr.name);
       }
     } else if (curr.isDirectory()) {
@@ -139,9 +151,9 @@ async function generate(targetPath, recursive = false) {
   if (recursive && dirs.size > 0) {
     for (const d of dirs) {
       files.push(
-        toPosixPath(await generate(`${targetPath}/${d}`, true)).split(
-          `${targetPath}/`
-        )[1]
+        toPosixPath(
+          await generate(`${targetPath}/${d}`, promptName, true)
+        ).split(`${targetPath}/`)[1]
       );
     }
   }
@@ -154,7 +166,7 @@ async function generate(targetPath, recursive = false) {
     exports = `${exports}export '${t}';\n`;
   }
 
-  const barrelFile = `${targetPath}/${dirName}.dart`;
+  const barrelFile = `${targetPath}/${promptName ? promptName : dirName}.dart`;
   return new Promise(async (resolve) => {
     writeFile(toPlatformSpecificPath(barrelFile), exports, 'utf8', (error) => {
       if (error) {
@@ -206,10 +218,18 @@ function toPlatformSpecificPath(posixPath) {
 /**
  * @param {string} posixPath
  * @param {string} dirName
+ * @param {string | undefined} promptName
  * @returns {boolean} Whether the file should be exported or not
  */
-function shouldExport(posixPath, dirName) {
-  if (REGEX.dart.test(posixPath) && !REGEX.base(dirName).test(posixPath)) {
+function shouldExport(posixPath, dirName, promptName) {
+  // If the user has the `promptName` option to true, `dirName` is not used,
+  // rather it uses the entered name
+  const barrelFileName = promptName ? promptName : dirName;
+
+  if (
+    REGEX.dart.test(posixPath) &&
+    !REGEX.base(barrelFileName).test(posixPath)
+  ) {
     if (posixPath.endsWith('.freezed.dart')) {
       // Export only if files are not excluded
       return !getConfig(CONFIGURATIONS.values.EXCLUDE_FREEZED);
