@@ -1,121 +1,127 @@
 {
-    "name": "dart-barrel-file-generator",
-    "displayName": "Dart Barrel File Generator",
-    "description": "",
-    "version": "1.3.1",
-    "publisher": "miquelddg",
-    "author": {
-        "name": "Miquel de Domingo i Giral",
-        "email": "miquelddg@gmail.com",
-        "url": "https://www.github.com/mikededo"
-    },
-    "engines": {
-        "vscode": "^1.60.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/mikededo/dartBarrelFileGenerator"
-    },
-    "bugs": {
-        "email": "miquelddg@gmail.com",
-        "url": "https://www.github.com/mikededo/dartBarrelFileGenerator/issues"
-    },
-    "categories": [
-        "Programming Languages",
-        "Other"
+  "name": "dart-barrel-file-generator",
+  "displayName": "Dart Barrel File Generator",
+  "description": "",
+  "version": "1.3.1",
+  "publisher": "miquelddg",
+  "author": {
+    "name": "Miquel de Domingo i Giral",
+    "email": "miquelddg@gmail.com",
+    "url": "https://www.github.com/mikededo"
+  },
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikededo/dartBarrelFileGenerator"
+  },
+  "bugs": {
+    "email": "miquelddg@gmail.com",
+    "url": "https://www.github.com/mikededo/dartBarrelFileGenerator/issues"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "icon": "assets/logo.png",
+  "keywords": [
+    "dart",
+    "barrel file",
+    "flutter"
+  ],
+  "activationEvents": [
+    "onLanguage:dart",
+    "onCommand:dart-barrel-file-generator.generateCurrent",
+    "onCommand:dart-barrel-file-generator.generateCurrentAndNested"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "dart-barrel-file-generator.generateCurrent",
+        "title": "GDBF: Current Folder Only"
+      },
+      {
+        "command": "dart-barrel-file-generator.generateCurrentAndNested",
+        "title": "GDBF: Current Folder and Nested Folders"
+      }
     ],
-    "icon": "assets/logo.png",
-    "keywords": [
-        "dart",
-        "barrel file",
-        "flutter"
-    ],
-    "activationEvents": [
-        "onLanguage:dart",
-        "onCommand:dart-barrel-file-generator.generateCurrent",
-        "onCommand:dart-barrel-file-generator.generateCurrentAndNested"
-    ],
-    "main": "./dist/extension.js",
-    "contributes": {
-        "commands": [
-            {
-                "command": "dart-barrel-file-generator.generateCurrent",
-                "title": "GDBF: Current Folder Only"
-            },
-            {
-                "command": "dart-barrel-file-generator.generateCurrentAndNested",
-                "title": "GDBF: Current Folder and Nested Folders"
-            }
-        ],
-        "configuration": [
-            {
-                "title": "Dart Barrel File Generator",
-                "properties": {
-                    "dartBarrelFileGenerator.excludeFreezed": {
-                        "title": "Exclude freezed (.freezed.dart) files",
-                        "type": "boolean",
-                        "default": true,
-                        "description": "Exclude .freezed.dart files"
-                    },
-                    "dartBarrelFileGenerator.excludeGenerated": {
-                        "title": "Exclude generated (.g.dart) files",
-                        "type": "boolean",
-                        "default": true,
-                        "description": "Exclude .g.dart files"
-                    }
-                }
-            }
-        ],
-        "menus": {
-            "explorer/context": [
-                {
-                    "command": "dart-barrel-file-generator.generateCurrent",
-                    "group": "7_modification",
-                    "when": "explorerResourceIsFolder"
-                },
-                {
-                    "command": "dart-barrel-file-generator.generateCurrentAndNested",
-                    "group": "7_modification",
-                    "when": "explorerResourceIsFolder"
-                }
-            ]
+    "configuration": [
+      {
+        "title": "Dart Barrel File Generator",
+        "properties": {
+          "dartBarrelFileGenerator.promptName": {
+            "title": "Open input on file generation",
+            "type": "boolean",
+            "default": false,
+            "description": "Get promted asking for the name of the barrel file that will be created"
+          },
+          "dartBarrelFileGenerator.excludeFreezed": {
+            "title": "Exclude freezed (.freezed.dart) files",
+            "type": "boolean",
+            "default": true,
+            "description": "Exclude .freezed.dart files"
+          },
+          "dartBarrelFileGenerator.excludeGenerated": {
+            "title": "Exclude generated (.g.dart) files",
+            "type": "boolean",
+            "default": true,
+            "description": "Exclude .g.dart files"
+          }
         }
-    },
-    "scripts": {
-        "lint": "eslint .",
-        "pretest": "eslint src/test/**/* && npm run compile:tests",
-        "compile:tests": "tsc -p .",
-        "watch:tests": "tsc -p . -w",
-        "test": "jest --config jest.config.js",
-        "vscode:prepublish": "webpack --mode production",
-        "webpack": "webpack --mode development",
-        "webpack-dev": "webpack --mode development --watch",
-        "package": "webpack --mode production --devtool hidden-source-map",
-        "build": "vsce package --out dist/"
-    },
-    "devDependencies": {
-        "@types/glob": "^7.2.0",
-        "@types/jest": "^27.0.3",
-        "@types/lodash": "^4.14.177",
-        "@types/mocha": "^9.0.0",
-        "@types/node": "^16.11.10",
-        "@types/vscode": "^1.62.0",
-        "@typescript-eslint/eslint-plugin": "^5.5.0",
-        "@typescript-eslint/parser": "^5.5.0",
-        "@vscode/test-electron": "^1.6.2",
-        "eslint": "^8.3.0",
-        "eslint-plugin-jest": "^25.3.0",
-        "jest": "^27.4.3",
-        "jest-runner-vscode": "^2.0.0",
-        "ts-jest": "^27.0.7",
-        "ts-loader": "^9.2.6",
-        "typescript": "^4.5.2",
-        "vscode-test": "^1.6.1",
-        "webpack": "^5.64.4",
-        "webpack-cli": "^4.9.1"
-    },
-    "dependencies": {
-        "lodash": "^4.17.21",
-        "path": "^0.12.7"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "dart-barrel-file-generator.generateCurrent",
+          "group": "7_modification",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "dart-barrel-file-generator.generateCurrentAndNested",
+          "group": "7_modification",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
     }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "eslint src/test/**/* && npm run compile:tests",
+    "compile:tests": "tsc -p .",
+    "watch:tests": "tsc -p . -w",
+    "test": "jest --config jest.config.js",
+    "vscode:prepublish": "webpack --mode production",
+    "webpack": "webpack --mode development",
+    "webpack-dev": "webpack --mode development --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "build": "vsce package --out dist/"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.2.0",
+    "@types/jest": "^27.0.3",
+    "@types/lodash": "^4.14.177",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.10",
+    "@types/vscode": "^1.62.0",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
+    "@vscode/test-electron": "^1.6.2",
+    "eslint": "^8.3.0",
+    "eslint-plugin-jest": "^25.3.0",
+    "jest": "^27.4.3",
+    "jest-runner-vscode": "^2.0.0",
+    "ts-jest": "^27.0.7",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.2",
+    "vscode-test": "^1.6.1",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "path": "^0.12.7"
+  }
 }
