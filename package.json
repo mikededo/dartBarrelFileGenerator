@@ -54,8 +54,8 @@
           "dartBarrelFileGenerator.promptName": {
             "title": "Open input on file generation",
             "type": "boolean",
-            "default": true,
-            "description": "Prompt for file name"
+            "default": false,
+            "description": "get promted asking for the name of the barrel file that will be created"
           },
           "dartBarrelFileGenerator.excludeFreezed": {
             "title": "Exclude freezed (.freezed.dart) files",
