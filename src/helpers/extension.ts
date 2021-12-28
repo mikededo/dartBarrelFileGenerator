@@ -1,10 +1,13 @@
 import { lstatSync, readdirSync, writeFile } from 'fs';
 import { get, isNil } from 'lodash';
-import { workspace } from 'vscode';
+import { window, workspace } from 'vscode';
 
+import { GEN_TYPE } from './';
+import { CONFIGURATIONS } from './constants';
 import Context from './context';
 import {
   fileSort,
+  getConfig,
   getFolderNameFromDialog,
   shouldExport,
   toOsSpecificPath,
@@ -94,22 +97,37 @@ const writeBarrelFile = (
 /**
  *
  * @param targetPath The target path of the barrel file
- * @param recursive If it should generate barrel files recursively
  * @returns A promise with the path of the written barrel file
  */
 const generate = async (targetPath: string): Promise<string> => {
   // Selected target is in the current workspace
   // This could be optional
   const splitDir = targetPath.split('/');
-  // The folder name
-  const dirName = splitDir[splitDir.length - 1];
+
+  // If the user has set the promptName option and it is not the
+  // recursive case, ask for the name
+  let barrelFileName: string = splitDir[splitDir.length - 1];
+
+  if (
+    Context.activeType === GEN_TYPE.REGULAR &&
+    getConfig(CONFIGURATIONS.values.PROMPT_NAME)
+  ) {
+    const result = await window.showInputBox({
+      title: 'Barrel file name',
+      prompt:
+        'Enter the name of the barrel file without the extension. If no name is entered, the folder name will be used',
+      placeHolder: 'Ex: index'
+    });
+
+    barrelFileName = result ? result : barrelFileName;
+  }
 
   const files = [];
   const dirs = new Set();
 
   for (const curr of readdirSync(targetPath, { withFileTypes: true })) {
     if (curr.isFile()) {
-      if (shouldExport(curr.name, dirName)) {
+      if (shouldExport(curr.name, barrelFileName)) {
         files.push(curr.name);
       }
     } else if (curr.isDirectory()) {
@@ -117,7 +135,7 @@ const generate = async (targetPath: string): Promise<string> => {
     }
   }
 
-  if (Context.activeType && dirs.size > 0) {
+  if (Context.activeType === GEN_TYPE.RECURSIVE && dirs.size > 0) {
     for (const d of dirs) {
       files.push(
         toPosixPath(await generate(`${targetPath}/${d}`)).split(
@@ -128,7 +146,7 @@ const generate = async (targetPath: string): Promise<string> => {
   }
 
   // Sort files
-  return writeBarrelFile(targetPath, dirName, files.sort(fileSort));
+  return writeBarrelFile(targetPath, barrelFileName, files.sort(fileSort));
 };
 
 export { validateAndGenerate };

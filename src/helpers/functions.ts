@@ -1,5 +1,5 @@
 import { isEmpty, isNil } from 'lodash';
-import { sep, posix } from 'path';
+import { posix, sep } from 'path';
 import { window, workspace } from 'vscode';
 
 import { CONFIGURATIONS, FILE_REGEX } from './constants';
