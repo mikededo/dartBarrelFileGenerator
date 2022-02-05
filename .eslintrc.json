@@ -4,7 +4,6 @@
     "commonjs": true,
     "es6": true,
     "node": true,
-    "mocha": true,
     "jest/globals": true
   },
   "plugins": ["@typescript-eslint", "jest"],
