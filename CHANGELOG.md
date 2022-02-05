@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.4.0
+
+- Add option to prompt for the barrel file name when generating a barrel file for a folder ([#16](https://github.com/mikededo/dartBarrelFileGenerator/issues/16)).
+
 ## 1.3.1
 
 - Fix files not exporting when suffixed with folder name ([#10](https://github.com/mikededo/dartBarrelFileGenerator/issues/10))

@@ -2,7 +2,7 @@
   "name": "dart-barrel-file-generator",
   "displayName": "Dart Barrel File Generator",
   "description": "",
-  "version": "1.3.1",
+  "version": "1.4.1",
   "publisher": "miquelddg",
   "author": {
     "name": "Miquel de Domingo i Giral",
@@ -35,7 +35,7 @@
     "onCommand:dart-barrel-file-generator.generateCurrent",
     "onCommand:dart-barrel-file-generator.generateCurrentAndNested"
   ],
-  "main": "./extension.js",
+  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -51,6 +51,12 @@
       {
         "title": "Dart Barrel File Generator",
         "properties": {
+          "dartBarrelFileGenerator.promptName": {
+            "title": "Open input on file generation",
+            "type": "boolean",
+            "default": false,
+            "description": "Get promted asking for the name of the barrel file that will be created"
+          },
           "dartBarrelFileGenerator.excludeFreezed": {
             "title": "Exclude freezed (.freezed.dart) files",
             "type": "boolean",
@@ -83,20 +89,30 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "pretest": "npm run lint",
-    "test": "node ./test/runTest.js",
+    "pretest": "eslint src/test/**/* && npm run compile:tests",
+    "compile:tests": "tsc -p .",
+    "watch:tests": "tsc -p . -w",
+    "vscode:prepublish": "webpack --mode production",
+    "webpack": "webpack --mode development",
+    "webpack-dev": "webpack --mode development --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
     "build": "vsce package --out dist/"
   },
   "devDependencies": {
-    "@types/glob": "^7.1.4",
-    "@types/mocha": "^9.0.0",
-    "@types/node": "^16.10.1",
-    "@types/vscode": "^1.60.0",
-    "eslint": "^7.32.0",
-    "glob": "^7.2.0",
-    "mocha": "^9.1.2",
-    "typescript": "^4.4.3",
-    "vscode-test": "^1.6.1"
+    "@types/glob": "^7.2.0",
+    "@types/jest": "^27.0.3",
+    "@types/lodash": "^4.14.177",
+    "@types/node": "^16.11.10",
+    "@types/vscode": "^1.62.0",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
+    "@vscode/test-electron": "^1.6.2",
+    "eslint": "^8.3.0",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.2",
+    "vscode-test": "^1.6.1",
+    "webpack": "^5.64.4",
+    "webpack-cli": "^4.9.1"
   },
   "dependencies": {
     "lodash": "^4.17.21",
