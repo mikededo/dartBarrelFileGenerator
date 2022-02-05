@@ -1,3 +1,4 @@
+import minimatch = require('minimatch');
 import { isEmpty, isNil } from 'lodash';
 import { posix, sep } from 'path';
 import { window, workspace } from 'vscode';
@@ -46,6 +47,16 @@ export const isBarrelFile = (dirName: string, fileName: string) =>
   FILE_REGEX.base(dirName).test(fileName);
 
 /**
+ * Checks if the given file name matches the given glob
+ *
+ * @param fileName The file to check for
+ * @param glob The glob to compare the string with
+ * @returns Whether it matches the glob or not
+ */
+export const matchesGlob = (fileName: string, glob: string): boolean =>
+  minimatch(fileName, glob);
+
+/**
  * Sorts the file names alphabetically
  */
 export const fileSort = (a: string, b: string): number =>
@@ -88,7 +99,8 @@ export const shouldExport = (
       return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
     }
 
-    return true;
+    const globs: Array<string> = getConfig(CONFIGURATIONS.values.EXCLUDE_FILES);
+    return globs.every((glob) => !matchesGlob(posixPath, glob));
   }
 
   return false;
