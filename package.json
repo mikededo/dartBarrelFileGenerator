@@ -68,6 +68,12 @@
             "type": "boolean",
             "default": true,
             "description": "Exclude .g.dart files"
+          },
+          "dartBarrelFileGenerator.excludeFileList": {
+            "title": "Additional patterns to exclude",
+            "type": "array",
+            "default": [],
+            "description": "Add the file patterns that you want to exclude (as glob patterns)"
           }
         }
       }
