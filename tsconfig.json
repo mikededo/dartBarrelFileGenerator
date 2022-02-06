@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "lib": ["ES2020"],
+    "rootDir": "./",
+    "outDir": "out",
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "types": ["node", "jest"]
+  },
+  "include": ["src/"],
+  "exclude": ["node_modules", ".vscode-test"]
+}

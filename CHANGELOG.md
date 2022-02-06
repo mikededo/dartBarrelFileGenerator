@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.0
+
+- Migrated code to TypeScript.
+- Added bundler to drastically reduce extension size.
+- Added configuration to exclude custom file patterns.
+
 ## 1.4.0
 
 - Add option to prompt for the barrel file name when generating a barrel file for a folder ([#16](https://github.com/mikededo/dartBarrelFileGenerator/issues/16)).
