@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.0.1
+
+- Updated versions.
+
 ## 2.0.0
 
 - Migrated code to TypeScript.
