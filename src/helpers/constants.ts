@@ -28,13 +28,13 @@ export const FILE_REGEX = {
    * Used to check whether the current file name has a
    * dart file extension
    */
-  dart: new RegExp('.*(.dart)$'),
+  dart: new RegExp('.+(\\.dart)$'),
 
   /**
    * Used to check whether the current filename has a
    * dart file extension suffixed with the given value
    */
-  suffixed: (suffix: string) => new RegExp(`.*(.${suffix}.dart)$`),
+  suffixed: (suffix: string) => new RegExp(`.+(\\.${suffix}\\.dart)$`),
 
   /**
    * Returns a regex that will match if the filename has
@@ -43,5 +43,5 @@ export const FILE_REGEX = {
    * @param {string} folder The folder name
    * @returns {RegExp}
    */
-  base: (folder: string): RegExp => new RegExp(`^${folder}.dart$`)
+  base: (folder: string): RegExp => new RegExp(`^${folder}\\.dart$`)
 };
