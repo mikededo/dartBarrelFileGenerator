@@ -1,5 +1,10 @@
 # Change Log
 
+## 2.1.0
+
+- Updated versions.
+- Fixed incorrect usage of RegExp's ([#21](https://github.com/mikededo/dartBarrelFileGenerator/issues/16)).
+
 ## 2.0.1
 
 - Updated versions.
