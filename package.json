@@ -70,10 +70,16 @@
             "description": "Exclude .g.dart files"
           },
           "dartBarrelFileGenerator.excludeFileList": {
-            "title": "Additional patterns to exclude",
+            "title": "Additional patterns to exclude files",
             "type": "array",
             "default": [],
-            "description": "Add the file patterns that you want to exclude (as glob patterns)"
+            "description": "Add the file patterns that you want to exclude (as glob patterns). Excluded files will not be added to the barrel file."
+          },
+          "dartBarrelFileGenerator.excludeDirList": {
+            "title": "Additional patterns to exclude directories",
+            "type": "array",
+            "default": [],
+            "description": "Add the directory patterns that you want to exclude (as glob patterns). A barrel file will not be generated for these directories."
           }
         }
       }

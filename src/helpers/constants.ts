@@ -6,7 +6,8 @@ export const CONFIGURATIONS = {
     PROMPT_NAME: 'promptName',
     EXCLUDE_FREEZED: 'excludeFreezed',
     EXCLUDE_GENERATED: 'excludeGenerated',
-    EXCLUDE_FILES: 'excludeFileList'
+    EXCLUDE_FILES: 'excludeFileList',
+    EXCLUDE_DIRS: 'excludeDirList'
   },
   input: {
     canSelectMany: false,
