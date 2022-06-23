@@ -1,0 +1,15 @@
+name: Renovate
+on:
+  schedule:
+    - cron: '0 0 * * *'
+jobs:
+  renovate:
+    runs-on: ubtuntu-latest
+    steps:
+      - uses: actions/checkout@master 
+      - name: Run renovate
+        uses: docker://renovate/renovate:slim
+        env:
+          RENOVATE_REPOSITORIES: mikededo/dartBarrelFileGenerator
+          RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
+          RENOVATE_AUTOMERGE: false
