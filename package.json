@@ -99,7 +99,7 @@
     "lint": "eslint .",
     "package": "webpack --mode production --devtool hidden-source-map",
     "prepare": "husky install",
-    "pretty": "prettier . --write",
+    "pretty": "prettier . --write --silent",
     "vscode:prepublish": "webpack --mode production",
     "watch:tests": "tsc -p . -w",
     "webpack": "webpack --mode development",
@@ -113,6 +113,7 @@
     "@typescript-eslint/eslint-plugin": "~5.21.0",
     "@typescript-eslint/parser": "~5.21.0",
     "@vscode/test-electron": "~2.1.3",
+    "cz-conventional-changelog": "~3.3.0",
     "eslint": "~8.14.0",
     "husky": "~8.0.0",
     "prettier": "~2.7.1",
@@ -125,5 +126,10 @@
   "dependencies": {
     "lodash": "~4.17.21",
     "path": "~0.12.7"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
