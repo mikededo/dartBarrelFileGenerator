@@ -3,10 +3,9 @@
     "browser": false,
     "commonjs": true,
     "es6": true,
-    "node": true,
-    "jest/globals": true
+    "node": true
   },
-  "plugins": ["@typescript-eslint", "jest"],
+  "plugins": ["@typescript-eslint"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2018,
@@ -24,5 +23,5 @@
     "constructor-super": "warn",
     "valid-typeof": "warn"
   },
-  "ignorePatterns": ["node_modules/*"]
+  "ignorePatterns": ["node_modules/*", "dist/*"]
 }
