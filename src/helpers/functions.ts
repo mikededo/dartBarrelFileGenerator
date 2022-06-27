@@ -107,6 +107,20 @@ export const shouldExport = (
 };
 
 /**
+ * Checks if the given `posixPath` is not excluded by any configuration
+ *
+ * @param posixPath The path to check
+ * @returns If the given `posixPath` should be added to the list of
+ * exports
+ */
+export const shouldExportDir = (
+  posixPath: PosixPath
+): boolean => {
+  const globs: Array<string> = getConfig(CONFIGURATIONS.values.EXCLUDE_DIRS);
+  return globs.every((glob) => !matchesGlob(posixPath, glob));
+};
+
+/**
  * Returns the configuration value of the given config value
  *
  * @param name Configuration value name

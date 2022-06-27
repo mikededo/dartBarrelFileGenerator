@@ -10,6 +10,7 @@ import {
   getConfig,
   getFolderNameFromDialog,
   shouldExport,
+  shouldExportDir,
   toOsSpecificPath,
   toPosixPath
 } from './functions';
@@ -131,7 +132,9 @@ const generate = async (targetPath: string): Promise<string> => {
         files.push(curr.name);
       }
     } else if (curr.isDirectory()) {
-      dirs.add(curr.name);
+      if (shouldExportDir(curr.name)) {
+        dirs.add(curr.name);
+      }
     }
   }
 
