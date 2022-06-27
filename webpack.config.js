@@ -12,7 +12,7 @@ const config = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'extension.js',
     libraryTarget: 'commonjs2',
-    devtoolModuleFilenameTemplate: '../[resource-path]',
+    devtoolModuleFilenameTemplate: '../[resource-path]'
   },
   devtool: 'source-map',
   externals: { vscode: 'commonjs vscode' },
@@ -24,11 +24,11 @@ const config = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'ts-loader',
-          },
-        ],
-      },
-    ],
-  },
+            loader: 'ts-loader'
+          }
+        ]
+      }
+    ]
+  }
 };
 module.exports = config;

@@ -34,9 +34,7 @@ You can also exclude `.freezed.dart` and `.g.dart` (generated) files by modifyin
 - `dartBarrelFileGenerator.excludeFreezed: false` (by default).
 - `dartBarrelFileGenerator.excludeGenerated: false` (by default).
 
-You can exclude files from being added to a barrel file. Create a list of glob file patterns to exclude with the `dartBarrelFileGenerator.excludeFileList`.
-
-Similarly, you can exclude a directory from having a barrel file generated. Create a list of glob directory patterns to exclude with the `dartBarrelFileGenerator.excludeDirList`.
+Additionally, you can create a list of glob file patterns to exclude with the `dartBarrelFileGenerator.excludeFileList`.
 
 ### Custom file name
 
