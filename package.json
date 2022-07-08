@@ -121,7 +121,7 @@
     "@typescript-eslint/parser": "5.30.5",
     "@vscode/test-electron": "2.1.5",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "8.14.0",
+    "eslint": "8.19.0",
     "husky": "8.0.1",
     "prettier": "2.7.1",
     "standard-version": "9.5.0",
@@ -132,8 +132,8 @@
     "webpack-cli": "4.10.0"
   },
   "dependencies": {
-    "lodash": "~4.17.21",
-    "path": "~0.12.7"
+    "lodash": "4.17.21",
+    "path": "0.12.7"
   },
   "config": {
     "commitizen": {
