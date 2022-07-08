@@ -1,4 +1,12 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"]
+  "assignees": ["mikededo"],
+  "extends": ["config:base"],
+  "baseBranches": ["next"],
+  "labels": ["renovate", "next"],
+  "major": { "labels": ["major"] },
+  "minor": { "labels": ["minor"] },
+  "patch": { "labels": ["patch"] },
+  "prConcurrentLimit": 3,
+  "semanticCommitScopeDisabled": true
 }
