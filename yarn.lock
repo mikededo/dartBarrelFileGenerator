@@ -286,10 +286,10 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/vscode@1.66.0":
-  version "1.66.0"
-  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.66.0.tgz#e90e1308ad103f2bd31b72c17b8031b4cec0713d"
-  integrity sha512-ZfJck4M7nrGasfs4A4YbUoxis3Vu24cETw3DERsNYtDZmYSYtk6ljKexKFKhImO/ZmY6ZMsmegu2FPkXoUFImA==
+"@types/vscode@1.68.1":
+  version "1.68.1"
+  resolved "https://registry.yarnpkg.com/@types/vscode/-/vscode-1.68.1.tgz#a9e5b33f825f715cae80593cb6d5d6d4cabbe998"
+  integrity sha512-fXlaq13NT5yHh6yZ3c+UxXloTSk34mIvsNFYyQCeO5Po2BLFAwz7EZT4kQ43B64/aPcnAenyWy3QasrTofBOnQ==
 
 "@typescript-eslint/eslint-plugin@5.21.0":
   version "5.21.0"
@@ -371,10 +371,10 @@
     "@typescript-eslint/types" "5.21.0"
     eslint-visitor-keys "^3.0.0"
 
-"@vscode/test-electron@2.1.4":
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/@vscode/test-electron/-/test-electron-2.1.4.tgz#fa1b8915246d0102e81d4fd664bb6c337ca7092f"
-  integrity sha512-tHHAWNVwl8C7nyezHAHdNPWkksdXWvmae6bt4k1tJ9hvMm6QIIk95Mkutl82XHcD60mdP46EHDGU+xFsAvygOQ==
+"@vscode/test-electron@2.1.5":
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/@vscode/test-electron/-/test-electron-2.1.5.tgz#ac98f8f445ea4590753f5fa0c7f6e4298f08c3b7"
+  integrity sha512-O/ioqFpV+RvKbRykX2ItYPnbcZ4Hk5V0rY4uhQjQTLhGL9WZUvS7exzuYQCCI+ilSqJpctvxq2llTfGXf9UnnA==
   dependencies:
     http-proxy-agent "^4.0.1"
     https-proxy-agent "^5.0.0"
