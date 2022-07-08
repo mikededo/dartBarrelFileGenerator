@@ -119,9 +119,9 @@
     "@types/vscode": "1.68.1",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
-    "@vscode/test-electron": "2.1.4",
+    "@vscode/test-electron": "2.1.5",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "8.14.0",
+    "eslint": "8.19.0",
     "husky": "8.0.1",
     "prettier": "2.7.1",
     "standard-version": "9.5.0",
@@ -132,8 +132,8 @@
     "webpack-cli": "4.9.2"
   },
   "dependencies": {
-    "lodash": "~4.17.21",
-    "path": "~0.12.7"
+    "lodash": "4.17.21",
+    "path": "0.12.7"
   },
   "config": {
     "commitizen": {
