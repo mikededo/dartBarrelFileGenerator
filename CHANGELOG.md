@@ -4,20 +4,18 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [3.0.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v2.0.0...v3.0.0) (2022-07-01)
 
-
 ### ⚠ BREAKING CHANGES
 
-* add exclusion of directory paths from having a barrel file generated (#23)
+- add exclusion of directory paths from having a barrel file generated (#23)
 
 ### Features
 
-* add exclusion of directory paths from having a barrel file generated ([#23](https://github.com/mikededo/dartBarrelFileGenerator/issues/23)) ([018d921](https://github.com/mikededo/dartBarrelFileGenerator/commit/018d921a66150c859a0403aa6b9ed604e4ed1470))
-* removed .github workflows ([7968cba](https://github.com/mikededo/dartBarrelFileGenerator/commit/7968cba66df408188a467c627a540644d0ddfb67))
-
+- add exclusion of directory paths from having a barrel file generated ([#23](https://github.com/mikededo/dartBarrelFileGenerator/issues/23)) ([018d921](https://github.com/mikededo/dartBarrelFileGenerator/commit/018d921a66150c859a0403aa6b9ed604e4ed1470))
+- removed .github workflows ([7968cba](https://github.com/mikededo/dartBarrelFileGenerator/commit/7968cba66df408188a467c627a540644d0ddfb67))
 
 ### Bug Fixes
 
-* incorrect usage of `.` in regexp ([9663d7a](https://github.com/mikededo/dartBarrelFileGenerator/commit/9663d7a0b7770c94572f077c664410f50d298eb8))
+- incorrect usage of `.` in regexp ([9663d7a](https://github.com/mikededo/dartBarrelFileGenerator/commit/9663d7a0b7770c94572f077c664410f50d298eb8))
 
 ## 2.1.0
 
