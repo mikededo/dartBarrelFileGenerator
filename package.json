@@ -10,7 +10,7 @@
     "url": "https://www.github.com/mikededo"
   },
   "engines": {
-    "vscode": "^1.68.1"
+    "vscode": "^1.69.0"
   },
   "repository": {
     "type": "git",
