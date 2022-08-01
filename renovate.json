@@ -3,9 +3,8 @@
   "assignees": ["mikededo"],
   "extends": ["config:base", ":semanticCommitScopeDisabled"],
   "baseBranches": ["main"],
-  "labels": ["renovate", "next"],
-  "major": { "labels": ["major"] },
-  "minor": { "labels": ["minor"] },
-  "patch": { "labels": ["patch"] },
+  "major": { "labels": ["renovate", "next", "major"] },
+  "minor": { "labels": ["renovate", "next", "minor"] },
+  "patch": { "labels": ["renovate", "next", "patch"] },
   "prConcurrentLimit": 3
 }
