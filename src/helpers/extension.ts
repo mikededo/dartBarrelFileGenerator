@@ -94,11 +94,18 @@ const writeBarrelFile = (
 };
 
 /**
- *
  * @param targetPath The target path of the barrel file
- * @returns A promise with the path of the written barrel file
+ * @returns A promise with the name of the barrel file
  */
-const generate = async (targetPath: string): Promise<string> => {
+const getBarrelFile = async (targetPath: string): Promise<string> => {
+  // Check if the user has the defaultBarrelName config set
+  const defaultBarrelName = getConfig<string>(
+    CONFIGURATIONS.values.DEFAULT_NAME
+  );
+  if (defaultBarrelName) {
+    return defaultBarrelName.replace(/ /g, '_').toLowerCase();
+  }
+
   // Selected target is in the current workspace
   // This could be optional
   const splitDir = targetPath.split('/');
@@ -123,6 +130,17 @@ const generate = async (targetPath: string): Promise<string> => {
     barrelFileName = result ? result : barrelFileName;
     Context.customBarrelName = barrelFileName;
   }
+
+  return barrelFileName;
+};
+
+/**
+ *
+ * @param targetPath The target path of the barrel file
+ * @returns A promise with the path of the written barrel file
+ */
+const generate = async (targetPath: string): Promise<string> => {
+  const barrelFileName = await getBarrelFile(targetPath);
 
   const files = [];
   const dirs = new Set();

@@ -3,6 +3,7 @@ import { OpenDialogOptions } from 'vscode';
 export const CONFIGURATIONS = {
   key: 'dartBarrelFileGenerator',
   values: {
+    DEFAULT_NAME: 'defaultBarrelName',
     PROMPT_NAME: 'promptName',
     EXCLUDE_FREEZED: 'excludeFreezed',
     EXCLUDE_GENERATED: 'excludeGenerated',

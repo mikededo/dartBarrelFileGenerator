@@ -51,6 +51,15 @@
       {
         "title": "Dart Barrel File Generator",
         "properties": {
+          "dartBarrelFileGenerator.defaultBarrelName": {
+            "title": "Default barrel file name",
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null,
+            "markdownDescription": "The default name for the barrel file is `<folder-name>.dart`. You can override this name by setting a custom name. If there's any whitespace in the name it will be replaced by a '-' and the name **will be transformed to lowercase**."
+          },
           "dartBarrelFileGenerator.promptName": {
             "title": "Open input on file generation",
             "type": "boolean",

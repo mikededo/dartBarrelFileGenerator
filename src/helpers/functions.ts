@@ -124,7 +124,7 @@ export const shouldExportDir = (posixPath: PosixPath): boolean => {
  * @param name Configuration value name
  * @returns The configuration value if any
  */
-export const getConfig = (name: string): any | undefined =>
+export const getConfig = <T = any>(name: string): T | undefined =>
   workspace.getConfiguration().get([CONFIGURATIONS.key, name].join('.'));
 
 export const formatDate = (date: Date = new Date()) =>
