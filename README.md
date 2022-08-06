@@ -42,7 +42,7 @@ By default, the extension will create a new file named as the folder name, appen
 
 - `dartBarrelFileGenerator.promptName: false` (by default).
 
-Whenever you create a new barrel file, a prompt will appear to ask for the file name. It only works when creating a barrel file for a single folder, since it does not have much sense having it for the other option.
+Whenever you create a new barrel file, a prompt will appear to ask for the file name. It can be used for both options.
 
 > **Note**: When entering the name, the `.dart` extension is not required.
 
