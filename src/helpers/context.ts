@@ -20,6 +20,8 @@ class GeneratorContext {
   private type?: GEN_TYPE;
   private startTimestamp?: number;
 
+  public customBarrelName?: string;
+
   constructor() {
     this.channel = window.createOutputChannel('DartBarrelFile');
 
@@ -34,6 +36,7 @@ class GeneratorContext {
     this.startTimestamp = undefined;
     this.path = undefined;
     this.type = undefined;
+    this.customBarrelName = undefined;
   }
 
   get activePath(): Uri {

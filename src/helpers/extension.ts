@@ -19,8 +19,6 @@ import {
  * Validates if the given `uri` is valid to generate a barrel file and,
  * if so, generates a barrel file in it
  *
- * @param uri The selected Uri to generate the barrel file
- * @param recursive If the barrel files should be generated recursively
  * @returns A promise with the path where the barrel file will be written
  * @throws {Error} If the selected `uri` is not valid
  */
@@ -105,22 +103,25 @@ const generate = async (targetPath: string): Promise<string> => {
   // This could be optional
   const splitDir = targetPath.split('/');
 
-  // If the user has set the promptName option and it is not the
-  // recursive case, ask for the name
-  let barrelFileName: string = splitDir[splitDir.length - 1];
+  // If the user has set the promptName option, use always such name
+  let barrelFileName: string =
+    Context.customBarrelName ?? splitDir[splitDir.length - 1];
 
+  // If there's a customBarrelName, it means that the user has already
+  // been prompted
   if (
-    Context.activeType === GEN_TYPE.REGULAR &&
+    !Context.customBarrelName &&
     getConfig(CONFIGURATIONS.values.PROMPT_NAME)
   ) {
     const result = await window.showInputBox({
-      title: 'Barrel file name',
+      title: `Barrel file name (${Context.customBarrelName})`,
       prompt:
         'Enter the name of the barrel file without the extension. If no name is entered, the folder name will be used',
       placeHolder: 'Ex: index'
     });
 
     barrelFileName = result ? result : barrelFileName;
+    Context.customBarrelName = barrelFileName;
   }
 
   const files = [];
