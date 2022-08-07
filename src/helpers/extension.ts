@@ -1,4 +1,4 @@
-import { lstatSync, readdirSync, writeFile } from 'fs';
+import { lstatSync, writeFile } from 'fs';
 import { get, isNil } from 'lodash';
 import { window, workspace } from 'vscode';
 
@@ -10,8 +10,6 @@ import {
   getConfig,
   getFilesAndDirsFromPath,
   getFolderNameFromDialog,
-  shouldExport,
-  shouldExportDir,
   toOsSpecificPath,
   toPosixPath
 } from './functions';
@@ -175,11 +173,17 @@ const getBarrelFile = async (targetPath: string): Promise<string> => {
  */
 const generate = async (targetPath: string): Promise<string> => {
   const barrelFileName = await getBarrelFile(targetPath);
+
+  if (Context.activeType === 'REGULAR_SUBFOLDERS') {
+    return writeBarrelFile(
+      targetPath,
+      barrelFileName,
+      getAllFilesFromSubfolders(barrelFileName, targetPath).sort(fileSort)
+    );
+  }
+
   const [files, dirs] = getFilesAndDirsFromPath(barrelFileName, targetPath);
-
-  const withDirs = dirs.size > 0;
-
-  if (Context.activeType === 'RECURSIVE' && withDirs) {
+  if (Context.activeType === 'RECURSIVE' && dirs.size > 0) {
     for (const d of dirs) {
       files.push(
         toPosixPath(await generate(`${targetPath}/${d}`)).split(
@@ -187,10 +191,6 @@ const generate = async (targetPath: string): Promise<string> => {
         )[1]
       );
     }
-  }
-
-  if (Context.activeType === 'REGULAR_SUBFOLDERS' && withDirs) {
-    files.push(...getAllFilesFromSubfolders(barrelFileName, targetPath));
   }
 
   // Sort files
