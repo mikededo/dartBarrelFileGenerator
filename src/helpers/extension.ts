@@ -6,7 +6,9 @@ import { CONFIGURATIONS } from './constants';
 import Context from './context';
 import {
   fileSort,
+  getAllFilesFromSubfolders,
   getConfig,
+  getFilesAndDirsFromPath,
   getFolderNameFromDialog,
   shouldExport,
   shouldExportDir,
@@ -165,29 +167,19 @@ const getBarrelFile = async (targetPath: string): Promise<string> => {
 };
 
 /**
+ * Generates the contents of the barrel file, recursively when the
+ * option chosen is recursive
  *
  * @param targetPath The target path of the barrel file
  * @returns A promise with the path of the written barrel file
  */
 const generate = async (targetPath: string): Promise<string> => {
   const barrelFileName = await getBarrelFile(targetPath);
+  const [files, dirs] = getFilesAndDirsFromPath(barrelFileName, targetPath);
 
-  const files = [];
-  const dirs = new Set();
+  const withDirs = dirs.size > 0;
 
-  for (const curr of readdirSync(targetPath, { withFileTypes: true })) {
-    if (curr.isFile()) {
-      if (shouldExport(curr.name, barrelFileName)) {
-        files.push(curr.name);
-      }
-    } else if (curr.isDirectory()) {
-      if (shouldExportDir(curr.name)) {
-        dirs.add(curr.name);
-      }
-    }
-  }
-
-  if (Context.activeType === 'RECURSIVE' && dirs.size > 0) {
+  if (Context.activeType === 'RECURSIVE' && withDirs) {
     for (const d of dirs) {
       files.push(
         toPosixPath(await generate(`${targetPath}/${d}`)).split(
@@ -195,6 +187,10 @@ const generate = async (targetPath: string): Promise<string> => {
         )[1]
       );
     }
+  }
+
+  if (Context.activeType === 'REGULAR_SUBFOLDERS' && withDirs) {
+    files.push(...getAllFilesFromSubfolders(barrelFileName, targetPath));
   }
 
   // Sort files
