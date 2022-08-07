@@ -1,19 +1,49 @@
-import { lstatSync, readdirSync, writeFile } from 'fs';
+import { lstatSync, writeFile } from 'fs';
 import { get, isNil } from 'lodash';
 import { window, workspace } from 'vscode';
 
-import { GEN_TYPE } from './';
 import { CONFIGURATIONS } from './constants';
 import Context from './context';
 import {
   fileSort,
+  getAllFilesFromSubfolders,
   getConfig,
+  getFilesAndDirsFromPath,
   getFolderNameFromDialog,
-  shouldExport,
-  shouldExportDir,
   toOsSpecificPath,
   toPosixPath
 } from './functions';
+
+/**
+ * Entry point of the extension. When this function is called
+ * the context should have already been set up
+ */
+export const init = async () => {
+  if (!Context.activeType) {
+    Context.onError(
+      'Extension did not launch properly. Create an issue if this error persists'
+    );
+    Context.endGeneration();
+
+    window.showErrorMessage('GBDF: Error on initialising the extension');
+  }
+
+  try {
+    window.showInformationMessage(
+      'GDBF: Generated files!',
+      await validateAndGenerate().then((s) => {
+        Context.endGeneration();
+
+        return s;
+      })
+    );
+  } catch (error: any) {
+    Context.onError(error);
+    Context.endGeneration();
+
+    window.showErrorMessage('GDBF: Error on generating the file', error);
+  }
+};
 
 /**
  * Validates if the given `uri` is valid to generate a barrel file and,
@@ -135,6 +165,8 @@ const getBarrelFile = async (targetPath: string): Promise<string> => {
 };
 
 /**
+ * Generates the contents of the barrel file, recursively when the
+ * option chosen is recursive
  *
  * @param targetPath The target path of the barrel file
  * @returns A promise with the path of the written barrel file
@@ -142,22 +174,16 @@ const getBarrelFile = async (targetPath: string): Promise<string> => {
 const generate = async (targetPath: string): Promise<string> => {
   const barrelFileName = await getBarrelFile(targetPath);
 
-  const files = [];
-  const dirs = new Set();
-
-  for (const curr of readdirSync(targetPath, { withFileTypes: true })) {
-    if (curr.isFile()) {
-      if (shouldExport(curr.name, barrelFileName)) {
-        files.push(curr.name);
-      }
-    } else if (curr.isDirectory()) {
-      if (shouldExportDir(curr.name)) {
-        dirs.add(curr.name);
-      }
-    }
+  if (Context.activeType === 'REGULAR_SUBFOLDERS') {
+    return writeBarrelFile(
+      targetPath,
+      barrelFileName,
+      getAllFilesFromSubfolders(barrelFileName, targetPath).sort(fileSort)
+    );
   }
 
-  if (Context.activeType === GEN_TYPE.RECURSIVE && dirs.size > 0) {
+  const [files, dirs] = getFilesAndDirsFromPath(barrelFileName, targetPath);
+  if (Context.activeType === 'RECURSIVE' && dirs.size > 0) {
     for (const d of dirs) {
       files.push(
         toPosixPath(await generate(`${targetPath}/${d}`)).split(

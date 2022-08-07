@@ -12,9 +12,13 @@ It can create barrel files only two the selected folder
 
 ![current-and-only-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-only.gif)
 
-It creates as well barrel files for the selected folder and all the nested folders from the selected. Likewise, it also adds the nested folder barrel file to its parent barrel file.
+It creates a barrel files for the selected folder and all the nested folders from the selected. Likewise, it also adds the nested folder barrel file to its parent barrel file.
 
 ![current-and-nested-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-and-nested.gif)
+
+Alternatively, the extension can create a barrel file with all the names of the nested folders (for each subfolder), without creating additional barrel files.
+
+![current-with-subfolders-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-with-subfolders.gif)
 
 ## Commands
 

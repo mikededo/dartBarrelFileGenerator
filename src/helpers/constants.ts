@@ -18,12 +18,7 @@ export const CONFIGURATIONS = {
   } as Partial<OpenDialogOptions>
 };
 
-export enum GEN_TYPE {
-  // eslint-disable-next-line no-unused-vars
-  REGULAR = 0,
-  // eslint-disable-next-line no-unused-vars
-  RECURSIVE = 1
-}
+export type GenerationType = 'REGULAR' | 'REGULAR_SUBFOLDERS' | 'RECURSIVE';
 
 export const FILE_REGEX = {
   /**
