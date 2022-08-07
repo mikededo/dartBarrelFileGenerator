@@ -6,19 +6,27 @@ import { Context, GEN_TYPE, validateAndGenerate } from './helpers';
  * Activates the extension
  */
 const activate = (context: ExtensionContext) => {
-  // Generate Current
+  // Generate current
   context.subscriptions.push(
     commands.registerCommand(
-      'dart-barrel-file-generator.generateCurrent',
+      'dartBarrelFileGenerator.generateCurrent',
       generateCurrent
     )
   );
 
-  // Generate Current and Nested
+  // Generate current and nested
   context.subscriptions.push(
     commands.registerCommand(
-      'dart-barrel-file-generator.generateCurrentAndNested',
+      'dartBarrelFileGenerator.generateCurrentAndNested',
       generateCurrentAndNested
+    )
+  );
+
+  // Generate current with subfolders
+  context.subscriptions.push(
+    commands.registerCommand(
+      'dartBarrelFileGenerator.generateCurrentWithSubfolders',
+      () => {}
     )
   );
 };

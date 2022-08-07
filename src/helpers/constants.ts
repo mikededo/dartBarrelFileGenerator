@@ -18,12 +18,11 @@ export const CONFIGURATIONS = {
   } as Partial<OpenDialogOptions>
 };
 
-export enum GEN_TYPE {
-  // eslint-disable-next-line no-unused-vars
-  REGULAR = 0,
-  // eslint-disable-next-line no-unused-vars
-  RECURSIVE = 1
-}
+export const GEN_TYPE = {
+  REGULAR: 0,
+  RECURSIVE: 1,
+  REGULAR_SUBFOLDERS: 2
+};
 
 export const FILE_REGEX = {
   /**
