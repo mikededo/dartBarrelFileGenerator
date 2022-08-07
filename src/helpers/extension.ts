@@ -2,7 +2,6 @@ import { lstatSync, readdirSync, writeFile } from 'fs';
 import { get, isNil } from 'lodash';
 import { window, workspace } from 'vscode';
 
-import { GEN_TYPE } from './';
 import { CONFIGURATIONS } from './constants';
 import Context from './context';
 import {
@@ -14,6 +13,37 @@ import {
   toOsSpecificPath,
   toPosixPath
 } from './functions';
+
+/**
+ * Entry point of the extension. When this function is called
+ * the context should have already been set up
+ */
+export const init = async () => {
+  if (!Context.activeType) {
+    Context.onError(
+      'Extension did not launch properly. Create an issue if this error persists'
+    );
+    Context.endGeneration();
+
+    window.showErrorMessage('GBDF: Error on initialising the extension');
+  }
+
+  try {
+    window.showInformationMessage(
+      'GDBF: Generated files!',
+      await validateAndGenerate().then((s) => {
+        Context.endGeneration();
+
+        return s;
+      })
+    );
+  } catch (error: any) {
+    Context.onError(error);
+    Context.endGeneration();
+
+    window.showErrorMessage('GDBF: Error on generating the file', error);
+  }
+};
 
 /**
  * Validates if the given `uri` is valid to generate a barrel file and,
@@ -157,7 +187,7 @@ const generate = async (targetPath: string): Promise<string> => {
     }
   }
 
-  if (Context.activeType === GEN_TYPE.RECURSIVE && dirs.size > 0) {
+  if (Context.activeType === 'RECURSIVE' && dirs.size > 0) {
     for (const d of dirs) {
       files.push(
         toPosixPath(await generate(`${targetPath}/${d}`)).split(

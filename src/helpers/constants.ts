@@ -18,11 +18,7 @@ export const CONFIGURATIONS = {
   } as Partial<OpenDialogOptions>
 };
 
-export const GEN_TYPE = {
-  REGULAR: 0,
-  RECURSIVE: 1,
-  REGULAR_SUBFOLDERS: 2
-};
+export type GenerationType = 'REGULAR' | 'REGULAR_SUBFOLDERS' | 'RECURSIVE';
 
 export const FILE_REGEX = {
   /**

@@ -1,6 +1,7 @@
-import { commands, ExtensionContext, Uri, window } from 'vscode';
+import { commands, ExtensionContext, Uri } from 'vscode';
 
-import { Context, GEN_TYPE, validateAndGenerate } from './helpers';
+import { Context, GenerationType } from './helpers';
+import { init } from './helpers/extension';
 
 /**
  * Activates the extension
@@ -10,15 +11,7 @@ const activate = (context: ExtensionContext) => {
   context.subscriptions.push(
     commands.registerCommand(
       'dartBarrelFileGenerator.generateCurrent',
-      generateCurrent
-    )
-  );
-
-  // Generate current and nested
-  context.subscriptions.push(
-    commands.registerCommand(
-      'dartBarrelFileGenerator.generateCurrentAndNested',
-      generateCurrentAndNested
+      generate('REGULAR')
     )
   );
 
@@ -26,67 +19,31 @@ const activate = (context: ExtensionContext) => {
   context.subscriptions.push(
     commands.registerCommand(
       'dartBarrelFileGenerator.generateCurrentWithSubfolders',
-      () => {}
+      generate('REGULAR_SUBFOLDERS')
+    )
+  );
+
+  // Generate current and nested
+  context.subscriptions.push(
+    commands.registerCommand(
+      'dartBarrelFileGenerator.generateCurrentAndNested',
+      generate('RECURSIVE')
     )
   );
 };
 
 /**
- * To be called when the barrel file should be created in the current
- * folder only. If the given uri is not a folder,it will not generate
- * a barrel file
- *
- * @param uri The uri path in which to create the barrel file
+ * Curried function that, from the given type of the generation,
+ * it will set up the context with the `uri` received from the curried fn
+ * and the given type
  */
-const generateCurrent = async (uri: Uri) => {
-  Context.initGeneration({ path: uri, type: GEN_TYPE.REGULAR });
-
-  try {
-    window.showInformationMessage(
-      'GDBF: Generated file!',
-      await validateAndGenerate().then((s) => {
-        Context.endGeneration();
-
-        return s;
-      })
-    );
-  } catch (error: any) {
-    Context.onError(error);
-    Context.endGeneration();
-
-    window.showErrorMessage('GDBF: Error on generating the file', error);
-  }
-};
-
-/**
- * To be called when the barrel file should be created recursively
- * starting from the given folder. If the given uri is not a folder,
- * it will not generate a barrel file
- *
- * @param uri The uri path in which to create the barrel file
- */
-const generateCurrentAndNested = async (uri: Uri) => {
-  Context.initGeneration({ path: uri, type: GEN_TYPE.RECURSIVE });
-
-  try {
-    window.showInformationMessage(
-      'GDBF: Generated files!',
-      await validateAndGenerate().then((s) => {
-        Context.endGeneration();
-
-        return s;
-      })
-    );
-  } catch (error: any) {
-    Context.onError(error);
-    Context.endGeneration();
-
-    window.showErrorMessage('GDBF: Error on generating the file', error);
-  }
+const generate = (type: GenerationType) => async (uri: Uri) => {
+  Context.initGeneration({ path: uri, type: type });
+  await init();
 };
 
 const deactivate = () => {
   Context.deactivate();
 };
 
-export { activate, deactivate, generateCurrent, generateCurrentAndNested };
+export { activate, deactivate, generate };
