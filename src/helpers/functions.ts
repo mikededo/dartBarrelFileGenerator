@@ -4,6 +4,7 @@ import { posix, sep } from 'path';
 import { window, workspace } from 'vscode';
 
 import { CONFIGURATIONS, FILE_REGEX } from './constants';
+import { readdirSync } from 'fs';
 
 const path = { sep, posix };
 
@@ -76,6 +77,61 @@ export const getFolderNameFromDialog = (): Thenable<string | undefined> =>
   );
 
 /**
+ * Gets the list of files and a set of directories from the given path
+ * without the path in the name.
+ *
+ * @param barrel The name of the barrel file
+ * @param path The name of the path to check for
+ */
+export const getFilesAndDirsFromPath = (
+  barrel: string,
+  path: string
+): [string[], Set<string>] => {
+  const files = [];
+  const dirs = new Set<string>();
+
+  for (const curr of readdirSync(path, { withFileTypes: true })) {
+    if (curr.isFile()) {
+      if (shouldExport(curr.name, barrel)) {
+        files.push(curr.name);
+      }
+    } else if (curr.isDirectory()) {
+      if (shouldExportDir(curr.name)) {
+        dirs.add(curr.name);
+      }
+    }
+  }
+
+  return [files, dirs];
+};
+
+/**
+ * Gets the list of all the files from the current path and its
+ * nested folders (including all subfolders)
+ *
+ * @param barrel The name of the barrel file
+ * @param path The name of the path to check for
+ */
+export const getAllFilesFromSubfolders = (
+  barrel: string,
+  path: string
+): string[] => {
+  const resultFiles: string[] = [];
+  const [files, dirs] = getFilesAndDirsFromPath(barrel, path);
+
+  resultFiles.push(...files);
+
+  if (dirs.size > 0) {
+    for (const d of dirs) {
+      const folderFiles = getAllFilesFromSubfolders(barrel, `${path}/${d}`);
+      resultFiles.push(...folderFiles.map((f) => `${d}/${f}`));
+    }
+  }
+
+  return resultFiles;
+};
+
+/**
  * Checks if the given `posixPath` is a dart file, it has a different
  * name than the folder barrel file and is not excluded by any configuration
  *
@@ -99,7 +155,8 @@ export const shouldExport = (
       return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
     }
 
-    const globs: Array<string> = getConfig(CONFIGURATIONS.values.EXCLUDE_FILES);
+    const globs: string[] =
+      getConfig(CONFIGURATIONS.values.EXCLUDE_FILES) ?? [];
     return globs.every((glob) => !matchesGlob(posixPath, glob));
   }
 
@@ -114,7 +171,7 @@ export const shouldExport = (
  * exports
  */
 export const shouldExportDir = (posixPath: PosixPath): boolean => {
-  const globs: Array<string> = getConfig(CONFIGURATIONS.values.EXCLUDE_DIRS);
+  const globs: string[] = getConfig(CONFIGURATIONS.values.EXCLUDE_DIRS) ?? [];
   return globs.every((glob) => !matchesGlob(posixPath, glob));
 };
 
@@ -124,7 +181,7 @@ export const shouldExportDir = (posixPath: PosixPath): boolean => {
  * @param name Configuration value name
  * @returns The configuration value if any
  */
-export const getConfig = (name: string): any | undefined =>
+export const getConfig = <T = any>(name: string): T | undefined =>
   workspace.getConfiguration().get([CONFIGURATIONS.key, name].join('.'));
 
 export const formatDate = (date: Date = new Date()) =>

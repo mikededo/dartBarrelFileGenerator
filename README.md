@@ -12,9 +12,13 @@ It can create barrel files only two the selected folder
 
 ![current-and-only-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-only.gif)
 
-It creates as well barrel files for the selected folder and all the nested folders from the selected. Likewise, it also adds the nested folder barrel file to its parent barrel file.
+It creates a barrel files for the selected folder and all the nested folders from the selected. Likewise, it also adds the nested folder barrel file to its parent barrel file.
 
 ![current-and-nested-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-and-nested.gif)
+
+Alternatively, the extension can create a barrel file with all the names of the nested folders (for each subfolder), without creating additional barrel files.
+
+![current-with-subfolders-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-with-subfolders.gif)
 
 ## Commands
 
@@ -36,13 +40,19 @@ You can also exclude `.freezed.dart` and `.g.dart` (generated) files by modifyin
 
 Additionally, you can create a list of glob file patterns to exclude with the `dartBarrelFileGenerator.excludeFileList`.
 
+### Default barrel file name
+
+The extension will create a barrel file with the `<folder-name>.dart` by default. This behaviour can be changed if the `dartBarrelFileGenerator.defaultBarrelName` option is set. By changing this option, whenever a barrel file is created, it will use the name set in the configuration instead of the default.
+
+> **Note**: If the name contains any whitespace, such will be replaced by `_`.
+
 ### Custom file name
 
 By default, the extension will create a new file named as the folder name, appended by the `.dart` extension. However, if you want to set the name, you can activate the following option:
 
 - `dartBarrelFileGenerator.promptName: false` (by default).
 
-Whenever you create a new barrel file, a prompt will appear to ask for the file name. It only works when creating a barrel file for a single folder, since it does not have much sense having it for the other option.
+Whenever you create a new barrel file, a prompt will appear to ask for the file name. It can be used for both options.
 
 > **Note**: When entering the name, the `.dart` extension is not required.
 

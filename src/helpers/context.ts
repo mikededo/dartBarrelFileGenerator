@@ -1,11 +1,11 @@
 import { isNil } from 'lodash';
 import { OutputChannel, Uri, window } from 'vscode';
 
-import { GEN_TYPE } from './constants';
+import { GenerationType } from './constants';
 import { formatDate } from './functions';
 
 type InitParms = {
-  type: GEN_TYPE;
+  type: GenerationType;
   path: Uri;
 };
 
@@ -17,8 +17,10 @@ type WriteInfoParams = {
 class GeneratorContext {
   private channel: OutputChannel;
   private path?: Uri;
-  private type?: GEN_TYPE;
+  private type?: GenerationType;
   private startTimestamp?: number;
+
+  public customBarrelName?: string;
 
   constructor() {
     this.channel = window.createOutputChannel('DartBarrelFile');
@@ -34,6 +36,7 @@ class GeneratorContext {
     this.startTimestamp = undefined;
     this.path = undefined;
     this.type = undefined;
+    this.customBarrelName = undefined;
   }
 
   get activePath(): Uri {
@@ -44,7 +47,7 @@ class GeneratorContext {
     return this.path;
   }
 
-  get activeType(): GEN_TYPE {
+  get activeType(): GenerationType {
     if (isNil(this.type)) {
       throw new Error('Context.activeType called when no active type');
     }

@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v3.0.5...v4.0.0) (2022-08-07)
+
+### ⚠ BREAKING CHANGES
+
+- generate current with subfolders
+  - A new option has been implemented that allows the user to create a barrel file from
+    the chsoen folder, which will include all subfiles from all subfolders, those without being inside a
+    barrel file.
+- add `defaultBarrelName` option (#58)
+
+### Features
+
+- add `defaultBarrelName` option ([#58](https://github.com/mikededo/dartBarrelFileGenerator/issues/58)) ([7bfbcd4](https://github.com/mikededo/dartBarrelFileGenerator/commit/7bfbcd411150a48e65233ccc5a67461467b59ad7))
+- set custom name for nested folders ([#57](https://github.com/mikededo/dartBarrelFileGenerator/issues/57)) ([c841141](https://github.com/mikededo/dartBarrelFileGenerator/commit/c84114170f1bf29c9e0df5a2fcaab6704b90bc59))
+
+### Bug Fixes
+
+- duplicated file names on `current with subfolders` ([c292e1c](https://github.com/mikededo/dartBarrelFileGenerator/commit/c292e1c30812f9e868b9f19af8be2169ace7be84))
+
 ### [3.0.5](https://github.com/mikededo/dartBarrelFileGenerator/compare/v3.0.4...v3.0.5) (2022-08-01)
 
 ### [3.0.4](https://github.com/mikededo/dartBarrelFileGenerator/compare/v3.0.3...v3.0.4) (2022-08-01)

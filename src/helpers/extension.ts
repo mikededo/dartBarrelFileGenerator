@@ -1,26 +1,54 @@
-import { lstatSync, readdirSync, writeFile } from 'fs';
+import { lstatSync, writeFile } from 'fs';
 import { get, isNil } from 'lodash';
 import { window, workspace } from 'vscode';
 
-import { GEN_TYPE } from './';
 import { CONFIGURATIONS } from './constants';
 import Context from './context';
 import {
   fileSort,
+  getAllFilesFromSubfolders,
   getConfig,
+  getFilesAndDirsFromPath,
   getFolderNameFromDialog,
-  shouldExport,
-  shouldExportDir,
   toOsSpecificPath,
   toPosixPath
 } from './functions';
 
 /**
+ * Entry point of the extension. When this function is called
+ * the context should have already been set up
+ */
+export const init = async () => {
+  if (!Context.activeType) {
+    Context.onError(
+      'Extension did not launch properly. Create an issue if this error persists'
+    );
+    Context.endGeneration();
+
+    window.showErrorMessage('GBDF: Error on initialising the extension');
+  }
+
+  try {
+    window.showInformationMessage(
+      'GDBF: Generated files!',
+      await validateAndGenerate().then((s) => {
+        Context.endGeneration();
+
+        return s;
+      })
+    );
+  } catch (error: any) {
+    Context.onError(error);
+    Context.endGeneration();
+
+    window.showErrorMessage('GDBF: Error on generating the file', error);
+  }
+};
+
+/**
  * Validates if the given `uri` is valid to generate a barrel file and,
  * if so, generates a barrel file in it
  *
- * @param uri The selected Uri to generate the barrel file
- * @param recursive If the barrel files should be generated recursively
  * @returns A promise with the path where the barrel file will be written
  * @throws {Error} If the selected `uri` is not valid
  */
@@ -96,49 +124,66 @@ const writeBarrelFile = (
 };
 
 /**
- *
  * @param targetPath The target path of the barrel file
- * @returns A promise with the path of the written barrel file
+ * @returns A promise with the name of the barrel file
  */
-const generate = async (targetPath: string): Promise<string> => {
+const getBarrelFile = async (targetPath: string): Promise<string> => {
+  // Check if the user has the defaultBarrelName config set
+  const defaultBarrelName = getConfig<string>(
+    CONFIGURATIONS.values.DEFAULT_NAME
+  );
+  if (defaultBarrelName) {
+    return defaultBarrelName.replace(/ /g, '_').toLowerCase();
+  }
+
   // Selected target is in the current workspace
   // This could be optional
   const splitDir = targetPath.split('/');
 
-  // If the user has set the promptName option and it is not the
-  // recursive case, ask for the name
-  let barrelFileName: string = splitDir[splitDir.length - 1];
+  // If the user has set the promptName option, use always such name
+  let barrelFileName: string =
+    Context.customBarrelName ?? splitDir[splitDir.length - 1];
 
+  // If there's a customBarrelName, it means that the user has already
+  // been prompted
   if (
-    Context.activeType === GEN_TYPE.REGULAR &&
+    !Context.customBarrelName &&
     getConfig(CONFIGURATIONS.values.PROMPT_NAME)
   ) {
     const result = await window.showInputBox({
-      title: 'Barrel file name',
+      title: `Barrel file name (${Context.customBarrelName})`,
       prompt:
         'Enter the name of the barrel file without the extension. If no name is entered, the folder name will be used',
       placeHolder: 'Ex: index'
     });
 
     barrelFileName = result ? result : barrelFileName;
+    Context.customBarrelName = barrelFileName;
   }
 
-  const files = [];
-  const dirs = new Set();
+  return barrelFileName;
+};
 
-  for (const curr of readdirSync(targetPath, { withFileTypes: true })) {
-    if (curr.isFile()) {
-      if (shouldExport(curr.name, barrelFileName)) {
-        files.push(curr.name);
-      }
-    } else if (curr.isDirectory()) {
-      if (shouldExportDir(curr.name)) {
-        dirs.add(curr.name);
-      }
-    }
+/**
+ * Generates the contents of the barrel file, recursively when the
+ * option chosen is recursive
+ *
+ * @param targetPath The target path of the barrel file
+ * @returns A promise with the path of the written barrel file
+ */
+const generate = async (targetPath: string): Promise<string> => {
+  const barrelFileName = await getBarrelFile(targetPath);
+
+  if (Context.activeType === 'REGULAR_SUBFOLDERS') {
+    return writeBarrelFile(
+      targetPath,
+      barrelFileName,
+      getAllFilesFromSubfolders(barrelFileName, targetPath).sort(fileSort)
+    );
   }
 
-  if (Context.activeType === GEN_TYPE.RECURSIVE && dirs.size > 0) {
+  const [files, dirs] = getFilesAndDirsFromPath(barrelFileName, targetPath);
+  if (Context.activeType === 'RECURSIVE' && dirs.size > 0) {
     for (const d of dirs) {
       files.push(
         toPosixPath(await generate(`${targetPath}/${d}`)).split(

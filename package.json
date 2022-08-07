@@ -1,8 +1,8 @@
 {
-  "name": "dart-barrel-file-generator",
+  "name": "dartBarrelFileGenerator",
   "displayName": "Dart Barrel File Generator",
   "description": "Visual studio code to generate barrel files for the Dart language.",
-  "version": "3.0.5",
+  "version": "4.0.0",
   "publisher": "miquelddg",
   "author": {
     "name": "Miquel de Domingo i Giralt",
@@ -32,25 +32,39 @@
   ],
   "activationEvents": [
     "onLanguage:dart",
-    "onCommand:dart-barrel-file-generator.generateCurrent",
-    "onCommand:dart-barrel-file-generator.generateCurrentAndNested"
+    "onCommand:dartBarrelFileGenerator.generateCurrent",
+    "onCommand:dartBarrelFileGenerator.generateCurrentAndNested",
+    "onCommand:dartBarrelFileGenerator.generateCurrentWithSubfolders"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "dart-barrel-file-generator.generateCurrent",
-        "title": "GDBF: Current Folder Only"
+        "command": "dartBarrelFileGenerator.generateCurrent",
+        "title": "GDBF: Current folder only"
       },
       {
-        "command": "dart-barrel-file-generator.generateCurrentAndNested",
-        "title": "GDBF: Current Folder and Nested Folders"
+        "command": "dartBarrelFileGenerator.generateCurrentAndNested",
+        "title": "GDBF: Current folder and nested folders"
+      },
+      {
+        "command": "dartBarrelFileGenerator.generateCurrentWithSubfolders",
+        "title": "GDBF: Current with subfolders"
       }
     ],
     "configuration": [
       {
         "title": "Dart Barrel File Generator",
         "properties": {
+          "dartBarrelFileGenerator.defaultBarrelName": {
+            "title": "Default barrel file name",
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null,
+            "markdownDescription": "The default name for the barrel file is `<folder-name>.dart`. You can override this name by setting a custom name. If there's any whitespace in the name it will be replaced by a '-' and the name **will be transformed to lowercase**."
+          },
           "dartBarrelFileGenerator.promptName": {
             "title": "Open input on file generation",
             "type": "boolean",
@@ -87,12 +101,17 @@
     "menus": {
       "explorer/context": [
         {
-          "command": "dart-barrel-file-generator.generateCurrent",
+          "command": "dartBarrelFileGenerator.generateCurrent",
           "group": "7_modification",
           "when": "explorerResourceIsFolder"
         },
         {
-          "command": "dart-barrel-file-generator.generateCurrentAndNested",
+          "command": "dartBarrelFileGenerator.generateCurrentAndNested",
+          "group": "7_modification",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "dartBarrelFileGenerator.generateCurrentWithSubfolders",
           "group": "7_modification",
           "when": "explorerResourceIsFolder"
         }
