@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "assignees": ["mikededo"],
   "extends": ["config:base", ":semanticCommitScopeDisabled"],
-  "baseBranches": ["next"],
+  "baseBranches": ["main"],
   "major": { "labels": ["renovate", "next", "major"] },
   "minor": { "labels": ["renovate", "next", "minor"] },
   "patch": { "labels": ["renovate", "next", "patch"] },
