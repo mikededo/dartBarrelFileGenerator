@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v4.0.0...v4.1.0) (2022-11-09)
+
+
+### Features
+
+* change renovate `baseBranch` ([5663ac0](https://github.com/mikededo/dartBarrelFileGenerator/commit/5663ac0fe7d19ba8194a6967154bbaf051f31242))
+* dump vscode engine version to `^1.73.0` ([38a04a1](https://github.com/mikededo/dartBarrelFileGenerator/commit/38a04a1f797880eda97dd724e729d114b7668b01))
+
+
+### Bug Fixes
+
+* package naming ([24e216a](https://github.com/mikededo/dartBarrelFileGenerator/commit/24e216a16763af4a7453ff42fd28b0468a56bfe4))
+
 ## [4.0.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v3.0.5...v4.0.0) (2022-08-07)
 
 ### ⚠ BREAKING CHANGES
