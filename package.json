@@ -75,13 +75,13 @@
             "title": "Exclude freezed (.freezed.dart) files",
             "type": "boolean",
             "default": true,
-            "description": "Exclude .freezed.dart files"
+            "markdownDescription": "Exclude `.freezed.dart` files"
           },
           "dartBarrelFileGenerator.excludeGenerated": {
             "title": "Exclude generated (.g.dart) files",
             "type": "boolean",
             "default": true,
-            "description": "Exclude .g.dart files"
+            "markdownDescription": "Exclude `.g.dart` files"
           },
           "dartBarrelFileGenerator.excludeFileList": {
             "title": "Additional patterns to exclude files",
@@ -99,13 +99,13 @@
             "title": "Prepend name of the folder to the generated file",
             "type": "boolean",
             "default": false,
-            "description": "Prepend the name of the folder to the generated files, e.g.: <folder-name>_<barrel-file>.dart."
+            "markdownDescription": "Prepend the name of the folder to the generated files, e.g.: `<folder-name>_<barrel-file>.dart`."
           },
           "dartBarrelFileGenerator.appendFolderName": {
             "title": "Append name of the folder to the generated file",
             "type": "boolean",
             "default": false,
-            "description": "Append the name of the folder to the generated files, e.g.: <barrel-file>_<folder-name>.dart."
+            "markdownDescription": "Append the name of the folder to the generated files, e.g.: `<barrel-file>_<folder-name>.dart`."
           }
         }
       }
