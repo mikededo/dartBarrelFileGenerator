@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v4.1.0...v5.0.0) (2022-11-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* Adds two new configuration options.
+
+- `prependFolderName`: When generating the barrel file, it will add the name of the folder at the beginning of the file generated.
+- `appendFolderName`: When generating the barrel file, it will add the name of the folder at the end of the file generated.
+
+### Features
+
+* prepend and append folder name options ([#70](https://github.com/mikededo/dartBarrelFileGenerator/issues/70)) ([80eccba](https://github.com/mikededo/dartBarrelFileGenerator/commit/80eccbab1315cbf1659ff19e7a4ef4c7430db418)), closes [#69](https://github.com/mikededo/dartBarrelFileGenerator/issues/69)
+
+
+### Other
+
+* use markdownDescription on configuration ([#71](https://github.com/mikededo/dartBarrelFileGenerator/issues/71)) ([2f7816f](https://github.com/mikededo/dartBarrelFileGenerator/commit/2f7816f6467631156221c1cb4ca90860233ccafd))
+
 ## [4.1.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v4.0.0...v4.1.0) (2022-11-09)
 
 
