@@ -1,3 +1,8 @@
 {
-	"packageFiles": []
+  "types": [
+    { "type": "feat", "section": "Features", "hidden": false },
+    { "type": "fix", "section": "Fixes", "hidden": false },
+    { "type": "chore", "section": "Other", "hidden": false },
+    { "type": "docs", "section": "Other", "hidden": false }
+  ]
 }
