@@ -128,17 +128,27 @@ const writeBarrelFile = (
  * @returns A promise with the name of the barrel file
  */
 const getBarrelFile = async (targetPath: string): Promise<string> => {
+  // Check if prepend or append is wanted
+  const shouldAppend = getConfig<boolean>(CONFIGURATIONS.values.APPEND_FOLDER);
+  const shouldPrepend = getConfig<boolean>(
+    CONFIGURATIONS.values.PREPEND_FOLDER
+  );
+
+  // Selected target is in the current workspace
+  // This could be optional
+  const splitDir = targetPath.split('/');
+  const prependedDir = shouldPrepend ? `${splitDir[splitDir.length - 1]}_` : '';
+  const appendedDir = shouldAppend ? `_${splitDir[splitDir.length - 1]}` : '';
+
   // Check if the user has the defaultBarrelName config set
   const defaultBarrelName = getConfig<string>(
     CONFIGURATIONS.values.DEFAULT_NAME
   );
   if (defaultBarrelName) {
-    return defaultBarrelName.replace(/ /g, '_').toLowerCase();
+    return `${prependedDir}${defaultBarrelName
+      .replace(/ /g, '_')
+      .toLowerCase()}${appendedDir}`;
   }
-
-  // Selected target is in the current workspace
-  // This could be optional
-  const splitDir = targetPath.split('/');
 
   // If the user has set the promptName option, use always such name
   let barrelFileName: string =
@@ -161,7 +171,7 @@ const getBarrelFile = async (targetPath: string): Promise<string> => {
     Context.customBarrelName = barrelFileName;
   }
 
-  return barrelFileName;
+  return `${prependedDir}${barrelFileName}${appendedDir}`;
 };
 
 /**
