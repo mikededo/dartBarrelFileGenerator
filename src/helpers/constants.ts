@@ -8,7 +8,9 @@ export const CONFIGURATIONS = {
     EXCLUDE_FREEZED: 'excludeFreezed',
     EXCLUDE_GENERATED: 'excludeGenerated',
     EXCLUDE_FILES: 'excludeFileList',
-    EXCLUDE_DIRS: 'excludeDirList'
+    EXCLUDE_DIRS: 'excludeDirList',
+    PREPEND_FOLDER: 'prependFolderName',
+    APPEND_FOLDER: 'appendFolderName'
   },
   input: {
     canSelectMany: false,
