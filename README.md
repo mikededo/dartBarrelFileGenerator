@@ -38,7 +38,10 @@ You can also exclude `.freezed.dart` and `.g.dart` (generated) files by modifyin
 - `dartBarrelFileGenerator.excludeFreezed: false` (by default).
 - `dartBarrelFileGenerator.excludeGenerated: false` (by default).
 
-Additionally, you can create a list of glob file patterns to exclude with the `dartBarrelFileGenerator.excludeFileList`.
+It is also possible to exclude glob patterns:
+
+- For files, you can add a list of file globs in the `dartBarrelFile.excludeFileList` option.
+- For directories, you can add a list of directories globs in the `dartBarrelFile.excludeDirList` option.
 
 ### Default barrel file name
 
@@ -55,6 +58,8 @@ By default, the extension will create a new file named as the folder name, appen
 Whenever you create a new barrel file, a prompt will appear to ask for the file name. It can be used for both options.
 
 > **Note**: When entering the name, the `.dart` extension is not required.
+
+### A
 
 ## Attributions
 
