@@ -1,5 +1,6 @@
-import { CONFIGURATIONS, FILE_REGEX, GenerationType } from './constants';
 import Context from './context';
+import { CONFIGURATIONS, FILE_REGEX } from './constants';
+import { GenerationType } from './types';
 import { validateAndGenerate } from './extension';
 
 export { CONFIGURATIONS, Context, FILE_REGEX, validateAndGenerate };

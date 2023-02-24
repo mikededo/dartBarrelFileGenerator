@@ -13,6 +13,7 @@ import {
   toOsSpecificPath,
   toPosixPath
 } from './functions';
+import { Maybe } from './types';
 
 /**
  * Entry point of the extension. When this function is called
@@ -29,14 +30,20 @@ export const init = async () => {
   }
 
   try {
-    window.showInformationMessage(
-      'GDBF: Generated files!',
-      await validateAndGenerate().then((s) => {
-        Context.endGeneration();
+    const maybeGenerated = await validateAndGenerate();
 
-        return s;
-      })
-    );
+    if (maybeGenerated) {
+      await window.showInformationMessage(
+        'GDBF: Generated files!',
+        maybeGenerated
+      );
+    } else {
+      await window.showInformationMessage(
+        'GDBF: No dart barrel file has been generated!'
+      );
+    }
+
+    Context.endGeneration();
   } catch (error: any) {
     Context.onError(error);
     Context.endGeneration();
@@ -52,7 +59,7 @@ export const init = async () => {
  * @returns A promise with the path where the barrel file will be written
  * @throws {Error} If the selected `uri` is not valid
  */
-const validateAndGenerate = async (): Promise<string> => {
+const validateAndGenerate = async (): Promise<Maybe<string>> => {
   let targetDir;
 
   if (isNil(get(Context.activePath, 'path'))) {
@@ -181,9 +188,8 @@ const getBarrelFile = async (targetPath: string): Promise<string> => {
  * @param targetPath The target path of the barrel file
  * @returns A promise with the path of the written barrel file
  */
-const generate = async (targetPath: string): Promise<string> => {
+const generate = async (targetPath: string): Promise<Maybe<string>> => {
   const barrelFileName = await getBarrelFile(targetPath);
-
   if (Context.activeType === 'REGULAR_SUBFOLDERS') {
     return writeBarrelFile(
       targetPath,
@@ -195,12 +201,17 @@ const generate = async (targetPath: string): Promise<string> => {
   const [files, dirs] = getFilesAndDirsFromPath(barrelFileName, targetPath);
   if (Context.activeType === 'RECURSIVE' && dirs.size > 0) {
     for (const d of dirs) {
-      files.push(
-        toPosixPath(await generate(`${targetPath}/${d}`)).split(
-          `${targetPath}/`
-        )[1]
-      );
+      const maybeGenerated = await generate(`${targetPath}/${d}`);
+      if (!maybeGenerated) {
+        continue;
+      }
+
+      files.push(toPosixPath(maybeGenerated).split(`${targetPath}/`)[1]);
     }
+  }
+
+  if (files.length === 0) {
+    return Promise.resolve(undefined);
   }
 
   // Sort files

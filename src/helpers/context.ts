@@ -1,7 +1,7 @@
 import { isNil } from 'lodash';
 import { OutputChannel, Uri, window } from 'vscode';
 
-import { GenerationType } from './constants';
+import { GenerationType } from './types';
 import { formatDate } from './functions';
 
 type InitParms = {

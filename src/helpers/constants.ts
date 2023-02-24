@@ -20,8 +20,6 @@ export const CONFIGURATIONS = {
   } as Partial<OpenDialogOptions>
 };
 
-export type GenerationType = 'REGULAR' | 'REGULAR_SUBFOLDERS' | 'RECURSIVE';
-
 export const FILE_REGEX = {
   /**
    * Used to check whether the current file name has a
