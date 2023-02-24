@@ -189,28 +189,34 @@ const getBarrelFile = async (targetPath: string): Promise<string> => {
  * @returns A promise with the path of the written barrel file
  */
 const generate = async (targetPath: string): Promise<Maybe<string>> => {
+  const skipEmpty = getConfig(CONFIGURATIONS.values.SKIP_EMPTY);
   const barrelFileName = await getBarrelFile(targetPath);
   if (Context.activeType === 'REGULAR_SUBFOLDERS') {
-    return writeBarrelFile(
-      targetPath,
-      barrelFileName,
-      getAllFilesFromSubfolders(barrelFileName, targetPath).sort(fileSort)
+    const files = getAllFilesFromSubfolders(barrelFileName, targetPath).sort(
+      fileSort
     );
+    if (files.length === 0 && skipEmpty) {
+      return Promise.resolve(undefined);
+    }
+
+    return writeBarrelFile(targetPath, barrelFileName, files);
   }
 
   const [files, dirs] = getFilesAndDirsFromPath(barrelFileName, targetPath);
   if (Context.activeType === 'RECURSIVE' && dirs.size > 0) {
     for (const d of dirs) {
       const maybeGenerated = await generate(`${targetPath}/${d}`);
-      if (!maybeGenerated) {
+      if (!maybeGenerated && skipEmpty) {
         continue;
       }
 
-      files.push(toPosixPath(maybeGenerated).split(`${targetPath}/`)[1]);
+      files.push(
+        toPosixPath(maybeGenerated as string).split(`${targetPath}/`)[1]
+      );
     }
   }
 
-  if (files.length === 0) {
+  if (files.length === 0 && skipEmpty) {
     return Promise.resolve(undefined);
   }
 

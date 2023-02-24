@@ -75,6 +75,13 @@ It can be used for both options.
 
 > **Note**: When entering the name, the `.dart` extension is not required.
 
+### Other options
+
+- Skipping empty folders: by default, `dartBarrelFileGenerator` will not
+  generate a barrel file for a folder that does not have any file to export. You
+  can change this behaviour by setting `dartBarrelFileGenerator.skipEmpty` to
+  `false`. 
+
 ## Attributions
 
 Extension icon made by [Freepik](https://www.flaticon.com/authors/freepik) from [flaticon](www.flaticon.com).
