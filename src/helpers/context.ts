@@ -1,4 +1,3 @@
-import { isNil } from 'lodash';
 import { OutputChannel, Uri, window } from 'vscode';
 
 import { GenerationType } from './constants';
@@ -40,7 +39,7 @@ class GeneratorContext {
   }
 
   get activePath(): Uri {
-    if (isNil(this.path)) {
+    if (!this.path) {
       throw new Error('Context.activePath called when no active path');
     }
 
@@ -48,7 +47,7 @@ class GeneratorContext {
   }
 
   get activeType(): GenerationType {
-    if (isNil(this.type)) {
+    if (!this.type) {
       throw new Error('Context.activeType called when no active type');
     }
 
@@ -74,7 +73,7 @@ class GeneratorContext {
   }
 
   endGeneration(): void {
-    if (isNil(this.startTimestamp)) {
+    if (!this.startTimestamp) {
       throw new Error(
         'Context.endGeneration cannot be called before Context.initGeneration'
       );

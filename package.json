@@ -143,7 +143,6 @@
   },
   "devDependencies": {
     "@types/glob": "8.1.0",
-    "@types/lodash": "4.14.191",
     "@types/node": "18.14.1",
     "@types/vscode": "1.75.1",
     "@typescript-eslint/eslint-plugin": "5.53.0",
@@ -159,7 +158,6 @@
     "webpack-cli": "5.0.1"
   },
   "dependencies": {
-    "lodash": "4.17.21",
     "path": "0.12.7"
   },
   "config": {
