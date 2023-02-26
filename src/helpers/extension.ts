@@ -1,5 +1,4 @@
 import { lstatSync, writeFile } from 'fs';
-import { get, isNil } from 'lodash';
 import { window, workspace } from 'vscode';
 
 import { CONFIGURATIONS } from './constants';
@@ -55,10 +54,10 @@ export const init = async () => {
 const validateAndGenerate = async (): Promise<string> => {
   let targetDir;
 
-  if (isNil(get(Context.activePath, 'path'))) {
+  if (!Context.activePath.path) {
     targetDir = await getFolderNameFromDialog();
 
-    if (isNil(targetDir)) {
+    if (!targetDir) {
       throw Error('Select a directory!');
     }
 
