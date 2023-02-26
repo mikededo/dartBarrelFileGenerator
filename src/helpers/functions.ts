@@ -1,5 +1,4 @@
 import minimatch = require('minimatch');
-import { isEmpty, isNil } from 'lodash';
 import { posix, sep } from 'path';
 import { window, workspace } from 'vscode';
 
@@ -70,10 +69,10 @@ export const fileSort = (a: string, b: string): number =>
  */
 export const getFolderNameFromDialog = (): Thenable<string | undefined> =>
   window.showOpenDialog(CONFIGURATIONS.input).then((uri) =>
-    isNil(uri) || isEmpty(uri)
-      ? undefined
-      : // The selected input is in the first array position
+    uri && uri.length > 0
+      ? // The selected input is in the first array position
         uri[0].path
+      : undefined
   );
 
 /**

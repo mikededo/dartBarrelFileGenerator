@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v5.0.0...v6.0.0) (2023-02-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* Added a new option that, by default, will skip generated dart barrel files taht do not contain any file. This can be toggled with the option (set to `true` by default): `dartBarrelFileGenerator.skipEmpty` 
+* Removed `lodash` dependency as it was used for really simple functions that could
+be replaced by simple comparisons
+
+### Features
+
+* exclude empty generated barrel files ([#79](https://github.com/mikededo/dartBarrelFileGenerator/issues/79)) ([79fd0bd](https://github.com/mikededo/dartBarrelFileGenerator/commit/79fd0bd6f7e4b3ea76578d5e3f0ae7833ed8255b))
+* remove `lodash` dependency ([#82](https://github.com/mikededo/dartBarrelFileGenerator/issues/82)) ([608c98c](https://github.com/mikededo/dartBarrelFileGenerator/commit/608c98c94b8cfc009cb93908a807a812229ca97d))
+
+
+### Fixes
+
+* clean package.json ([#80](https://github.com/mikededo/dartBarrelFileGenerator/issues/80)) ([343b78b](https://github.com/mikededo/dartBarrelFileGenerator/commit/343b78b43fd460b86f101e2b7bc19984ed77aa65))
+
+
+### Other
+
+* display `refactor` commits on changelog ([#83](https://github.com/mikededo/dartBarrelFileGenerator/issues/83)) ([a43027b](https://github.com/mikededo/dartBarrelFileGenerator/commit/a43027bd8c1666ad3657be258b5532d8ad1ce961))
+* update outdated readme ([#77](https://github.com/mikededo/dartBarrelFileGenerator/issues/77)) ([38e0d3e](https://github.com/mikededo/dartBarrelFileGenerator/commit/38e0d3e120dae47494c574c7e5834fe8b3e30c09))
+
 ## [5.0.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v4.1.0...v5.0.0) (2022-11-27)
 
 

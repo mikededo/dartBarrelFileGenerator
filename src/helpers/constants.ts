@@ -3,14 +3,15 @@ import { OpenDialogOptions } from 'vscode';
 export const CONFIGURATIONS = {
   key: 'dartBarrelFileGenerator',
   values: {
+    APPEND_FOLDER: 'appendFolderName',
     DEFAULT_NAME: 'defaultBarrelName',
-    PROMPT_NAME: 'promptName',
+    EXCLUDE_DIRS: 'excludeDirList',
+    EXCLUDE_FILES: 'excludeFileList',
     EXCLUDE_FREEZED: 'excludeFreezed',
     EXCLUDE_GENERATED: 'excludeGenerated',
-    EXCLUDE_FILES: 'excludeFileList',
-    EXCLUDE_DIRS: 'excludeDirList',
     PREPEND_FOLDER: 'prependFolderName',
-    APPEND_FOLDER: 'appendFolderName'
+    PROMPT_NAME: 'promptName',
+    SKIP_EMPTY: 'skipEmpty'
   },
   input: {
     canSelectMany: false,
@@ -19,8 +20,6 @@ export const CONFIGURATIONS = {
     openLabel: 'Select the folder in which you want to create the barrel file'
   } as Partial<OpenDialogOptions>
 };
-
-export type GenerationType = 'REGULAR' | 'REGULAR_SUBFOLDERS' | 'RECURSIVE';
 
 export const FILE_REGEX = {
   /**
