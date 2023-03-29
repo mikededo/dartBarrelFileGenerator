@@ -90,12 +90,13 @@ export const getFilesAndDirsFromPath = (
   const dirs = new Set<string>();
 
   for (const curr of readdirSync(path, { withFileTypes: true })) {
+    const fullPath = `${path}/${curr.name}`;
     if (curr.isFile()) {
-      if (shouldExport(curr.name, barrel)) {
+      if (shouldExport(curr.name, fullPath, barrel)) {
         files.push(curr.name);
       }
     } else if (curr.isDirectory()) {
-      if (shouldExportDir(curr.name)) {
+      if (shouldExportDirectory(fullPath)) {
         dirs.add(curr.name);
       }
     }
@@ -140,23 +141,24 @@ export const getAllFilesFromSubfolders = (
  * exports
  */
 export const shouldExport = (
-  posixPath: PosixPath,
+  fileName: PosixPath,
+  filePath: PosixPath,
   dirName: string
 ): boolean => {
-  if (isDartFile(posixPath) && !isBarrelFile(dirName, posixPath)) {
-    if (FILE_REGEX.suffixed('freezed').test(posixPath)) {
+  if (isDartFile(fileName) && !isBarrelFile(dirName, fileName)) {
+    if (FILE_REGEX.suffixed('freezed').test(fileName)) {
       // Export only if files are not excluded
       return !getConfig(CONFIGURATIONS.values.EXCLUDE_FREEZED);
     }
 
-    if (FILE_REGEX.suffixed('g').test(posixPath)) {
+    if (FILE_REGEX.suffixed('g').test(fileName)) {
       // Export only if files are not excluded
       return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
     }
 
     const globs: string[] =
       getConfig(CONFIGURATIONS.values.EXCLUDE_FILES) ?? [];
-    return globs.every((glob) => !matchesGlob(posixPath, glob));
+    return globs.every((glob) => !matchesGlob(filePath, glob));
   }
 
   return false;
@@ -169,7 +171,7 @@ export const shouldExport = (
  * @returns If the given `posixPath` should be added to the list of
  * exports
  */
-export const shouldExportDir = (posixPath: PosixPath): boolean => {
+export const shouldExportDirectory = (posixPath: PosixPath): boolean => {
   const globs: string[] = getConfig(CONFIGURATIONS.values.EXCLUDE_DIRS) ?? [];
   return globs.every((glob) => !matchesGlob(posixPath, glob));
 };
