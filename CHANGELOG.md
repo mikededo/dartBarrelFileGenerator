@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v6.0.0...v6.1.0) (2023-03-29)
+
+
+### Features
+
+* change options names in menu ([#92](https://github.com/mikededo/dartBarrelFileGenerator/issues/92)) ([8a441ea](https://github.com/mikededo/dartBarrelFileGenerator/commit/8a441ead0ce11903c19be338eafad2eae1b971f9))
+
+
+### Fixes
+
+* check globs for full file/dir path ([#91](https://github.com/mikededo/dartBarrelFileGenerator/issues/91)) ([e1bae76](https://github.com/mikededo/dartBarrelFileGenerator/commit/e1bae76b6a4ea1b0a848e77f14b0c6c22c9493bf))
+
+
+### Other
+
+* dump dependencies ([#93](https://github.com/mikededo/dartBarrelFileGenerator/issues/93)) ([f1040f7](https://github.com/mikededo/dartBarrelFileGenerator/commit/f1040f7e37857ad538de261c3ae8adfa1548545d))
+
 ## [6.0.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v5.0.0...v6.0.0) (2023-02-26)
 
 
