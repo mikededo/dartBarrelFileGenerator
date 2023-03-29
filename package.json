@@ -41,15 +41,15 @@
     "commands": [
       {
         "command": "dartBarrelFileGenerator.generateCurrent",
-        "title": "GDBF: Current folder only"
+        "title": "GDBF: This folder"
       },
       {
         "command": "dartBarrelFileGenerator.generateCurrentAndNested",
-        "title": "GDBF: Current folder and nested folders"
+        "title": "GDBF: Folders (recursive)"
       },
       {
         "command": "dartBarrelFileGenerator.generateCurrentWithSubfolders",
-        "title": "GDBF: Current with subfolders"
+        "title": "GDBF: Folders' files (recursive)"
       }
     ],
     "configuration": [

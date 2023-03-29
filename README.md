@@ -12,25 +12,26 @@ or from the [marketplace](https://marketplace.visualstudio.com/).
 
 It can create barrel files only two the selected folder
 
-![current-and-only-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-only.gif)
+![this-folder](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-only.gif)
 
 It creates a barrel file for the selected folder and all the nested folders from
 the selected. Likewise, it also adds the nested folder barrel file to its parent
 barrel file.
 
-![current-and-nested-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-and-nested.gif)
+![folders-recursie](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-and-nested.gif)
 
 Alternatively, the extension can create a barrel file with all the names of the
 nested folders (for each subfolder), without creating additional barrel files.
 
-![current-with-subfolders-demo](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-with-subfolders.gif)
+![folders-files-recursive](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-with-subfolders.gif)
 
 ## Commands
 
-| Command                            | Description                                                   |
-| ---------------------------------- | ------------------------------------------------------------- |
-| `GDBF: Current Folder Only`        | Creates a barrel file for the selected folder                 |
-| `GDBF: Current and Nested Folders` | Creates a barrel file for the selected and its nested folders |
+| Command                            | Description                                                                     |
+|------------------------------------|---------------------------------------------------------------------------------|
+| `GDBF: This folder`                | Creates a barrel file for the selected folder                                   |
+| `GDBF: Folders (recursive)`        | Creates a barrel file for the selected and its nested folders                   |
+| `GDBF: Folders' files (recursive)` | Creates a barrel file for the selected exporting all files with the entire path |
 
 Both commands can be used by typing in the command palette. It will then ask you to
 choose a folder. If it is done from the folder tree, it will use the selected
