@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.1.1](https://github.com/mikededo/dartBarrelFileGenerator/compare/v6.1.0...v6.1.1) (2023-03-30)
+
+
+### Fixes
+
+* security updates ([#95](https://github.com/mikededo/dartBarrelFileGenerator/issues/95)) ([473eda8](https://github.com/mikededo/dartBarrelFileGenerator/commit/473eda8c74599b5d86968d98cb27ae6ab815e2b3))
+
 ## [6.1.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v6.0.0...v6.1.0) (2023-03-29)
 
 
