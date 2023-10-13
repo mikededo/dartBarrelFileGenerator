@@ -4,6 +4,7 @@ export const CONFIGURATIONS = {
   key: 'dartBarrelFileGenerator',
   values: {
     APPEND_FOLDER: 'appendFolderName',
+    APPEND_LIB_PACKAGE: 'prependPackageToLibExport',
     DEFAULT_NAME: 'defaultBarrelName',
     EXCLUDE_DIRS: 'excludeDirList',
     EXCLUDE_FILES: 'excludeFileList',

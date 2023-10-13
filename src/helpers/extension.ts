@@ -9,6 +9,7 @@ import {
   getConfig,
   getFilesAndDirsFromPath,
   getFolderNameFromDialog,
+  isTargetLibFolder,
   toOsSpecificPath,
   toPosixPath
 } from './functions';
@@ -107,9 +108,16 @@ const writeBarrelFile = (
   files: string[]
 ): Promise<string> => {
   let exports = '';
+  // Check if we should prepend the package
+  const shouldPrependPackage =
+    getConfig<boolean>(CONFIGURATIONS.values.APPEND_LIB_PACKAGE) &&
+    isTargetLibFolder(targetPath);
+  const prependPackageValue = shouldPrependPackage
+    ? `package:${Context.packageName}/`
+    : '';
 
   for (const t of files) {
-    exports = `${exports}export '${t}';\n`;
+    exports = `${exports}export '${prependPackageValue}${t}';\n`;
   }
 
   Context.writeFolderInfo({ path: targetPath, fileCount: files.length });

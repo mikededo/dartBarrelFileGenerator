@@ -1,7 +1,7 @@
 import { OutputChannel, Uri, window } from 'vscode';
 
 import { GenerationType } from './types';
-import { formatDate } from './functions';
+import { formatDate, toPosixPath } from './functions';
 
 type InitParms = {
   type: GenerationType;
@@ -54,12 +54,22 @@ class GeneratorContext {
     return this.type;
   }
 
+  get packageName(): string {
+    if (!this.path) {
+      throw new Error('Context.packageName called when no active path');
+    }
+
+    const parts = toPosixPath(this.activePath.fsPath).split('/lib');
+    const path = parts[0].split('/');
+    return path[path.length - 1];
+  }
+
   initGeneration({ path, type }: InitParms): void {
     const ts = new Date();
     this.startTimestamp = ts.getTime();
 
     this.channel.appendLine(
-      `[${formatDate()}] Geneartion started ${formatDate(ts)}`
+      `[${formatDate()}] Generation started ${formatDate(ts)}`
     );
 
     this.path = path;

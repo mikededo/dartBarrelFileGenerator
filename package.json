@@ -109,6 +109,12 @@
             "type": "boolean",
             "default": true,
             "description": "Skip generating barrel files for folders that are empty (or do not contain any valid dart file)"
+          },
+          "dartBarrelFileGenerator.prependPackageToLibExport": {
+            "title": "Append package name to lib exports",
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "It will prepend `package:<package-name>/...` as a prefix of the export exclusively for the root file under `lib/`. It detects the name of the package by analysing the path of the project."
           }
         }
       }

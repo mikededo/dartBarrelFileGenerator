@@ -187,3 +187,14 @@ export const getConfig = <T = any>(name: string): T | undefined =>
 
 export const formatDate = (date: Date = new Date()) =>
   date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
+/**
+ * Checks if the given target path is the lib folder
+ *
+ * @param targetPath The barrel file target path
+ * @returns If the path is the `lib` folder
+ */
+export const isTargetLibFolder = (targetPath: string): boolean => {
+  const parts = targetPath.split('/');
+  return parts[parts.length - 1] === 'lib';
+};
