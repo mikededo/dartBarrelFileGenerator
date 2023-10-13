@@ -2,7 +2,7 @@
   "name": "dart-barrel-file-generator",
   "displayName": "Dart Barrel File Generator",
   "description": "Visual studio code to generate barrel files for the Dart language.",
-  "version": "6.1.2",
+  "version": "6.2.0",
   "publisher": "miquelddg",
   "author": {
     "name": "Miquel de Domingo i Giralt",
