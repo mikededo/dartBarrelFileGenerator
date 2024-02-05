@@ -10,7 +10,7 @@
     "url": "https://www.github.com/mikededo"
   },
   "engines": {
-    "vscode": "^1.83.0"
+    "vscode": "^1.86.0"
   },
   "repository": {
     "type": "git",
@@ -144,7 +144,7 @@
     "changelog": "HUSKY=0 standard-version --no-verify",
     "lint": "eslint .",
     "package": "webpack --mode production --devtool hidden-source-map",
-    "prepare": "husky install",
+    "prepare": "husky",
     "pretty": "prettier . --write --loglevel warn",
     "vscode:prepublish": "webpack --mode production",
     "webpack": "webpack --mode development",
@@ -152,18 +152,18 @@
   },
   "devDependencies": {
     "@types/glob": "8.1.0",
-    "@types/node": "20.8.5",
-    "@types/vscode": "1.83.0",
-    "@typescript-eslint/eslint-plugin": "6.7.5",
-    "@typescript-eslint/parser": "6.7.5",
+    "@types/node": "20.11.16",
+    "@types/vscode": "1.86.0",
+    "@typescript-eslint/eslint-plugin": "6.20.0",
+    "@typescript-eslint/parser": "6.20.0",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "8.51.0",
-    "husky": "8.0.3",
-    "prettier": "3.0.3",
+    "eslint": "8.56.0",
+    "husky": "9.0.10",
+    "prettier": "3.2.5",
     "standard-version": "9.5.0",
-    "ts-loader": "9.5.0",
-    "typescript": "5.2.2",
-    "webpack": "5.88.2",
+    "ts-loader": "9.5.1",
+    "typescript": "5.3.3",
+    "webpack": "5.90.1",
     "webpack-cli": "5.1.4"
   },
   "dependencies": {
