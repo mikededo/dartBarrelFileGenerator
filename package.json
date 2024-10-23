@@ -29,7 +29,8 @@
   "main": "./dist/extension.js",
   "icon": "assets/logo.png",
   "engines": {
-    "vscode": "^1.86.0"
+    "node": ">=22",
+    "vscode": "^1.94.0"
   },
   "activationEvents": [
     "onLanguage:dart"
@@ -145,11 +146,10 @@
     }
   },
   "scripts": {
-    "build": "vsce package --yarn --out dist/",
     "changelog": "HUSKY=0 standard-version --no-verify",
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
-    "package": "webpack --mode production --devtool hidden-source-map",
+    "package": "yarn install && vsce package --yarn --out dist/ && rm yarn.lock",
     "prepare": "husky",
     "vscode:prepublish": "webpack --mode production",
     "webpack": "webpack --mode development",
@@ -173,6 +173,7 @@
     "standard-version": "9.5.0",
     "ts-loader": "9.5.1",
     "typescript": "5.6.3",
+    "vsce": "2.15.0",
     "webpack": "5.95.0",
     "webpack-cli": "5.1.4"
   },
