@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.3.0](https://github.com/mikededo/dartBarrelFileGenerator/compare/v6.2.2...v6.3.0) (2024-10-23)
+
+
+### Features
+
+* add generateFocusedParent ([262ca57](https://github.com/mikededo/dartBarrelFileGenerator/commit/262ca5717e7acd4baa8568e8e0f0ea3eeba7f1ab))
+
 ### [6.2.2](https://github.com/mikededo/dartBarrelFileGenerator/compare/v6.2.1...v6.2.2) (2024-02-05)
 
 
