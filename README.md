@@ -27,11 +27,12 @@ nested folders (for each subfolder), without creating additional barrel files.
 
 ## Commands
 
-| Command                            | Description                                                                     |
-|------------------------------------|---------------------------------------------------------------------------------|
-| `GDBF: This folder`                | Creates a barrel file for the selected folder                                   |
-| `GDBF: Folders (recursive)`        | Creates a barrel file for the selected and its nested folders                   |
-| `GDBF: Folders' files (recursive)` | Creates a barrel file for the selected exporting all files with the entire path |
+| Command                            | Description                                                                                                  |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `GDBF: This folder`                | Creates a barrel file for the selected folder                                                                |
+| `GDBF: Folders (recursive)`        | Creates a barrel file for the selected and its nested folders                                                |
+| `GDBF: Folders' files (recursive)` | Creates a barrel file for the selected exporting all files with the entire path                              |
+| `GDBF: Focused (parent)`           | Through the command palette and when focusing the editor, generates a barrel file to the focused file parent |
 
 Both commands can be used by typing in the command palette. It will then ask you to
 choose a folder. If it is done from the folder tree, it will use the selected
