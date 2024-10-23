@@ -1,4 +1,12 @@
 import { OpenDialogOptions } from 'vscode';
+import { FocusedGenerations, RegularGenerations } from './types';
+
+export const FOCUSED_TO_REGULAR: Record<
+  FocusedGenerations,
+  RegularGenerations
+> = {
+  REGULAR_FOCUSED: 'REGULAR'
+};
 
 export const CONFIGURATIONS = {
   key: 'dartBarrelFileGenerator',

@@ -1,7 +1,4 @@
-import Context from './context';
-import { CONFIGURATIONS, FILE_REGEX } from './constants';
-import { GenerationType } from './types';
-import { validateAndGenerate } from './extension';
-
-export { CONFIGURATIONS, Context, FILE_REGEX, validateAndGenerate };
-export type { GenerationType };
+export type * from './types';
+export { CONFIGURATIONS, FILE_REGEX } from './constants';
+export { default as Context } from './context';
+export { validateAndGenerate, init } from './extension';

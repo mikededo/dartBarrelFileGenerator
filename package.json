@@ -47,6 +47,11 @@
       {
         "command": "dartBarrelFileGenerator.generateCurrentWithSubfolders",
         "title": "GDBF: Folders' files (recursive)"
+      },
+      {
+        "command": "dartBarrelFileGenerator.generateFocusedParent",
+        "title": "GDBF: Focused (parent)",
+        "when": "editorTextFocus"
       }
     ],
     "configuration": [

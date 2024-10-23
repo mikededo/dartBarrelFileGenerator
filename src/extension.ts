@@ -1,7 +1,8 @@
-import { commands, ExtensionContext, Uri } from 'vscode';
+import { commands, window, ExtensionContext, Uri } from 'vscode';
 
-import { Context, GenerationType } from './helpers';
-import { init } from './helpers/extension';
+import { Context, FocusedGenerations, GenerationType } from './helpers';
+import { init } from './helpers';
+import { FOCUSED_TO_REGULAR } from './helpers/constants';
 
 /**
  * Activates the extension
@@ -12,6 +13,13 @@ const activate = (context: ExtensionContext) => {
     commands.registerCommand(
       'dartBarrelFileGenerator.generateCurrent',
       generate('REGULAR')
+    )
+  );
+  // For current folder
+  context.subscriptions.push(
+    commands.registerCommand(
+      'dartBarrelFileGenerator.generateFocusedParent',
+      generateFocused('REGULAR_FOCUSED')
     )
   );
 
@@ -40,6 +48,17 @@ const activate = (context: ExtensionContext) => {
 const generate = (type: GenerationType) => async (uri: Uri) => {
   Context.initGeneration({ path: uri, type: type });
   await init();
+};
+
+const generateFocused = (type: FocusedGenerations) => async () => {
+  const activeEditor = window.activeTextEditor;
+  if (!activeEditor) {
+    Context.onError('No active editor');
+    return;
+  }
+
+  const parent = Uri.joinPath(activeEditor.document.uri, '..');
+  await generate(FOCUSED_TO_REGULAR[type])(parent);
 };
 
 const deactivate = () => {

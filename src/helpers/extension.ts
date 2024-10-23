@@ -45,6 +45,7 @@ export const init = async () => {
 
     Context.endGeneration();
   } catch (error: any) {
+    console.log(error);
     Context.onError(error);
     Context.endGeneration();
 
@@ -65,6 +66,7 @@ const validateAndGenerate = async (): Promise<Maybe<string>> => {
   if (!Context.activePath.path) {
     targetDir = await getFolderNameFromDialog();
 
+    console.log(Context.activePath.path);
     if (!targetDir) {
       throw Error('Select a directory!');
     }
