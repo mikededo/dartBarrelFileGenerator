@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "Node",
     "lib": ["ES2020"],
     "rootDir": "./",
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "types": ["node"],
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
     "outDir": "out",
     "sourceMap": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "esModuleInterop": true,
-    "types": ["node"]
+    "esModuleInterop": true
   },
   "include": ["src/"],
   "exclude": ["node_modules", ".vscode-test"]

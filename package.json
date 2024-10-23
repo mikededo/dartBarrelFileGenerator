@@ -1,16 +1,13 @@
 {
+  "publisher": "miquelddg",
   "name": "dart-barrel-file-generator",
   "displayName": "Dart Barrel File Generator",
-  "description": "Visual studio code to generate barrel files for the Dart language.",
   "version": "6.3.0",
-  "publisher": "miquelddg",
+  "description": "Visual studio code to generate barrel files for the Dart language.",
   "author": {
     "name": "Miquel de Domingo i Giralt",
     "email": "miquelddg@gmail.com",
     "url": "https://www.github.com/mikededo"
-  },
-  "engines": {
-    "vscode": "^1.86.0"
   },
   "repository": {
     "type": "git",
@@ -20,20 +17,23 @@
     "email": "miquelddg@gmail.com",
     "url": "https://www.github.com/mikededo/dartBarrelFileGenerator/issues"
   },
-  "categories": [
-    "Programming Languages",
-    "Other"
-  ],
-  "icon": "assets/logo.png",
   "keywords": [
     "dart",
     "barrel file",
     "flutter"
   ],
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "icon": "assets/logo.png",
+  "engines": {
+    "vscode": "^1.86.0"
+  },
   "activationEvents": [
     "onLanguage:dart"
   ],
-  "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
@@ -147,32 +147,34 @@
   "scripts": {
     "build": "vsce package --yarn --out dist/",
     "changelog": "HUSKY=0 standard-version --no-verify",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings 0",
+    "lint:fix": "eslint . --fix",
     "package": "webpack --mode production --devtool hidden-source-map",
     "prepare": "husky",
-    "pretty": "prettier . --write --log-level warn",
     "vscode:prepublish": "webpack --mode production",
     "webpack": "webpack --mode development",
     "webpack-dev": "webpack --mode development --watch"
   },
+  "dependencies": {
+    "minimatch": "10.0.1",
+    "path": "0.12.7"
+  },
   "devDependencies": {
+    "@antfu/eslint-config": "3.8.0",
     "@types/glob": "8.1.0",
-    "@types/node": "20.11.16",
-    "@types/vscode": "1.86.0",
-    "@typescript-eslint/eslint-plugin": "6.20.0",
-    "@typescript-eslint/parser": "6.20.0",
+    "@types/node": "22.7.9",
+    "@types/vscode": "1.94.0",
+    "@typescript-eslint/eslint-plugin": "8.11.0",
+    "@typescript-eslint/parser": "8.11.0",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "8.56.0",
-    "husky": "9.0.10",
-    "prettier": "3.2.5",
+    "eslint": "9.13.0",
+    "eslint-plugin-format": "0.1.2",
+    "husky": "9.1.6",
     "standard-version": "9.5.0",
     "ts-loader": "9.5.1",
-    "typescript": "5.3.3",
-    "webpack": "5.90.1",
+    "typescript": "5.6.3",
+    "webpack": "5.95.0",
     "webpack-cli": "5.1.4"
-  },
-  "dependencies": {
-    "path": "0.12.7"
   },
   "config": {
     "commitizen": {

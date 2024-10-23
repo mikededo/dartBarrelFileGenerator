@@ -1,6 +1,7 @@
-import { lstatSync, writeFile } from 'fs';
-import { window, workspace } from 'vscode';
+import type { Maybe } from './types';
+import { lstatSync, writeFile } from 'node:fs';
 
+import { window, workspace } from 'vscode';
 import { CONFIGURATIONS } from './constants';
 import Context from './context';
 import {
@@ -13,45 +14,6 @@ import {
   toOsSpecificPath,
   toPosixPath
 } from './functions';
-import { Maybe } from './types';
-
-/**
- * Entry point of the extension. When this function is called
- * the context should have already been set up
- */
-export const init = async () => {
-  if (!Context.activeType) {
-    Context.onError(
-      'Extension did not launch properly. Create an issue if this error persists'
-    );
-    Context.endGeneration();
-
-    window.showErrorMessage('GBDF: Error on initialising the extension');
-  }
-
-  try {
-    const maybeGenerated = await validateAndGenerate();
-
-    if (maybeGenerated) {
-      await window.showInformationMessage(
-        'GDBF: Generated files!',
-        maybeGenerated
-      );
-    } else {
-      await window.showInformationMessage(
-        'GDBF: No dart barrel file has been generated!'
-      );
-    }
-
-    Context.endGeneration();
-  } catch (error: any) {
-    console.log(error);
-    Context.onError(error);
-    Context.endGeneration();
-
-    window.showErrorMessage('GDBF: Error on generating the file', error);
-  }
-};
 
 /**
  * Validates if the given `uri` is valid to generate a barrel file and,
@@ -66,19 +28,18 @@ const validateAndGenerate = async (): Promise<Maybe<string>> => {
   if (!Context.activePath.path) {
     targetDir = await getFolderNameFromDialog();
 
-    console.log(Context.activePath.path);
     if (!targetDir) {
-      throw Error('Select a directory!');
+      throw new Error('Select a directory!');
     }
 
     targetDir = toPosixPath(targetDir);
 
     if (!lstatSync(targetDir).isDirectory()) {
-      throw Error('Select a directory!');
+      throw new Error('Select a directory!');
     }
   } else {
     if (!lstatSync(toPosixPath(Context.activePath.fsPath)).isDirectory()) {
-      throw Error('Select a directory!');
+      throw new Error('Select a directory!');
     }
 
     targetDir = toPosixPath(Context.activePath.fsPath);
@@ -88,12 +49,13 @@ const validateAndGenerate = async (): Promise<Maybe<string>> => {
     const currDir = toPosixPath(workspace.workspaceFolders[0].uri.fsPath);
 
     if (!targetDir.includes(currDir)) {
-      throw Error('Select a folder from the workspace');
-    } else {
-      return generate(targetDir);
+      throw new Error('Select a folder from the workspace');
     }
+
+    // eslint-disable-next-line ts/no-use-before-define
+    return generate(targetDir);
   } else {
-    throw Error('The workspace has no folders');
+    throw new Error('The workspace has no folders');
   }
 };
 
@@ -118,8 +80,8 @@ const writeBarrelFile = (
     ? `package:${Context.packageName}/`
     : '';
 
-  for (const t of files) {
-    exports = `${exports}export '${prependPackageValue}${t}';\n`;
+  for (const file of files) {
+    exports = `${exports}export '${prependPackageValue}${file}';\n`;
   }
 
   Context.writeFolderInfo({ path: targetPath, fileCount: files.length });
@@ -130,7 +92,7 @@ const writeBarrelFile = (
 
     writeFile(path, exports, 'utf8', (error) => {
       if (error) {
-        throw Error(error.message);
+        throw new Error(error.message);
       }
 
       Context.writeSuccessfullInfo(path);
@@ -183,7 +145,7 @@ const getBarrelFile = async (targetPath: string): Promise<string> => {
       placeHolder: 'Ex: index'
     });
 
-    barrelFileName = result ? result : barrelFileName;
+    barrelFileName = result || barrelFileName;
     Context.customBarrelName = barrelFileName;
   }
 
@@ -233,4 +195,41 @@ const generate = async (targetPath: string): Promise<Maybe<string>> => {
   return writeBarrelFile(targetPath, barrelFileName, files.sort(fileSort));
 };
 
-export { validateAndGenerate };
+/**
+ * Entry point of the extension. When this function is called
+ * the context should have already been set up
+ */
+const init = async () => {
+  if (!Context.activeType) {
+    Context.onError(
+      'Extension did not launch properly. Create an issue if this error persists'
+    );
+    Context.endGeneration();
+
+    window.showErrorMessage('GBDF: Error on initialising the extension');
+  }
+
+  try {
+    const maybeGenerated = await validateAndGenerate();
+
+    if (maybeGenerated) {
+      await window.showInformationMessage(
+        'GDBF: Generated files!',
+        maybeGenerated
+      );
+    } else {
+      await window.showInformationMessage(
+        'GDBF: No dart barrel file has been generated!'
+      );
+    }
+
+    Context.endGeneration();
+  } catch (error: any) {
+    Context.onError(error);
+    Context.endGeneration();
+
+    window.showErrorMessage('GDBF: Error on generating the file', error);
+  }
+};
+
+export { init, validateAndGenerate };

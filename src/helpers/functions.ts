@@ -1,9 +1,10 @@
-import minimatch = require('minimatch');
-import { posix, sep } from 'path';
+import { readdirSync } from 'node:fs';
+import { posix, sep } from 'node:path';
+import { minimatch } from 'minimatch';
+
 import { window, workspace } from 'vscode';
 
 import { CONFIGURATIONS, FILE_REGEX } from './constants';
-import { readdirSync } from 'fs';
 
 const path = { sep, posix };
 
@@ -17,6 +18,29 @@ type PosixPath = string;
  */
 export const toPosixPath = (pathLike: string): PosixPath =>
   pathLike.split(path.sep).join(path.posix.sep);
+
+/**
+ * Returns the configuration value of the given config value
+ *
+ * @param name Configuration value name
+ * @returns The configuration value if any
+ */
+export const getConfig = <T = any>(name: string): T | undefined =>
+  workspace.getConfiguration().get([CONFIGURATIONS.key, name].join('.'));
+
+export const formatDate = (date: Date = new Date()) =>
+  date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
+/**
+ * Checks if the given target path is the lib folder
+ *
+ * @param targetPath The barrel file target path
+ * @returns If the path is the `lib` folder
+ */
+export const isTargetLibFolder = (targetPath: string): boolean => {
+  const parts = targetPath.split('/');
+  return parts[parts.length - 1] === 'lib';
+};
 
 /**
  * Converts a `PosixPath` to a OS specific path
@@ -68,12 +92,58 @@ export const fileSort = (a: string, b: string): number =>
  * @returns The selected path if any
  */
 export const getFolderNameFromDialog = (): Thenable<string | undefined> =>
-  window.showOpenDialog(CONFIGURATIONS.input).then((uri) =>
+  window.showOpenDialog(CONFIGURATIONS.input).then(uri =>
+    // The selected input is in the first array position
     uri && uri.length > 0
-      ? // The selected input is in the first array position
-        uri[0].path
+      ? uri[0].path
       : undefined
   );
+
+/**
+ * Checks if the given `posixPath` is a dart file, it has a different
+ * name than the folder barrel file and is not excluded by any configuration
+ *
+ * @param fileName File name
+ * @param filePath File path
+ * @param dirName The current directory name
+ * @returns If the given `posixPath` should be added to the list of
+ * exports
+ */
+export const shouldExport = (
+  fileName: PosixPath,
+  filePath: PosixPath,
+  dirName: string
+): boolean => {
+  if (isDartFile(fileName) && !isBarrelFile(dirName, fileName)) {
+    if (FILE_REGEX.suffixed('freezed').test(fileName)) {
+      // Export only if files are not excluded
+      return !getConfig(CONFIGURATIONS.values.EXCLUDE_FREEZED);
+    }
+
+    if (FILE_REGEX.suffixed('g').test(fileName)) {
+      // Export only if files are not excluded
+      return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
+    }
+
+    const globs: string[] =
+      getConfig(CONFIGURATIONS.values.EXCLUDE_FILES) ?? [];
+    return globs.every(glob => !matchesGlob(filePath, glob));
+  }
+
+  return false;
+};
+
+/**
+ * Checks if the given `posixPath` is not excluded by any configuration
+ *
+ * @param posixPath The path to check
+ * @returns If the given `posixPath` should be added to the list of
+ * exports
+ */
+export const shouldExportDirectory = (posixPath: PosixPath): boolean => {
+  const globs: string[] = getConfig(CONFIGURATIONS.values.EXCLUDE_DIRS) ?? [];
+  return globs.every(glob => !matchesGlob(posixPath, glob));
+};
 
 /**
  * Gets the list of files and a set of directories from the given path
@@ -124,77 +194,9 @@ export const getAllFilesFromSubfolders = (
   if (dirs.size > 0) {
     for (const d of dirs) {
       const folderFiles = getAllFilesFromSubfolders(barrel, `${path}/${d}`);
-      resultFiles.push(...folderFiles.map((f) => `${d}/${f}`));
+      resultFiles.push(...folderFiles.map(f => `${d}/${f}`));
     }
   }
 
   return resultFiles;
-};
-
-/**
- * Checks if the given `posixPath` is a dart file, it has a different
- * name than the folder barrel file and is not excluded by any configuration
- *
- * @param posixPath The path to check
- * @param dirName The current directory name
- * @returns If the given `posixPath` should be added to the list of
- * exports
- */
-export const shouldExport = (
-  fileName: PosixPath,
-  filePath: PosixPath,
-  dirName: string
-): boolean => {
-  if (isDartFile(fileName) && !isBarrelFile(dirName, fileName)) {
-    if (FILE_REGEX.suffixed('freezed').test(fileName)) {
-      // Export only if files are not excluded
-      return !getConfig(CONFIGURATIONS.values.EXCLUDE_FREEZED);
-    }
-
-    if (FILE_REGEX.suffixed('g').test(fileName)) {
-      // Export only if files are not excluded
-      return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
-    }
-
-    const globs: string[] =
-      getConfig(CONFIGURATIONS.values.EXCLUDE_FILES) ?? [];
-    return globs.every((glob) => !matchesGlob(filePath, glob));
-  }
-
-  return false;
-};
-
-/**
- * Checks if the given `posixPath` is not excluded by any configuration
- *
- * @param posixPath The path to check
- * @returns If the given `posixPath` should be added to the list of
- * exports
- */
-export const shouldExportDirectory = (posixPath: PosixPath): boolean => {
-  const globs: string[] = getConfig(CONFIGURATIONS.values.EXCLUDE_DIRS) ?? [];
-  return globs.every((glob) => !matchesGlob(posixPath, glob));
-};
-
-/**
- * Returns the configuration value of the given config value
- *
- * @param name Configuration value name
- * @returns The configuration value if any
- */
-export const getConfig = <T = any>(name: string): T | undefined =>
-  workspace.getConfiguration().get([CONFIGURATIONS.key, name].join('.'));
-
-export const formatDate = (date: Date = new Date()) =>
-  date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
-
-/**
- * Checks if the given target path is the lib folder
- *
- * @param targetPath The barrel file target path
- * @returns If the path is the `lib` folder
- */
-export const isTargetLibFolder = (targetPath: string): boolean => {
-  const parts = targetPath.split('/');
-  return parts[parts.length - 1] === 'lib';
 };

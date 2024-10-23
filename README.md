@@ -82,7 +82,7 @@ It can be used for both options.
 - Skipping empty folders: by default, `dartBarrelFileGenerator` will not
   generate a barrel file for a folder that does not have any file to export. You
   can change this behaviour by setting `dartBarrelFileGenerator.skipEmpty` to
-  `false`. 
+  `false`.
 - Exporting as `package:<app-name>/` if the extension is executed in the `./lib`
   folder. Enable it by setting
   `dartBarrelFileGenerator.prependPackageLibToExport` to `true`. Disabled by

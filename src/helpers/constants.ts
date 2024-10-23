@@ -1,5 +1,5 @@
-import { OpenDialogOptions } from 'vscode';
-import { FocusedGenerations, RegularGenerations } from './types';
+import type { OpenDialogOptions } from 'vscode';
+import type { FocusedGenerations, RegularGenerations } from './types';
 
 export const FOCUSED_TO_REGULAR: Record<
   FocusedGenerations,
@@ -35,7 +35,7 @@ export const FILE_REGEX = {
    * Used to check whether the current file name has a
    * dart file extension
    */
-  dart: new RegExp('.+(\\.dart)$'),
+  dart: /.+(\.dart)$/,
 
   /**
    * Used to check whether the current filename has a
@@ -48,7 +48,7 @@ export const FILE_REGEX = {
    * the same name as the barrel file of the `folder` param
    *
    * @param {string} folder The folder name
-   * @returns {RegExp}
+   * @returns {RegExp} The regex
    */
   base: (folder: string): RegExp => new RegExp(`^${folder}\\.dart$`)
 };

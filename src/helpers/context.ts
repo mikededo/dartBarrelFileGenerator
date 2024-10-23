@@ -1,6 +1,7 @@
-import { OutputChannel, Uri, window } from 'vscode';
+import type { OutputChannel, Uri } from 'vscode';
+import type { GenerationType } from './types';
 
-import { GenerationType } from './types';
+import { window } from 'vscode';
 import { formatDate, toPosixPath } from './functions';
 
 type InitParms = {

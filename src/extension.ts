@@ -1,8 +1,34 @@
-import { commands, window, ExtensionContext, Uri } from 'vscode';
+import type { ExtensionContext } from 'vscode';
+import type { FocusedGenerations, GenerationType } from './helpers';
 
-import { Context, FocusedGenerations, GenerationType } from './helpers';
-import { init } from './helpers';
+import { commands, Uri, window } from 'vscode';
+import { Context, init } from './helpers';
 import { FOCUSED_TO_REGULAR } from './helpers/constants';
+
+/**
+ * Curried function that, from the given type of the generation,
+ * it will set up the context with the `uri` received from the curried fn
+ * and the given type
+ */
+const generate = (type: GenerationType) => async (uri: Uri) => {
+  Context.initGeneration({ path: uri, type });
+  await init();
+};
+
+const generateFocused = (type: FocusedGenerations) => async () => {
+  const activeEditor = window.activeTextEditor;
+  if (!activeEditor) {
+    Context.onError('No active editor');
+    return;
+  }
+
+  const parent = Uri.joinPath(activeEditor.document.uri, '..');
+  await generate(FOCUSED_TO_REGULAR[type])(parent);
+};
+
+const deactivate = () => {
+  Context.deactivate();
+};
 
 /**
  * Activates the extension
@@ -38,31 +64,6 @@ const activate = (context: ExtensionContext) => {
       generate('RECURSIVE')
     )
   );
-};
-
-/**
- * Curried function that, from the given type of the generation,
- * it will set up the context with the `uri` received from the curried fn
- * and the given type
- */
-const generate = (type: GenerationType) => async (uri: Uri) => {
-  Context.initGeneration({ path: uri, type: type });
-  await init();
-};
-
-const generateFocused = (type: FocusedGenerations) => async () => {
-  const activeEditor = window.activeTextEditor;
-  if (!activeEditor) {
-    Context.onError('No active editor');
-    return;
-  }
-
-  const parent = Uri.joinPath(activeEditor.document.uri, '..');
-  await generate(FOCUSED_TO_REGULAR[type])(parent);
-};
-
-const deactivate = () => {
-  Context.deactivate();
 };
 
 export { activate, deactivate, generate };
