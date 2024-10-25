@@ -146,14 +146,13 @@
     }
   },
   "scripts": {
+    "build": "vite build",
     "changelog": "HUSKY=0 standard-version --no-verify",
+    "dev": "vite build --watch",
     "lint": "eslint . --max-warnings 0",
     "lint:fix": "eslint . --fix",
-    "package": "yarn install && vsce package --yarn --out dist/ && rm yarn.lock",
-    "prepare": "husky",
-    "vscode:prepublish": "webpack --mode production",
-    "webpack": "webpack --mode development",
-    "webpack-dev": "webpack --mode development --watch"
+    "package": "vsce package --no-dependencies",
+    "prepare": "husky"
   },
   "dependencies": {
     "minimatch": "10.0.1",
@@ -173,9 +172,8 @@
     "standard-version": "9.5.0",
     "ts-loader": "9.5.1",
     "typescript": "5.6.3",
-    "vsce": "2.15.0",
-    "webpack": "5.95.0",
-    "webpack-cli": "5.1.4"
+    "vite": "5.4.10",
+    "vsce": "2.15.0"
   },
   "config": {
     "commitizen": {
