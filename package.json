@@ -162,7 +162,7 @@
     "@antfu/eslint-config": "3.8.0",
     "@types/glob": "8.1.0",
     "@types/node": "22.7.9",
-    "@types/vscode": "1.94.0",
+    "@types/vscode": "1.97.0",
     "@typescript-eslint/eslint-plugin": "8.11.0",
     "@typescript-eslint/parser": "8.11.0",
     "cz-conventional-changelog": "3.3.0",
