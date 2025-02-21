@@ -161,7 +161,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "3.8.0",
     "@types/glob": "8.1.0",
-    "@types/node": "22.7.9",
+    "@types/node": "22.13.5",
     "@types/vscode": "1.94.0",
     "@typescript-eslint/eslint-plugin": "8.11.0",
     "@typescript-eslint/parser": "8.11.0",
