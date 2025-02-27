@@ -30,7 +30,7 @@
   "icon": "assets/logo.png",
   "engines": {
     "node": ">=22",
-    "vscode": "^1.94.0"
+    "vscode": "^1.97.0"
   },
   "activationEvents": [
     "onLanguage:dart"
