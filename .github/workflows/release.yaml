@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+permissions: {}
+jobs:
+  release:
+    if: github.repository == 'mikededo/dartBarrelFileGenerator'
+    permissions:
+      contents: write # to create release
+      pull-requests: write # to create pull request (changesets/action)
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install
+        run: bun install --frozen-lockfile
+      - name: Capture new release version
+        run: |
+          bun changeset status --output=release.json
+          echo "NEW_VERSION=$(jq -r '.releases[0].newVersion' release.json)" >> "$GITHUB_ENV"
+          rm release.json
+      - name: Create PR release or publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          version: bun changeset version
+          commit: 'chore(release): v${{env.NEW_VERSION}}'
+          title: 'chore(release): v${{env.NEW_VERSION}}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
