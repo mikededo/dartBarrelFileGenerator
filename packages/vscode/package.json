@@ -12,11 +12,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mikededo/dartBarrelFileGenerator"
+    "url": "https://github.com/mikededo/dart-barrel-file-generator"
   },
   "bugs": {
     "email": "miquelddg@gmail.com",
-    "url": "https://www.github.com/mikededo/dartBarrelFileGenerator/issues"
+    "url": "https://www.github.com/mikededo/dart-barrel-file-generator/issues"
   },
   "keywords": [
     "dart",
@@ -39,19 +39,19 @@
   "contributes": {
     "commands": [
       {
-        "command": "dartBarrelFileGenerator.generateCurrent",
+        "command": "dart-barrel-file-generator.generateCurrent",
         "title": "GDBF: This folder"
       },
       {
-        "command": "dartBarrelFileGenerator.generateCurrentAndNested",
+        "command": "dart-barrel-file-generator.generateCurrentAndNested",
         "title": "GDBF: Folders (recursive)"
       },
       {
-        "command": "dartBarrelFileGenerator.generateCurrentWithSubfolders",
+        "command": "dart-barrel-file-generator.generateCurrentWithSubfolders",
         "title": "GDBF: Folders' files (recursive)"
       },
       {
-        "command": "dartBarrelFileGenerator.generateFocusedParent",
+        "command": "dart-barrel-file-generator.generateFocusedParent",
         "title": "GDBF: Focused (parent)",
         "when": "editorTextFocus"
       }
@@ -60,7 +60,7 @@
       {
         "title": "Dart Barrel File Generator",
         "properties": {
-          "dartBarrelFileGenerator.defaultBarrelName": {
+          "dart-barrel-file-generator.defaultBarrelName": {
             "title": "Default barrel file name",
             "type": [
               "string",
@@ -69,55 +69,55 @@
             "default": null,
             "markdownDescription": "The default name for the barrel file is `<folder-name>.dart`. You can override this name by setting a custom name. If there's any whitespace in the name it will be replaced by a '-' and the name **will be transformed to lowercase**."
           },
-          "dartBarrelFileGenerator.promptName": {
+          "dart-barrel-file-generator.promptName": {
             "title": "Open input on file generation",
             "type": "boolean",
             "default": false,
             "description": "Get promted asking for the name of the barrel file that will be created"
           },
-          "dartBarrelFileGenerator.excludeFreezed": {
+          "dart-barrel-file-generator.excludeFreezed": {
             "title": "Exclude freezed (.freezed.dart) files",
             "type": "boolean",
             "default": true,
             "markdownDescription": "Exclude `.freezed.dart` files"
           },
-          "dartBarrelFileGenerator.excludeGenerated": {
+          "dart-barrel-file-generator.excludeGenerated": {
             "title": "Exclude generated (.g.dart) files",
             "type": "boolean",
             "default": true,
             "markdownDescription": "Exclude `.g.dart` files"
           },
-          "dartBarrelFileGenerator.excludeFileList": {
+          "dart-barrel-file-generator.excludeFileList": {
             "title": "Additional patterns to exclude files",
             "type": "array",
             "default": [],
             "description": "Add the file patterns that you want to exclude (as glob patterns). Excluded files will not be added to the barrel file."
           },
-          "dartBarrelFileGenerator.excludeDirList": {
+          "dart-barrel-file-generator.excludeDirList": {
             "title": "Additional patterns to exclude directories",
             "type": "array",
             "default": [],
             "description": "Add the directory patterns that you want to exclude (as glob patterns). A barrel file will not be generated for these directories."
           },
-          "dartBarrelFileGenerator.prependFolderName": {
+          "dart-barrel-file-generator.prependFolderName": {
             "title": "Prepend name of the folder to the generated file",
             "type": "boolean",
             "default": false,
             "markdownDescription": "Prepend the name of the folder to the generated files, e.g.: `<folder-name>_<barrel-file>.dart`."
           },
-          "dartBarrelFileGenerator.appendFolderName": {
+          "dart-barrel-file-generator.appendFolderName": {
             "title": "Append name of the folder to the generated file",
             "type": "boolean",
             "default": false,
             "markdownDescription": "Append the name of the folder to the generated files, e.g.: `<barrel-file>_<folder-name>.dart`."
           },
-          "dartBarrelFileGenerator.skipEmpty": {
+          "dart-barrel-file-generator.skipEmpty": {
             "title": "Skip empty folders",
             "type": "boolean",
             "default": true,
             "description": "Skip generating barrel files for folders that are empty (or do not contain any valid dart file)"
           },
-          "dartBarrelFileGenerator.prependPackageToLibExport": {
+          "dart-barrel-file-generator.prependPackageToLibExport": {
             "title": "Append package name to lib exports",
             "type": "boolean",
             "default": false,
@@ -129,17 +129,17 @@
     "menus": {
       "explorer/context": [
         {
-          "command": "dartBarrelFileGenerator.generateCurrent",
+          "command": "dart-barrel-file-generator.generateCurrent",
           "group": "7_modification",
           "when": "explorerResourceIsFolder"
         },
         {
-          "command": "dartBarrelFileGenerator.generateCurrentAndNested",
+          "command": "dart-barrel-file-generator.generateCurrentAndNested",
           "group": "7_modification",
           "when": "explorerResourceIsFolder"
         },
         {
-          "command": "dartBarrelFileGenerator.generateCurrentWithSubfolders",
+          "command": "dart-barrel-file-generator.generateCurrentWithSubfolders",
           "group": "7_modification",
           "when": "explorerResourceIsFolder"
         }

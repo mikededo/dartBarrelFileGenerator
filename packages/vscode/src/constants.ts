@@ -7,7 +7,7 @@ export const CONFIGURATIONS = {
     canSelectMany: false,
     openLabel: 'Select the folder in which you want to create the barrel file'
   } as Partial<OpenDialogOptions>,
-  key: 'dartBarrelFileGenerator',
+  key: 'dart-barrel-file-generator',
   values: {
   }
 };

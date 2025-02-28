@@ -12,18 +12,18 @@ or from the [marketplace](https://marketplace.visualstudio.com/).
 
 It can create barrel files only two the selected folder
 
-![this-folder](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-only.gif)
+![this-folder](https://raw.githubusercontent.com/mikededo/dart-barrel-file-generator/master/assets/current-only.gif)
 
 It creates a barrel file for the selected folder and all the nested folders from
 the selected. Likewise, it also adds the nested folder barrel file to its parent
 barrel file.
 
-![folders-recursive](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-and-nested.gif)
+![folders-recursive](https://raw.githubusercontent.com/mikededo/dart-barrel-file-generator/master/assets/current-and-nested.gif)
 
 Alternatively, the extension can create a barrel file with all the names of the
 nested folders (for each subfolder), without creating additional barrel files.
 
-![folders-files-recursive](https://raw.githubusercontent.com/mikededo/dartBarrelFileGenerator/master/assets/current-with-subfolders.gif)
+![folders-files-recursive](https://raw.githubusercontent.com/mikededo/dart-barrel-file-generator/master/assets/current-with-subfolders.gif)
 
 ## Commands
 
@@ -45,8 +45,8 @@ folder as the root folder.
 You can also exclude `.freezed.dart` and `.g.dart` (generated) files by modifying the
 following options in your settings:
 
-- `dartBarrelFileGenerator.excludeFreezed: false` (by default).
-- `dartBarrelFileGenerator.excludeGenerated: false` (by default).
+- `dart-barrel-file-generator.excludeFreezed: false` (by default).
+- `dart-barrel-file-generator.excludeGenerated: false` (by default).
 
 It is also possible to exclude glob patterns:
 
@@ -58,7 +58,7 @@ It is also possible to exclude glob patterns:
 ### Default barrel file name
 
 The extension will create a barrel file with the `<folder-name>.dart` by default. This
-behaviour can be changed if the `dartBarrelFileGenerator.defaultBarrelName` option is
+behaviour can be changed if the `dart-barrel-file-generator.defaultBarrelName` option is
 set. By changing this option, whenever a barrel file is created, it will use the name
 set in the configuration instead of the default.
 
@@ -70,7 +70,7 @@ By default, the extension will create a new file named as the folder name, appen
 the `.dart` extension. However, if you want to set the name, you can activate the
 following option:
 
-- `dartBarrelFileGenerator.promptName: false` (by default).
+- `dart-barrel-file-generator.promptName: false` (by default).
 
 Whenever you create a new barrel file, a prompt will appear to ask for the file name.
 It can be used for both options.
@@ -79,13 +79,13 @@ It can be used for both options.
 
 ### Other options
 
-- Skipping empty folders: by default, `dartBarrelFileGenerator` will not
+- Skipping empty folders: by default, `dart-barrel-file-generator` will not
   generate a barrel file for a folder that does not have any file to export. You
-  can change this behaviour by setting `dartBarrelFileGenerator.skipEmpty` to
+  can change this behaviour by setting `dart-barrel-file-generator.skipEmpty` to
   `false`.
 - Exporting as `package:<app-name>/` if the extension is executed in the `./lib`
   folder. Enable it by setting
-  `dartBarrelFileGenerator.prependPackageLibToExport` to `true`. Disabled by
+  `dart-barrel-file-generator.prependPackageLibToExport` to `true`. Disabled by
   default.
 
 ## Attributions

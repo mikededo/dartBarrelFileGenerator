@@ -30,14 +30,14 @@ export const activate = (context: ExtensionContext) => {
   // Generate current
   context.subscriptions.push(
     commands.registerCommand(
-      'dartBarrelFileGenerator.generateCurrent',
+      'dart-barrel-file-generator.generateCurrent',
       generate('REGULAR')
     )
   );
   // For current folder
   context.subscriptions.push(
     commands.registerCommand(
-      'dartBarrelFileGenerator.generateFocusedParent',
+      'dart-barrel-file-generator.generateFocusedParent',
       generateFocused('REGULAR_FOCUSED')
     )
   );
@@ -45,7 +45,7 @@ export const activate = (context: ExtensionContext) => {
   // Generate current with subfolders
   context.subscriptions.push(
     commands.registerCommand(
-      'dartBarrelFileGenerator.generateCurrentWithSubfolders',
+      'dart-barrel-file-generator.generateCurrentWithSubfolders',
       generate('REGULAR_SUBFOLDERS')
     )
   );
@@ -53,7 +53,7 @@ export const activate = (context: ExtensionContext) => {
   // Generate current and nested
   context.subscriptions.push(
     commands.registerCommand(
-      'dartBarrelFileGenerator.generateCurrentAndNested',
+      'dart-barrel-file-generator.generateCurrentAndNested',
       generate('RECURSIVE')
     )
   );

@@ -26,11 +26,11 @@ When developing, make sure to following the below steps:
 2. Clone the repository to your local machine, adding the original repo as an
    upstream remote:
 
-````sh git clone git@github:<your-name>/dartBarrelFileGenerator.git # You can
+````sh git clone git@github:<your-name>/dart-barrel-file-generator.git # You can
 also use https # git clone
 https://github.com/<your-name>/dartBarrelFileGenereator.git cd
-dartBarrelFileGenerator git remote add upstream
-https://github.com/mikededo/dartBarrelFileGenerator.git ```
+dart-barrel-file-generator git remote add upstream
+https://github.com/mikededo/dart-barrel-file-generator.git ```
 
 3. Synchronize the branch:
 

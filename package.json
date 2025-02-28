@@ -11,11 +11,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mikededo/dartBarrelFileGenerator"
+    "url": "https://github.com/mikededo/dart-barrel-file-generator"
   },
   "bugs": {
     "email": "miquelddg@gmail.com",
-    "url": "https://www.github.com/mikededo/dartBarrelFileGenerator/issues"
+    "url": "https://www.github.com/mikededo/dart-barrel-file-generator/issues"
   },
   "scripts": {
     "build": "bun run build:core && bun run build:vscode",
