@@ -1,5 +1,11 @@
 # @dbf/vscode
 
+## 7.0.1
+
+### Patch Changes
+
+- ebf01e1: Correct build entry point
+
 ## 7.0.0
 
 ### Major Changes
