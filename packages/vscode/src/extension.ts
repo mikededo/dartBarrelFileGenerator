@@ -58,10 +58,9 @@ const validateAndGenerate = async (): Promise<Maybe<string>> => {
     excludeGenerated: !!getConfig('excludeGenerated')
   };
 
-  let targetDir: string | undefined;
-
+  let targetDir = '';
   if (!Context.activePath.path) {
-    targetDir = await getFolderNameFromDialog();
+    targetDir = await getFolderNameFromDialog() ?? '';
 
     if (!targetDir) {
       throw new Error('Select a directory!');

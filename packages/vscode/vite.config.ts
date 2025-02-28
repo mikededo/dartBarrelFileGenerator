@@ -4,14 +4,15 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/extension.ts'),
+      entry: resolve(__dirname, 'src/index.ts'),
       fileName: 'extension',
       formats: ['cjs'],
       name: 'dbfg'
     },
+    minify: false,
     outDir: resolve(__dirname, 'dist'),
     rollupOptions: {
-      external: ['vscode', 'node:fs', 'node:path', '@dbf/core']
+      external: ['vscode', 'node:fs', 'node:path']
     },
     sourcemap: true
   },
