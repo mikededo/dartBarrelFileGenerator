@@ -7,7 +7,7 @@ on:
 permissions: {}
 jobs:
   release:
-    if: github.repository == 'mikededo/dartBarrelFileGenerator'
+    if: github.repository == 'mikededo/dart-barrel-file-generator'
     permissions:
       contents: write # to create release
       pull-requests: write # to create pull request (changesets/action)
