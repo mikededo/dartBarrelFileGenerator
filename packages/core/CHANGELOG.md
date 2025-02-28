@@ -1,5 +1,11 @@
 # @dbf/core
 
+## 1.0.1
+
+### Patch Changes
+
+- Replace `dartBarrelFileGenerator` for `dart-barrel-file-generator` ([`0a4b3d6`](https://github.com/mikededo/dart-barrel-file-generator/commit/0a4b3d6e1188aa528d33aa33f578416ccb684b11))
+
 ## 1.0.0
 
 ### Major Changes
