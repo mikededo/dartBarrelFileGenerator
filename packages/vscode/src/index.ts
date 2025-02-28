@@ -1,9 +1,11 @@
-import type { ExtensionContext } from 'vscode';
-import type { FocusedGenerations, GenerationType } from './helpers';
+import type { FocusedGenerations, GenerationType } from '@dbf/core';
 
+import type { ExtensionContext } from 'vscode';
 import { commands, Uri, window } from 'vscode';
-import { Context, init } from './helpers';
-import { FOCUSED_TO_REGULAR } from './helpers/constants';
+
+import { init } from './extension.js';
+
+export { deactivate } from './extension.js';
 
 /**
  * Curried function that, from the given type of the generation,
@@ -11,29 +13,20 @@ import { FOCUSED_TO_REGULAR } from './helpers/constants';
  * and the given type
  */
 const generate = (type: GenerationType) => async (uri: Uri) => {
-  Context.initGeneration({ path: uri, type });
-  await init();
+  await init(uri, type);
 };
 
 const generateFocused = (type: FocusedGenerations) => async () => {
   const activeEditor = window.activeTextEditor;
   if (!activeEditor) {
-    Context.onError('No active editor');
     return;
   }
 
   const parent = Uri.joinPath(activeEditor.document.uri, '..');
-  await generate(FOCUSED_TO_REGULAR[type])(parent);
+  await generate(type)(parent);
 };
 
-const deactivate = () => {
-  Context.deactivate();
-};
-
-/**
- * Activates the extension
- */
-const activate = (context: ExtensionContext) => {
+export const activate = (context: ExtensionContext) => {
   // Generate current
   context.subscriptions.push(
     commands.registerCommand(
@@ -65,5 +58,3 @@ const activate = (context: ExtensionContext) => {
     )
   );
 };
-
-export { activate, deactivate, generate };

@@ -4,7 +4,7 @@
     {
       "label": "Run extension",
       "type": "npm",
-      "script": "dev",
+      "script": "dev:extension",
       "isBackground": true,
       "presentation": {
         "reveal": "never",

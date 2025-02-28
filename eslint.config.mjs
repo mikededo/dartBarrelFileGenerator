@@ -1,14 +1,16 @@
 import antfu from '@antfu/eslint-config';
+import perfectionist from 'eslint-plugin-perfectionist';
 
 export default antfu({
-  lessOpinionated: true,
   formatters: true,
+  gitignore: true,
+  jsonc: true,
+  lessOpinionated: true,
   stylistic: {
     indent: 2,
-    semi: true,
-    quotes: 'single'
+    quotes: 'single',
+    semi: true
   },
-  gitignore: true,
   typescript: {
     overrides: {
       'no-use-before-define': 'off',
@@ -60,6 +62,56 @@ export default antfu({
         overrides: { ':': 'before', '?': 'before' }
       }],
       'style/quote-props': ['error', 'as-needed']
+    }
+  }
+).override(
+  'antfu/perfectionist/setup',
+  {
+    rules: {
+      ...(perfectionist.configs['recommended-alphabetical'].rules ?? {}),
+      'perfectionist/sort-exports': [
+        'error',
+        {
+          groupKind: 'types-first',
+          ignoreCase: true,
+          order: 'asc',
+          type: 'alphabetical'
+        }
+      ],
+      'perfectionist/sort-imports': [
+        'error',
+        {
+          environment: 'bun',
+          groups: [
+            'style',
+            'internal-type',
+            ['parent-type', 'sibling-type', 'index-type'],
+            ['builtin', 'external'],
+            'internal',
+            ['parent', 'sibling', 'index'],
+            'object',
+            'unknown'
+          ],
+          ignoreCase: true,
+          internalPattern: ['\\@dbf\\/+'],
+          maxLineLength: undefined,
+          newlinesBetween: 'always',
+          order: 'asc',
+          type: 'alphabetical'
+        }
+      ],
+      'perfectionist/sort-object-types': [
+        'error',
+        {
+          customGroups: { callbacks: 'on*' },
+          groupKind: 'required-first',
+          groups: ['unknown', 'callbacks', 'multiline'],
+          ignoreCase: true,
+          order: 'asc',
+          partitionByNewLine: true,
+          type: 'alphabetical'
+        }
+      ]
     }
   }
 );

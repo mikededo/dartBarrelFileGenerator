@@ -1,0 +1,161 @@
+{
+  "publisher": "miquelddg",
+  "name": "@dbf/vscode",
+  "displayName": "Dart Barrel File Generator",
+  "version": "6.3.1",
+  "private": true,
+  "description": "Visual studio code to generate barrel files for the Dart language.",
+  "author": {
+    "name": "Miquel de Domingo i Giralt",
+    "email": "miquelddg@gmail.com",
+    "url": "https://www.github.com/mikededo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikededo/dartBarrelFileGenerator"
+  },
+  "bugs": {
+    "email": "miquelddg@gmail.com",
+    "url": "https://www.github.com/mikededo/dartBarrelFileGenerator/issues"
+  },
+  "keywords": [
+    "dart",
+    "barrel file",
+    "flutter"
+  ],
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "icon": "assets/logo.png",
+  "engines": {
+    "node": ">=22",
+    "vscode": "^1.97.0"
+  },
+  "activationEvents": [
+    "onLanguage:dart"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "dartBarrelFileGenerator.generateCurrent",
+        "title": "GDBF: This folder"
+      },
+      {
+        "command": "dartBarrelFileGenerator.generateCurrentAndNested",
+        "title": "GDBF: Folders (recursive)"
+      },
+      {
+        "command": "dartBarrelFileGenerator.generateCurrentWithSubfolders",
+        "title": "GDBF: Folders' files (recursive)"
+      },
+      {
+        "command": "dartBarrelFileGenerator.generateFocusedParent",
+        "title": "GDBF: Focused (parent)",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Dart Barrel File Generator",
+        "properties": {
+          "dartBarrelFileGenerator.defaultBarrelName": {
+            "title": "Default barrel file name",
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null,
+            "markdownDescription": "The default name for the barrel file is `<folder-name>.dart`. You can override this name by setting a custom name. If there's any whitespace in the name it will be replaced by a '-' and the name **will be transformed to lowercase**."
+          },
+          "dartBarrelFileGenerator.promptName": {
+            "title": "Open input on file generation",
+            "type": "boolean",
+            "default": false,
+            "description": "Get promted asking for the name of the barrel file that will be created"
+          },
+          "dartBarrelFileGenerator.excludeFreezed": {
+            "title": "Exclude freezed (.freezed.dart) files",
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Exclude `.freezed.dart` files"
+          },
+          "dartBarrelFileGenerator.excludeGenerated": {
+            "title": "Exclude generated (.g.dart) files",
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Exclude `.g.dart` files"
+          },
+          "dartBarrelFileGenerator.excludeFileList": {
+            "title": "Additional patterns to exclude files",
+            "type": "array",
+            "default": [],
+            "description": "Add the file patterns that you want to exclude (as glob patterns). Excluded files will not be added to the barrel file."
+          },
+          "dartBarrelFileGenerator.excludeDirList": {
+            "title": "Additional patterns to exclude directories",
+            "type": "array",
+            "default": [],
+            "description": "Add the directory patterns that you want to exclude (as glob patterns). A barrel file will not be generated for these directories."
+          },
+          "dartBarrelFileGenerator.prependFolderName": {
+            "title": "Prepend name of the folder to the generated file",
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Prepend the name of the folder to the generated files, e.g.: `<folder-name>_<barrel-file>.dart`."
+          },
+          "dartBarrelFileGenerator.appendFolderName": {
+            "title": "Append name of the folder to the generated file",
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Append the name of the folder to the generated files, e.g.: `<barrel-file>_<folder-name>.dart`."
+          },
+          "dartBarrelFileGenerator.skipEmpty": {
+            "title": "Skip empty folders",
+            "type": "boolean",
+            "default": true,
+            "description": "Skip generating barrel files for folders that are empty (or do not contain any valid dart file)"
+          },
+          "dartBarrelFileGenerator.prependPackageToLibExport": {
+            "title": "Append package name to lib exports",
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "It will prepend `package:<package-name>/...` as a prefix of the export exclusively for the root file under `lib/`. It detects the name of the package by analysing the path of the project."
+          }
+        }
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "dartBarrelFileGenerator.generateCurrent",
+          "group": "7_modification",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "dartBarrelFileGenerator.generateCurrentAndNested",
+          "group": "7_modification",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "dartBarrelFileGenerator.generateCurrentWithSubfolders",
+          "group": "7_modification",
+          "when": "explorerResourceIsFolder"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "package": "bun ./scripts/package.ts"
+  },
+  "dependencies": {
+    "@dbf/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/vscode": "1.97.0",
+    "@vscode/vsce": "3.2.2"
+  }
+}

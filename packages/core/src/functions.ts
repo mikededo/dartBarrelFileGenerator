@@ -1,12 +1,12 @@
+import type { GenerationConfiguration } from './types';
+
+import { minimatch } from 'minimatch';
 import { readdirSync } from 'node:fs';
 import { posix, sep } from 'node:path';
-import { minimatch } from 'minimatch';
 
-import { window, workspace } from 'vscode';
+import { FILE_REGEX } from './constants';
 
-import { CONFIGURATIONS, FILE_REGEX } from './constants';
-
-const path = { sep, posix };
+const path = { posix, sep };
 
 type PosixPath = string;
 
@@ -19,15 +19,6 @@ type PosixPath = string;
 export const toPosixPath = (pathLike: string): PosixPath =>
   pathLike.split(path.sep).join(path.posix.sep);
 
-/**
- * Returns the configuration value of the given config value
- *
- * @param name Configuration value name
- * @returns The configuration value if any
- */
-export const getConfig = <T = any>(name: string): T | undefined =>
-  workspace.getConfiguration().get([CONFIGURATIONS.key, name].join('.'));
-
 export const formatDate = (date: Date = new Date()) =>
   date.toISOString().replace(/T/, ' ').replace(/\..+/, '');
 
@@ -37,7 +28,7 @@ export const formatDate = (date: Date = new Date()) =>
  * @param targetPath The barrel file target path
  * @returns If the path is the `lib` folder
  */
-export const isTargetLibFolder = (targetPath: string): boolean => {
+export const isTargetLibFolder = (targetPath: string) => {
   const parts = targetPath.split('/');
   return parts[parts.length - 1] === 'lib';
 };
@@ -48,7 +39,7 @@ export const isTargetLibFolder = (targetPath: string): boolean => {
  * @param posixPath Current path
  * @returns A location path with os specific separators
  */
-export const toOsSpecificPath = (posixPath: PosixPath): string =>
+export const toOsSpecificPath = (posixPath: PosixPath) =>
   posixPath.split(path.posix.sep).join(path.sep);
 
 /**
@@ -77,7 +68,7 @@ export const isBarrelFile = (dirName: string, fileName: string) =>
  * @param glob The glob to compare the string with
  * @returns Whether it matches the glob or not
  */
-export const matchesGlob = (fileName: string, glob: string): boolean =>
+export const matchesGlob = (fileName: string, glob: string) =>
   minimatch(fileName, glob);
 
 /**
@@ -85,19 +76,6 @@ export const matchesGlob = (fileName: string, glob: string): boolean =>
  */
 export const fileSort = (a: string, b: string): number =>
   a < b ? -1 : a > b ? 1 : 0;
-
-/**
- * Shows a vscode dialog to select a folder to create a barrel file to
- *
- * @returns The selected path if any
- */
-export const getFolderNameFromDialog = (): Thenable<string | undefined> =>
-  window.showOpenDialog(CONFIGURATIONS.input).then(uri =>
-    // The selected input is in the first array position
-    uri && uri.length > 0
-      ? uri[0].path
-      : undefined
-  );
 
 /**
  * Checks if the given `posixPath` is a dart file, it has a different
@@ -112,21 +90,21 @@ export const getFolderNameFromDialog = (): Thenable<string | undefined> =>
 export const shouldExport = (
   fileName: PosixPath,
   filePath: PosixPath,
-  dirName: string
-): boolean => {
+  dirName: string,
+  opts: GenerationConfiguration
+) => {
   if (isDartFile(fileName) && !isBarrelFile(dirName, fileName)) {
     if (FILE_REGEX.suffixed('freezed').test(fileName)) {
       // Export only if files are not excluded
-      return !getConfig(CONFIGURATIONS.values.EXCLUDE_FREEZED);
+      return !opts.excludeFreezed;
     }
 
     if (FILE_REGEX.suffixed('g').test(fileName)) {
       // Export only if files are not excluded
-      return !getConfig(CONFIGURATIONS.values.EXCLUDE_GENERATED);
+      return !opts.excludeGenerated;
     }
 
-    const globs: string[] =
-      getConfig(CONFIGURATIONS.values.EXCLUDE_FILES) ?? [];
+    const globs: string[] = opts.excludedFiles ?? [];
     return globs.every(glob => !matchesGlob(filePath, glob));
   }
 
@@ -140,10 +118,8 @@ export const shouldExport = (
  * @returns If the given `posixPath` should be added to the list of
  * exports
  */
-export const shouldExportDirectory = (posixPath: PosixPath): boolean => {
-  const globs: string[] = getConfig(CONFIGURATIONS.values.EXCLUDE_DIRS) ?? [];
-  return globs.every(glob => !matchesGlob(posixPath, glob));
-};
+export const shouldExportDirectory = (posixPath: PosixPath, opts: GenerationConfiguration) =>
+  (opts.excludedDirs ?? []).every(glob => !matchesGlob(posixPath, glob));
 
 /**
  * Gets the list of files and a set of directories from the given path
@@ -154,19 +130,20 @@ export const shouldExportDirectory = (posixPath: PosixPath): boolean => {
  */
 export const getFilesAndDirsFromPath = (
   barrel: string,
-  path: string
+  path: string,
+  config: GenerationConfiguration
 ): [string[], Set<string>] => {
-  const files = [];
+  const files: string[] = [];
   const dirs = new Set<string>();
 
   for (const curr of readdirSync(path, { withFileTypes: true })) {
     const fullPath = `${path}/${curr.name}`;
     if (curr.isFile()) {
-      if (shouldExport(curr.name, fullPath, barrel)) {
+      if (shouldExport(curr.name, fullPath, barrel, config)) {
         files.push(curr.name);
       }
     } else if (curr.isDirectory()) {
-      if (shouldExportDirectory(fullPath)) {
+      if (shouldExportDirectory(fullPath, config)) {
         dirs.add(curr.name);
       }
     }
@@ -184,16 +161,17 @@ export const getFilesAndDirsFromPath = (
  */
 export const getAllFilesFromSubfolders = (
   barrel: string,
-  path: string
-): string[] => {
+  path: string,
+  opts: GenerationConfiguration
+) => {
   const resultFiles: string[] = [];
-  const [files, dirs] = getFilesAndDirsFromPath(barrel, path);
+  const [files, dirs] = getFilesAndDirsFromPath(barrel, path, opts);
 
   resultFiles.push(...files);
 
   if (dirs.size > 0) {
     for (const d of dirs) {
-      const folderFiles = getAllFilesFromSubfolders(barrel, `${path}/${d}`);
+      const folderFiles = getAllFilesFromSubfolders(barrel, `${path}/${d}`, opts);
       resultFiles.push(...folderFiles.map(f => `${d}/${f}`));
     }
   }
