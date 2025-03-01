@@ -1,5 +1,15 @@
 # @dbf/vscode
 
+## 7.1.0
+
+### Minor Changes
+
+- Convert extension into ESM ([`ba55600`](https://github.com/mikededo/dart-barrel-file-generator/commit/ba55600e928c6869cd7c60a304f3dc7f19df3dc0))
+
+### Patch Changes
+
+- Update incorrect image URLs ([`b533e50`](https://github.com/mikededo/dart-barrel-file-generator/commit/b533e5062869d171fab252bed4a6e59289166e18))
+
 ## 7.0.2
 
 ### Patch Changes
