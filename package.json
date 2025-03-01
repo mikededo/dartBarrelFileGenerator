@@ -33,11 +33,11 @@
     "@types/node": "22.13.5",
     "@typescript-eslint/eslint-plugin": "8.25.0",
     "@typescript-eslint/parser": "8.25.0",
-    "chalk": "5.4.1",
     "eslint": "9.21.0",
     "eslint-plugin-format": "1.0.1",
     "eslint-plugin-perfectionist": "4.9.0",
     "husky": "9.1.7",
+    "picocolors": "1.1.1",
     "typescript": "5.7.3",
     "vite": "6.2.0"
   },

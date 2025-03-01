@@ -149,7 +149,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite build --watch",
-    "package": "bun ./scripts/package.ts"
+    "package": "bun run build && bun ./scripts/package.ts"
   },
   "dependencies": {
     "@dbf/core": "workspace:*"
