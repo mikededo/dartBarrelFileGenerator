@@ -6,9 +6,7 @@ export type GenerationConfiguration = {
   excludeGenerated: boolean;
 };
 export type GenerationType = FocusedGenerations | RegularGenerations;
-
 export type Maybe<T> = T | undefined;
-
 export type RegularGenerations =
   | 'RECURSIVE'
   | 'REGULAR_SUBFOLDERS'
