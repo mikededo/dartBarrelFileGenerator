@@ -12,18 +12,18 @@ or from the [marketplace](https://marketplace.visualstudio.com/).
 
 It can create barrel files only two the selected folder
 
-![this-folder](https://raw.githubusercontent.com/mikededo/dart-barrel-file-generator/master/assets/current-only.gif)
+![this-folder](https://raw.githubusercontent.com/mikededo/dart-barrel-file-generator/main/packages/vscode/assets/current-only.gif)
 
 It creates a barrel file for the selected folder and all the nested folders from
 the selected. Likewise, it also adds the nested folder barrel file to its parent
 barrel file.
 
-![folders-recursive](https://raw.githubusercontent.com/mikededo/dart-barrel-file-generator/master/assets/current-and-nested.gif)
+![folders-recursive](https://raw.githubusercontent.com/mikededo/dart-barrel-file-generator/main/packages/vscode/assets/current-and-nested.gif)
 
 Alternatively, the extension can create a barrel file with all the names of the
 nested folders (for each subfolder), without creating additional barrel files.
 
-![folders-files-recursive](https://raw.githubusercontent.com/mikededo/dart-barrel-file-generator/master/assets/current-with-subfolders.gif)
+![folders-files-recursive](https://raw.githubusercontent.com/mikededo/dart-barrel-file-generator/main/packages/vscode/assets/current-with-subfolders.gif)
 
 ## Commands
 
