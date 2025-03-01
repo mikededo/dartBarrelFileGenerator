@@ -34,8 +34,9 @@ jobs:
         uses: changesets/action@v1
         with:
           version: bun changeset version
+          publish: ./release.sh
           commit: 'chore(release): v${{env.NEW_VERSION}}'
           title: 'chore(release): v${{env.NEW_VERSION}}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
