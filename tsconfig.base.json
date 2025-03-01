@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "incremental": true,
-    "composite": true,
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "target": "es2020",
+    "lib": ["esnext"],
+    "module": "esnext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
     "strict": true,
-    "declaration": true,
+    "strictNullChecks": true,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true,
     "skipLibCheck": true
   }
 }

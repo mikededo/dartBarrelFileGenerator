@@ -1,0 +1,12 @@
+{
+  "name": "@dbf/cli",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "CLI to generate Dart barrel files",
+  "bin": {},
+  "dependencies": {
+    "@dbf/core": "workspace:*",
+    "commander": "13.1.0",
+    "valibot": "1.0.0-rc.2"
+  }
+}
