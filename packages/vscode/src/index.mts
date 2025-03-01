@@ -3,9 +3,9 @@ import type { FocusedGenerations, GenerationType } from '@dbf/core';
 import type { ExtensionContext } from 'vscode';
 import { commands, Uri, window } from 'vscode';
 
-import { init } from './extension.js';
+import { init } from './extension.mjs';
 
-export { deactivate } from './extension.js';
+export { deactivate } from './extension.mjs';
 
 /**
  * Curried function that, from the given type of the generation,

@@ -1,6 +1,6 @@
 import type { GenerationConfiguration, GenerationType, Maybe } from '@dbf/core';
 
-import type { VSCodeConfigKeyToValue, VSCodeConfigurationKeys } from './constants.js';
+import type { VSCodeConfigKeyToValue, VSCodeConfigurationKeys } from './constants.mjs';
 
 import { lstatSync, writeFile } from 'node:fs';
 import type { Uri } from 'vscode';
@@ -16,7 +16,7 @@ import {
   toPosixPath
 } from '@dbf/core';
 
-import { CONFIGURATIONS } from './constants.js';
+import { CONFIGURATIONS } from './constants.mjs';
 
 const logger = window.createOutputChannel('DartBarrelFile');
 const Context = new GeneratorContext({ log: logger.appendLine });

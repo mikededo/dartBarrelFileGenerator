@@ -4,7 +4,7 @@
     "composite": true,
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "strict": true,
     "declaration": true,
     "esModuleInterop": true,
