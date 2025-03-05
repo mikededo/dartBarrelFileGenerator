@@ -1,5 +1,16 @@
 # @dbf/vscode
 
+## 7.2.0
+
+### Minor Changes
+
+- Remove generation logic from the package, and adapt to new `core` interface. ([`8444cfd`](https://github.com/mikededo/dart-barrel-file-generator/commit/8444cfd9b99a7f28837f7426e9fea84bd30c448b))
+
+### Patch Changes
+
+- Updated dependencies [[`db2d0be`](https://github.com/mikededo/dart-barrel-file-generator/commit/db2d0be7f3efdd0701ba940736e50e415407b987)]:
+  - @dbf/core@2.0.0
+
 ## 7.1.0
 
 ### Minor Changes
