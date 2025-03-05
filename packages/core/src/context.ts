@@ -1,132 +1,223 @@
-import type { GenerationType } from './types.js';
+import type {
+  GenerationConfig,
+  GenerationLogger,
+  GenerationType,
+  Maybe
+} from './types.js';
 
-import { formatDate, toPosixPath } from './functions.js';
+import { writeFile } from 'node:fs';
 
-type InitParams = {
+import {
+  fileSort,
+  formatDate,
+  getAllFilesFromSubfolders,
+  getFilesAndDirsFromPath,
+  hasFolders,
+  isTargetLibFolder,
+  toOsSpecificPath,
+  toPosixPath
+} from './functions.js';
+
+type CreateContextOptions = {
+  config: GenerationConfig;
+  logger: GenerationLogger;
+};
+type StartParams = {
   fsPath: string;
   path: string;
   type: GenerationType;
+  workspace: string;
 };
-type OutputChannel = { log: (...values: string[]) => void };
-
-type WriteInfoParams = {
+type State = {
+  fsPath: string;
   path: string;
-  fileCount: number;
+  type?: GenerationType;
+  promptedName?: string;
+
+  startTimestamp?: number;
 };
 
-export class GeneratorContext {
-  public customBarrelName?: string;
-  get activePath() {
-    if (!this.path || !this.fsPath) {
-      throw new Error('Context.activePath called when no active path');
+export const createContext = ({ config, logger }: CreateContextOptions) => {
+  const state: State = { fsPath: '', path: '', type: undefined };
+
+  const endGeneration = () => {
+    logger.log(`[${formatDate()}] Generation finished`);
+  };
+
+  const definedOrError = (value: keyof State) => {
+    if (!state[value]) {
+      throw new Error(`Cannot access ${value} in context. Did you initialise the context?`);
     }
 
-    return { fsPath: this.fsPath, path: this.path };
-  }
+    return state[value];
+  };
 
-  get activeType(): GenerationType {
-    if (!this.type) {
-      throw new Error('Context.activeType called when no active type');
-    }
-
-    return this.type;
-  }
-
-  get packageName(): string {
-    if (!this.path || !this.fsPath) {
+  const getPackageName = () => {
+    if (!state.path || !state.fsPath) {
       throw new Error('Context.packageName called when no active path');
     }
 
-    const parts = toPosixPath(this.fsPath).split('/lib');
+    const parts = toPosixPath(state.fsPath).split('/lib');
     const path = parts[0].split('/');
     return path[path.length - 1];
-  }
+  };
 
-  private fsPath?: string;
+  /**
+   *
+   * @param targetPath The target path of the barrel file
+   * @param dirName The barrel file directory name
+   * @param files The file names to write to the barrel file
+   * @returns A promise with the path of the written barrel file
+   */
+  const writeBarrelFile = (
+    targetPath: string,
+    dirName: string,
+    files: string[]
+  ): Promise<string> => {
+    let exports = '';
+    // Check if we should prepend the package
+    const shouldPrependPackage = config.prependPackageToLibExport && isTargetLibFolder(targetPath);
+    const prependPackageValue = shouldPrependPackage
+      ? `package:${getPackageName()}/`
+      : '';
 
-  private path?: string;
-
-  private startTimestamp?: number;
-
-  private type?: GenerationType;
-
-  constructor(
-    private channel: OutputChannel
-  ) {
-    this.channel.log(
-      `[${formatDate()}] DartBarrelFile extension enabled`
-    );
-
-    this.reset();
-  }
-
-  deactivate() {
-    this.channel.log(
-      `[${formatDate()}] DartBarrelFile extension disabled`
-    );
-  }
-
-  endGeneration(): void {
-    if (!this.startTimestamp) {
-      throw new Error(
-        'Context.endGeneration cannot be called before Context.initGeneration'
-      );
+    for (const file of files) {
+      exports = `${exports}export '${prependPackageValue}${file}';\n`;
     }
 
-    this.channel.log(
-      `[${formatDate()}] Elapsed time: ${new Date(
-        Date.now() - this.startTimestamp
-      ).getMilliseconds()}ms`
-    );
+    logger.log(`[${formatDate()}] Exporting ${targetPath} - found ${files.length} Dart files`);
+    const barrelFile = `${targetPath}/${dirName}.dart`;
 
-    this.reset();
-  }
+    return new Promise((resolve) => {
+      const path = toOsSpecificPath(barrelFile);
 
-  initGeneration({ fsPath, path, type }: InitParams): void {
+      writeFile(path, exports, 'utf8', (error) => {
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        logger.log(
+          `[${formatDate()}] Generated successfull barrel file at ${path}`
+        );
+        resolve(path);
+      });
+    });
+  };
+
+  /**
+   * @param targetPath The target path of the barrel file
+   * @returns A promise with the name of the barrel file
+   */
+  const getBarrelFile = (targetPath: string): string => {
+    const shouldAppend = config.appendFolderName;
+    const shouldPrepend = config.prependFolderName;
+
+    // Selected target is in the current workspace
+    // This could be optional
+    const splitDir = targetPath.split('/');
+    const prependedDir = shouldPrepend ? `${splitDir[splitDir.length - 1]}_` : '';
+    const appendedDir = shouldAppend ? `_${splitDir[splitDir.length - 1]}` : '';
+
+    // Check if the user has the defaultBarrelName config set
+    if (config.defaultBarrelName) {
+      return `${prependedDir}${config.defaultBarrelName.replace(/ /g, '_').toLowerCase()}${appendedDir}`;
+    }
+
+    return `${prependedDir}${splitDir[splitDir.length - 1]}${appendedDir}`;
+  };
+
+  /**
+   * Generates the contents of the barrel file, recursively when the
+   * option chosen is recursive
+   *
+   * @param targetPath The target path of the barrel file
+   * @returns A promise with the path of the written barrel file
+   */
+  const generate = async (targetPath: string): Promise<Maybe<string>> => {
+    const skipEmpty = config.skipEmpty;
+    const barrelFileName = getBarrelFile(targetPath);
+
+    if (state.type === 'REGULAR_SUBFOLDERS') {
+      const files = getAllFilesFromSubfolders(
+        barrelFileName,
+        targetPath,
+        config
+      ).sort(fileSort);
+
+      if (files.length === 0 && skipEmpty) {
+        return Promise.resolve(undefined);
+      }
+
+      return writeBarrelFile(targetPath, barrelFileName, files);
+    }
+
+    const [files, dirs] = getFilesAndDirsFromPath(barrelFileName, targetPath, config);
+    if (state.type === 'RECURSIVE' && dirs.size > 0) {
+      for (const d of dirs) {
+        const maybeGenerated = await generate(`${targetPath}/${d}`);
+        if (!maybeGenerated && skipEmpty) {
+          continue;
+        }
+
+        files.push(
+          toPosixPath(maybeGenerated as string).split(`${targetPath}/`)[1]
+        );
+      }
+    }
+
+    if (files.length === 0 && skipEmpty) {
+      return Promise.resolve(undefined);
+    }
+
+    // Sort files
+    return writeBarrelFile(targetPath, barrelFileName, files.sort(fileSort));
+  };
+
+  const validateAndGenerate = async (workspace: string): Promise<Maybe<string>> => {
+    try {
+      if (!hasFolders(workspace)) {
+        logger.error('The workspace has no folders');
+        return;
+      }
+
+      const currDir = toPosixPath(workspace);
+      if (!state.path.includes(currDir)) {
+        throw new Error('Select a folder from the workspace');
+      }
+
+      return generate(state.path);
+    } catch {
+      logger.error('Error validating the generation');
+    }
+  };
+
+  const start = ({ fsPath, path, type, workspace }: StartParams) => {
     const ts = new Date();
-    this.startTimestamp = ts.getTime();
+    state.startTimestamp = ts.getTime();
 
-    this.channel.log(
-      `[${formatDate()}] Generation started ${formatDate(ts)}`
+    state.fsPath = fsPath;
+    state.path = path;
+    state.type = type;
+
+    logger.log(`[${formatDate()}] Generation started ${formatDate(ts)}`);
+    logger.log(
+      `[${formatDate()}] Type: ${type ? 'recursive' : 'regular'} - Path: ${fsPath}`
     );
 
-    this.path = path;
-    this.fsPath = fsPath;
-    this.type = type;
+    return validateAndGenerate(workspace);
+  };
 
-    this.channel.log(
-      `[${formatDate()}] Type: ${type ? 'recursive' : 'regular'} - Path: ${
-        fsPath
-      }`
-    );
-  }
-
-  onError(error: any): void {
-    this.channel.log(`[${formatDate()}] ERROR: ${error}`);
-  }
-
-  writeFolderInfo({ fileCount, path }: WriteInfoParams) {
-    this.channel.log(
-      `[${formatDate()}] Exporting ${path} - found ${fileCount} Dart files`
-    );
-  }
-
-  writeGeneratedInfo(path: string): void {
-    this.channel.log(
-      `[${formatDate()}] Generating barrel file at ${path}`
-    );
-  }
-
-  writeSuccessfullInfo(path: string): void {
-    this.channel.log(
-      `[${formatDate()}] Generated successfull barrel file at ${path}`
-    );
-  }
-
-  private reset() {
-    this.startTimestamp = undefined;
-    this.path = undefined;
-    this.type = undefined;
-    this.customBarrelName = undefined;
-  }
-}
+  return {
+    endGeneration,
+    get fsPath() {
+      return definedOrError('fsPath');
+    },
+    // TODO: Will implement later
+    // eslint-disable-next-line no-console
+    onError: console.log,
+    get path() {
+      return definedOrError('path');
+    },
+    start
+  };
+};

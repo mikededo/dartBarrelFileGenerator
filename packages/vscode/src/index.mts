@@ -12,8 +12,19 @@ export { deactivate } from './extension.mjs';
  * it will set up the context with the `uri` received from the curried fn
  * and the given type
  */
-const generate = (type: GenerationType) => async (uri: Uri) => {
-  await init(uri, type);
+const generate = (type: GenerationType) => async (uri: undefined | Uri) => {
+  const maybeUri = uri ?? await window.showOpenDialog({
+    canSelectFiles: false,
+    canSelectFolders: true,
+    canSelectMany: false,
+    openLabel: 'Select the folder '
+  }).then(uris => uris && uris[0]);
+
+  if (!maybeUri) {
+    return;
+  }
+
+  await init(maybeUri, type);
 };
 
 const generateFocused = (type: FocusedGenerations) => async () => {
