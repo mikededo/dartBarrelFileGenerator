@@ -21,10 +21,9 @@
     "build": "bun run build:core && bun run build:vscode",
     "build:core": "vite build --config ./packages/core/vite.config.ts",
     "build:vscode": "vite build --config ./packages/vscode/vite.config.ts",
-    "dev:extension": "vite build --watch --config ./packages/vscode/vite.config.ts",
+    "dev:vscode": "vite build --watch --config ./packages/vscode/vite.config.ts",
     "lint": "eslint . --max-warnings 0",
-    "lint:fix": "eslint . --fix",
-    "prepare": "husky"
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
     "@antfu/eslint-config": "4.3.0",

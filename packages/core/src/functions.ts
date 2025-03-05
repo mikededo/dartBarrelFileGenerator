@@ -1,10 +1,10 @@
-import type { GenerationConfiguration } from './types';
+import type { GenerationConfig } from './types.js';
 
 import { minimatch } from 'minimatch';
-import { readdirSync } from 'node:fs';
-import { posix, sep } from 'node:path';
+import { readdirSync, statSync } from 'node:fs';
+import { join, posix, sep } from 'node:path';
 
-import { FILE_REGEX } from './constants';
+import { FILE_REGEX } from './constants.js';
 
 const path = { posix, sep };
 
@@ -77,6 +77,9 @@ export const matchesGlob = (fileName: string, glob: string) =>
 export const fileSort = (a: string, b: string): number =>
   a < b ? -1 : a > b ? 1 : 0;
 
+export const hasFolders = (path: string) =>
+  readdirSync(path).some(item => statSync(join(path, item)).isDirectory());
+
 /**
  * Checks if the given `posixPath` is a dart file, it has a different
  * name than the folder barrel file and is not excluded by any configuration
@@ -91,20 +94,20 @@ export const shouldExport = (
   fileName: PosixPath,
   filePath: PosixPath,
   dirName: string,
-  opts: GenerationConfiguration
+  { excludeFileList, excludeFreezed, excludeGenerated }: GenerationConfig
 ) => {
   if (isDartFile(fileName) && !isBarrelFile(dirName, fileName)) {
     if (FILE_REGEX.suffixed('freezed').test(fileName)) {
       // Export only if files are not excluded
-      return !opts.excludeFreezed;
+      return !excludeFreezed;
     }
 
     if (FILE_REGEX.suffixed('g').test(fileName)) {
       // Export only if files are not excluded
-      return !opts.excludeGenerated;
+      return !excludeGenerated;
     }
 
-    const globs: string[] = opts.excludedFiles ?? [];
+    const globs: string[] = excludeFileList ?? [];
     return globs.every(glob => !matchesGlob(filePath, glob));
   }
 
@@ -118,8 +121,8 @@ export const shouldExport = (
  * @returns If the given `posixPath` should be added to the list of
  * exports
  */
-export const shouldExportDirectory = (posixPath: PosixPath, opts: GenerationConfiguration) =>
-  (opts.excludedDirs ?? []).every(glob => !matchesGlob(posixPath, glob));
+export const shouldExportDirectory = (posixPath: PosixPath, { excludeDirList }: GenerationConfig) =>
+  (excludeDirList ?? []).every(glob => !matchesGlob(posixPath, glob));
 
 /**
  * Gets the list of files and a set of directories from the given path
@@ -131,7 +134,7 @@ export const shouldExportDirectory = (posixPath: PosixPath, opts: GenerationConf
 export const getFilesAndDirsFromPath = (
   barrel: string,
   path: string,
-  config: GenerationConfiguration
+  config: GenerationConfig
 ): [string[], Set<string>] => {
   const files: string[] = [];
   const dirs = new Set<string>();
@@ -162,7 +165,7 @@ export const getFilesAndDirsFromPath = (
 export const getAllFilesFromSubfolders = (
   barrel: string,
   path: string,
-  opts: GenerationConfiguration
+  opts: GenerationConfig
 ) => {
   const resultFiles: string[] = [];
   const [files, dirs] = getFilesAndDirsFromPath(barrel, path, opts);
@@ -178,3 +181,4 @@ export const getAllFilesFromSubfolders = (
 
   return resultFiles;
 };
+
