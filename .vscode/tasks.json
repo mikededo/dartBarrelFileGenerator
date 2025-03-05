@@ -2,32 +2,17 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run extension",
-      "type": "npm",
-      "script": "dev:extension",
-      "isBackground": true,
+      "type": "shell",
+      "command": "bun",
+      "args": ["build:vscode"],
+      "label": "build",
       "presentation": {
-        "reveal": "never",
-        "panel": "dedicated"
+        "clear": true,
+        "echo": true
       },
       "group": {
         "kind": "build",
         "isDefault": true
-      },
-      "problemMatcher": {
-        "owner": "vite",
-        "pattern": {
-          "regexp": ".",
-          "file": 1,
-          "line": 1,
-          "message": 1,
-          "kind": "file"
-        },
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": "^build started...",
-          "endsPattern": "^built in \\d+ms\\.$"
-        }
       }
     }
   ]
