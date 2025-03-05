@@ -1,5 +1,11 @@
 # @dbf/core
 
+## 2.0.0
+
+### Major Changes
+
+- Update the implementation of the `core`, and move all the generation logic into it. ([#116](https://github.com/mikededo/dart-barrel-file-generator/pull/116))
+
 ## 1.0.1
 
 ### Patch Changes
