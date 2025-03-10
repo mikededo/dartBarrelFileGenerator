@@ -1,5 +1,12 @@
 # @dbf/vscode
 
+## 7.2.1
+
+### Patch Changes
+
+- Updated dependencies [[`279a8a2`](https://github.com/mikededo/dart-barrel-file-generator/commit/279a8a2794fd83ae1d2d350aac4e060098c010df)]:
+  - @dbf/core@2.0.1
+
 ## 7.2.0
 
 ### Minor Changes
