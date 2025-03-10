@@ -212,9 +212,10 @@ export const createContext = ({ config, logger }: CreateContextOptions) => {
     get fsPath() {
       return definedOrError('fsPath');
     },
-    // TODO: Will implement later
-    // eslint-disable-next-line no-console
-    onError: console.log,
+    onError: (error: string) => {
+      logger.log(`[${formatDate()}] An error occurred:`);
+      logger.error(error);
+    },
     get path() {
       return definedOrError('path');
     },
