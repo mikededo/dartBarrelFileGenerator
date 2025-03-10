@@ -1,5 +1,11 @@
 # @dbf/core
 
+## 2.0.1
+
+### Patch Changes
+
+- Implement missing `onError` ([`279a8a2`](https://github.com/mikededo/dart-barrel-file-generator/commit/279a8a2794fd83ae1d2d350aac4e060098c010df))
+
 ## 2.0.0
 
 ### Major Changes
